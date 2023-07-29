@@ -117,4 +117,19 @@ class VolumeContainerTest {
 		assertEquals(volume1, container.getVolume(2));
 	}
 
+	@Test
+	@DisplayName("should be created one element and its volume set to given value")
+	void test9() {
+		VolumeContainer container = new VolumeContainer(1);
+		final int price1 = 1000;
+		final int volume1 = 100;
+		final int volume2 = 1000;
+		container.set(price1, volume1);
+		container.set(price1, volume2);
+
+		assertEquals(1, container.getSize());
+		assertEquals(price1, container.getPrice(0));
+		assertEquals(volume2, container.getVolume(0));
+	}
+
 }

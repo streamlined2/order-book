@@ -47,15 +47,28 @@ public class VolumeContainer {
 		if (index >= 0) {
 			volumes[index] += volume;
 		} else {
-			if (size == prices.length) {
-				expand();
-			}
-			final int insertIndex = -index - 1;
-			freeCellByShifting(insertIndex);
-			prices[insertIndex] = price;
-			volumes[insertIndex] = volume;
-			size++;
+			freeCellAndStorePriceVolume(index, price, volume);
 		}
+	}
+
+	public void set(int price, int volume) {
+		final int index = indexOf(price);
+		if (index >= 0) {
+			volumes[index] = volume;
+		} else {
+			freeCellAndStorePriceVolume(index, price, volume);
+		}
+	}
+
+	private void freeCellAndStorePriceVolume(final int index, int price, int volume) {
+		if (size == prices.length) {
+			expand();
+		}
+		final int insertIndex = -index - 1;
+		freeCellByShifting(insertIndex);
+		prices[insertIndex] = price;
+		volumes[insertIndex] = volume;
+		size++;
 	}
 
 	private void freeCellByShifting(int insertIndex) {
