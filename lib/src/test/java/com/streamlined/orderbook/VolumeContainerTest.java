@@ -58,4 +58,25 @@ class VolumeContainerTest {
 		assertEquals(volume2, container.getVolume(1));
 	}
 
+	@Test
+	@DisplayName("check binary search for price value if succeeds")
+	void test5() {
+		VolumeContainer container = new VolumeContainer(new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
+
+		assertEquals(0, container.indexOf(100));
+		assertEquals(1, container.indexOf(200));
+		assertEquals(2, container.indexOf(300));
+	}
+
+	@Test
+	@DisplayName("check binary search for price value if fails")
+	void test6() {
+		VolumeContainer container = new VolumeContainer(new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
+
+		assertEquals(-1, container.indexOf(0));
+		assertEquals(-2, container.indexOf(150));
+		assertEquals(-3, container.indexOf(250));
+		assertEquals(-4, container.indexOf(350));
+	}
+
 }

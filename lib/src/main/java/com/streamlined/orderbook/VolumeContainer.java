@@ -21,6 +21,13 @@ public class VolumeContainer {
 		volumes = new int[capacity];
 	}
 
+	public VolumeContainer(int[] prices, int[] volumes) {
+		this(Math.min(prices.length, volumes.length));
+		for (int k = 0; k < this.prices.length; k++) {
+			add(prices[k], volumes[k]);
+		}
+	}
+
 	public int getCapacity() {
 		return prices.length;
 	}
@@ -31,6 +38,15 @@ public class VolumeContainer {
 
 	private int mapIndex(int index) {
 		return reversed ? prices.length - 1 - index : index;
+	}
+
+	public void add(int price, int volume) {
+		if (size == prices.length) {
+			expand();
+		}
+		final int index = mapIndex(size++);
+		prices[index] = price;
+		volumes[index] = volume;
 	}
 
 	private void expand() {
@@ -45,13 +61,21 @@ public class VolumeContainer {
 		volumes = newVolumes;
 	}
 
-	public void add(int price, int volume) {
-		if (size == prices.length) {
-			expand();
+	int indexOf(int price) {
+		int leftIndex = 0;
+		int rightIndex = size - 1;
+		while (leftIndex <= rightIndex) {
+			int middleIndex = (leftIndex + rightIndex) / 2;
+			int middlePrice = prices[mapIndex(middleIndex)];
+			if (middlePrice < price) {
+				leftIndex = middleIndex + 1;
+			} else if (middlePrice > price) {
+				rightIndex = middleIndex - 1;
+			} else {
+				return middleIndex;
+			}
 		}
-		final int index = mapIndex(size++);
-		prices[index] = price;
-		volumes[index] = volume;
+		return -leftIndex - 1;
 	}
 
 	public int getPrice(int index) {
