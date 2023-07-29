@@ -1,5 +1,7 @@
 package com.streamlined.orderbook;
 
+import java.util.Arrays;
+
 public class VolumeContainer {
 
 	private static final int INITIAL_CAPACITY = 1000;
@@ -41,12 +43,29 @@ public class VolumeContainer {
 	}
 
 	public void add(int price, int volume) {
-		if (size == prices.length) {
-			expand();
+		final int index = indexOf(price);
+		if (index >= 0) {
+			volumes[index] += volume;
+		} else {
+			if (size == prices.length) {
+				expand();
+			}
+			final int insertIndex = -index - 1;
+			freeCellByShifting(insertIndex);
+			prices[insertIndex] = price;
+			volumes[insertIndex] = volume;
+			size++;
 		}
-		final int index = mapIndex(size++);
-		prices[index] = price;
-		volumes[index] = volume;
+	}
+
+	private void freeCellByShifting(int insertIndex) {
+		if (reversed) {
+			System.arraycopy(prices, insertIndex, prices, insertIndex - 1, insertIndex + 1);
+			System.arraycopy(volumes, insertIndex, volumes, insertIndex - 1, insertIndex + 1);
+		} else {
+			System.arraycopy(prices, insertIndex, prices, insertIndex + 1, size - insertIndex);
+			System.arraycopy(volumes, insertIndex, volumes, insertIndex + 1, size - insertIndex);
+		}
 	}
 
 	private void expand() {
@@ -84,6 +103,12 @@ public class VolumeContainer {
 
 	public int getVolume(int index) {
 		return volumes[mapIndex(index)];
+	}
+
+	@Override
+	public String toString() {
+		return new StringBuilder().append("prices: ").append(Arrays.toString(prices)).append(", volumes: ")
+				.append(Arrays.toString(volumes)).toString();
 	}
 
 }
