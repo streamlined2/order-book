@@ -11,23 +11,36 @@ public class VolumeContainer {
 	private static final PriceVolume lastPriceVolume = new PriceVolume();
 	static final int VOLUME_VALUE_ABSENT = -1;
 
+	private final boolean reversed;
 	private int[] prices;
 	private int[] volumes;
 	private int size;
-	private boolean reversed;
 
 	public VolumeContainer() {
-		this(INITIAL_CAPACITY);
+		this(false, INITIAL_CAPACITY);
+	}
+
+	public VolumeContainer(boolean reversed) {
+		this(reversed, INITIAL_CAPACITY);
 	}
 
 	public VolumeContainer(int initialCapacity) {
+		this(false, initialCapacity);
+	}
+
+	public VolumeContainer(boolean reversed, int initialCapacity) {
+		this.reversed = reversed;
 		final int capacity = initialCapacity > 0 ? initialCapacity : 1;
 		prices = new int[capacity];
 		volumes = new int[capacity];
 	}
 
 	public VolumeContainer(int[] prices, int[] volumes) {
-		this(Math.min(prices.length, volumes.length));
+		this(false, prices, volumes);
+	}
+
+	public VolumeContainer(boolean reversed, int[] prices, int[] volumes) {
+		this(reversed, Math.min(prices.length, volumes.length));
 		for (int k = 0; k < this.prices.length; k++) {
 			add(prices[k], volumes[k]);
 		}
@@ -39,10 +52,6 @@ public class VolumeContainer {
 
 	public int getSize() {
 		return size;
-	}
-
-	private int mapIndex(int index) {
-		return reversed ? prices.length - size + index : index;
 	}
 
 	public void add(int price, int volume) {
@@ -75,14 +84,8 @@ public class VolumeContainer {
 	}
 
 	private void freeCellByShifting(int insertIndex) {
-		if (reversed) {
-			final int startIndex = mapIndex(0);
-			System.arraycopy(prices, insertIndex, prices, insertIndex - 1, insertIndex - startIndex + 1);
-			System.arraycopy(volumes, insertIndex, volumes, insertIndex - 1, insertIndex - startIndex + 1);
-		} else {
-			System.arraycopy(prices, insertIndex, prices, insertIndex + 1, size - insertIndex);
-			System.arraycopy(volumes, insertIndex, volumes, insertIndex + 1, size - insertIndex);
-		}
+		System.arraycopy(prices, insertIndex, prices, insertIndex + 1, size - insertIndex);
+		System.arraycopy(volumes, insertIndex, volumes, insertIndex + 1, size - insertIndex);
 	}
 
 	private void expand() {
@@ -99,14 +102,14 @@ public class VolumeContainer {
 	}
 
 	int indexOf(int price) {
-		int leftIndex = mapIndex(0);
-		int rightIndex = mapIndex(size - 1);
+		int leftIndex = 0;
+		int rightIndex = size - 1;
 		while (leftIndex <= rightIndex) {
 			int middleIndex = (leftIndex + rightIndex) / 2;
-			int middlePrice = prices[mapIndex(middleIndex)];
-			if (middlePrice < price) {
+			int middlePrice = prices[middleIndex];
+			if (!reversed && middlePrice < price || reversed && middlePrice > price) {
 				leftIndex = middleIndex + 1;
-			} else if (middlePrice > price) {
+			} else if (!reversed && middlePrice > price || reversed && middlePrice < price) {
 				rightIndex = middleIndex - 1;
 			} else {
 				return middleIndex;
@@ -116,11 +119,11 @@ public class VolumeContainer {
 	}
 
 	int getPrice(int index) {
-		return prices[mapIndex(index)];
+		return prices[index];
 	}
 
 	int getVolume(int index) {
-		return volumes[mapIndex(index)];
+		return volumes[index];
 	}
 
 	@Override
@@ -139,12 +142,12 @@ public class VolumeContainer {
 	}
 
 	private boolean isIndexValid(int index) {
-		return 0 <= index && index < prices.length;
+		return 0 <= index && index < size;
 	}
 
 	public int getVolumeByPrice(int price) {
 		final int index = indexOf(price);
-		if (index >= 0) {
+		if (isIndexValid(index)) {
 			return volumes[index];
 		}
 		return VOLUME_VALUE_ABSENT;
@@ -163,9 +166,9 @@ public class VolumeContainer {
 
 	int getBestPriceIndex() {
 		if (reversed) {
-			return mapIndex(0);
+			return 0;
 		} else {
-			return mapIndex(size - 1);
+			return size - 1;
 		}
 	}
 

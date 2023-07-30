@@ -2,8 +2,12 @@ package com.streamlined.orderbook;
 
 public class OrderBook {
 
-	public static void main(String... args) {
-		// TODO Auto-generated method stub
+	private final VolumeContainer askContainer;
+	private final VolumeContainer bidContainer;
+
+	public OrderBook() {
+		askContainer = new VolumeContainer(true);
+		bidContainer = new VolumeContainer();
 	}
 
 }
