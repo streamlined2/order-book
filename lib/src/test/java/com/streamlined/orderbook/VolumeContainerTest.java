@@ -133,26 +133,6 @@ class VolumeContainerTest {
 	}
 
 	@Test
-	@DisplayName("should return first value of price and volume in container")
-	void test10() {
-		VolumeContainer container = new VolumeContainer(new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
-
-		var priceVolume = container.getFirstValue();
-		assertEquals(100, priceVolume.getPrice());
-		assertEquals(5, priceVolume.getVolume());
-	}
-
-	@Test
-	@DisplayName("should return last value of price and volume in container")
-	void test11() {
-		VolumeContainer container = new VolumeContainer(new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
-
-		var priceVolume = container.getLastValue();
-		assertEquals(300, priceVolume.getPrice());
-		assertEquals(15, priceVolume.getVolume());
-	}
-
-	@Test
 	@DisplayName("should return volume by price if found")
 	void test12() {
 		VolumeContainer container = new VolumeContainer(new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
@@ -189,6 +169,25 @@ class VolumeContainerTest {
 		assertEquals(3, container.getSize());
 		assertEquals(15, container.subtractVolumeForBestPrice(20));
 		assertEquals(2, container.getSize());
+	}
+
+	@Test
+	@DisplayName("should return price and volume for best price value in container")
+	void test16() {
+		VolumeContainer container = new VolumeContainer(new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
+
+		var priceVolume = container.getBestPriceValue();
+		assertEquals(300, priceVolume.getPrice());
+		assertEquals(15, priceVolume.getVolume());
+	}
+
+	@Test
+	@DisplayName("should return null for best price value in empty container")
+	void test17() {
+		VolumeContainer container = new VolumeContainer();
+
+		var priceVolume = container.getBestPriceValue();
+		assertNull(priceVolume);
 	}
 
 }

@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class VolumeContainer {
 
 	private static final int INITIAL_CAPACITY = 1000;
-	private static final int EXPANSION_NUMERATOR = 5;
+	private static final int EXPANSION_NUMERATOR = 3;
 	private static final int EXPANSION_DENOMINATOR = 2;
 
 	private static final PriceVolume lastPriceVolume = new PriceVolume();
@@ -86,7 +86,8 @@ public class VolumeContainer {
 	}
 
 	private void expand() {
-		final int newCapacity = prices.length * EXPANSION_NUMERATOR / EXPANSION_DENOMINATOR;
+		int newCapacity = prices.length * EXPANSION_NUMERATOR / EXPANSION_DENOMINATOR;
+		newCapacity = newCapacity > prices.length ? newCapacity : newCapacity + 1;
 
 		final int[] newPrices = new int[newCapacity];
 		System.arraycopy(prices, 0, newPrices, 0, prices.length);
@@ -128,16 +129,17 @@ public class VolumeContainer {
 				.append(Arrays.toString(volumes)).toString();
 	}
 
-	public PriceVolume getFirstValue() {
-		final int index = mapIndex(0);
-		lastPriceVolume.setPriceVolume(prices[index], volumes[index]);
-		return lastPriceVolume;
+	public PriceVolume getBestPriceValue() {
+		final int index = getBestPriceIndex();
+		if (isIndexValid(index)) {
+			lastPriceVolume.setPriceVolume(prices[index], volumes[index]);
+			return lastPriceVolume;
+		}
+		return null;
 	}
 
-	public PriceVolume getLastValue() {
-		final int index = mapIndex(size - 1);
-		lastPriceVolume.setPriceVolume(prices[index], volumes[index]);
-		return lastPriceVolume;
+	private boolean isIndexValid(int index) {
+		return 0 <= index && index < prices.length;
 	}
 
 	public int getVolumeByPrice(int price) {
@@ -166,7 +168,7 @@ public class VolumeContainer {
 			return mapIndex(size - 1);
 		}
 	}
-	
+
 	int getBestPriceVolume() {
 		return volumes[getBestPriceIndex()];
 	}
