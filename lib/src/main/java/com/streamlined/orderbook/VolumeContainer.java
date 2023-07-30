@@ -42,7 +42,7 @@ public class VolumeContainer {
 	}
 
 	private int mapIndex(int index) {
-		return reversed ? prices.length - 1 - index : index;
+		return reversed ? prices.length - size + index : index;
 	}
 
 	public void add(int price, int volume) {
@@ -76,8 +76,9 @@ public class VolumeContainer {
 
 	private void freeCellByShifting(int insertIndex) {
 		if (reversed) {
-			System.arraycopy(prices, insertIndex, prices, insertIndex - 1, insertIndex + 1);
-			System.arraycopy(volumes, insertIndex, volumes, insertIndex - 1, insertIndex + 1);
+			final int startIndex = mapIndex(0);
+			System.arraycopy(prices, insertIndex, prices, insertIndex - 1, insertIndex - startIndex + 1);
+			System.arraycopy(volumes, insertIndex, volumes, insertIndex - 1, insertIndex - startIndex + 1);
 		} else {
 			System.arraycopy(prices, insertIndex, prices, insertIndex + 1, size - insertIndex);
 			System.arraycopy(volumes, insertIndex, volumes, insertIndex + 1, size - insertIndex);
@@ -141,10 +142,33 @@ public class VolumeContainer {
 
 	public int getVolumeByPrice(int price) {
 		final int index = indexOf(price);
-		if(index>=0) {
+		if (index >= 0) {
 			return volumes[index];
 		}
 		return VOLUME_VALUE_ABSENT;
+	}
+
+	public int subtractVolumeForBestPrice(int subtractVolume) {
+		final int index = getBestPriceIndex();
+		final int previousVolume = volumes[index];
+		if (previousVolume < subtractVolume) {
+			size--;
+		} else {
+			volumes[index] -= subtractVolume;
+		}
+		return previousVolume;
+	}
+
+	int getBestPriceIndex() {
+		if (reversed) {
+			return mapIndex(0);
+		} else {
+			return mapIndex(size - 1);
+		}
+	}
+	
+	int getBestPriceVolume() {
+		return volumes[getBestPriceIndex()];
 	}
 
 }

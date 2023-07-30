@@ -172,4 +172,23 @@ class VolumeContainerTest {
 		assertEquals(VolumeContainer.VOLUME_VALUE_ABSENT, container.getVolumeByPrice(330));
 	}
 
+	@Test
+	@DisplayName("should subtract given volume for best price if volume enough")
+	void test14() {
+		VolumeContainer container = new VolumeContainer(new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
+
+		assertEquals(15, container.subtractVolumeForBestPrice(5));
+		assertEquals(10, container.getBestPriceVolume());
+	}
+
+	@Test
+	@DisplayName("should remove element for best price if volume is not enough")
+	void test15() {
+		VolumeContainer container = new VolumeContainer(new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
+
+		assertEquals(3, container.getSize());
+		assertEquals(15, container.subtractVolumeForBestPrice(20));
+		assertEquals(2, container.getSize());
+	}
+
 }
