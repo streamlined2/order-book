@@ -118,7 +118,7 @@ class VolumeContainerTest {
 	}
 
 	@Test
-	@DisplayName("should be created one element and its volume set to given value")
+	@DisplayName("should one element be created and its volume set to given value")
 	void test9() {
 		VolumeContainer container = new VolumeContainer(1);
 		final int price1 = 1000;
@@ -130,6 +130,46 @@ class VolumeContainerTest {
 		assertEquals(1, container.getSize());
 		assertEquals(price1, container.getPrice(0));
 		assertEquals(volume2, container.getVolume(0));
+	}
+
+	@Test
+	@DisplayName("should return first value of price and volume in container")
+	void test10() {
+		VolumeContainer container = new VolumeContainer(new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
+
+		var priceVolume = container.getFirstValue();
+		assertEquals(100, priceVolume.getPrice());
+		assertEquals(5, priceVolume.getVolume());
+	}
+
+	@Test
+	@DisplayName("should return last value of price and volume in container")
+	void test11() {
+		VolumeContainer container = new VolumeContainer(new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
+
+		var priceVolume = container.getLastValue();
+		assertEquals(300, priceVolume.getPrice());
+		assertEquals(15, priceVolume.getVolume());
+	}
+
+	@Test
+	@DisplayName("should return volume by price if found")
+	void test12() {
+		VolumeContainer container = new VolumeContainer(new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
+
+		assertEquals(5, container.getVolumeByPrice(100));
+		assertEquals(10, container.getVolumeByPrice(200));
+		assertEquals(15, container.getVolumeByPrice(300));
+	}
+
+	@Test
+	@DisplayName("should return absent volume value if price not found")
+	void test13() {
+		VolumeContainer container = new VolumeContainer(new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
+
+		assertEquals(VolumeContainer.VOLUME_VALUE_ABSENT, container.getVolumeByPrice(110));
+		assertEquals(VolumeContainer.VOLUME_VALUE_ABSENT, container.getVolumeByPrice(220));
+		assertEquals(VolumeContainer.VOLUME_VALUE_ABSENT, container.getVolumeByPrice(330));
 	}
 
 }

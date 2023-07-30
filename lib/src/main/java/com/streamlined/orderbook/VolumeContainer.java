@@ -8,6 +8,9 @@ public class VolumeContainer {
 	private static final int EXPANSION_NUMERATOR = 5;
 	private static final int EXPANSION_DENOMINATOR = 2;
 
+	private static final PriceVolume lastPriceVolume = new PriceVolume();
+	static final int VOLUME_VALUE_ABSENT = -1;
+
 	private int[] prices;
 	private int[] volumes;
 	private int size;
@@ -30,7 +33,7 @@ public class VolumeContainer {
 		}
 	}
 
-	public int getCapacity() {
+	int getCapacity() {
 		return prices.length;
 	}
 
@@ -94,8 +97,8 @@ public class VolumeContainer {
 	}
 
 	int indexOf(int price) {
-		int leftIndex = 0;
-		int rightIndex = size - 1;
+		int leftIndex = mapIndex(0);
+		int rightIndex = mapIndex(size - 1);
 		while (leftIndex <= rightIndex) {
 			int middleIndex = (leftIndex + rightIndex) / 2;
 			int middlePrice = prices[mapIndex(middleIndex)];
@@ -110,11 +113,11 @@ public class VolumeContainer {
 		return -leftIndex - 1;
 	}
 
-	public int getPrice(int index) {
+	int getPrice(int index) {
 		return prices[mapIndex(index)];
 	}
 
-	public int getVolume(int index) {
+	int getVolume(int index) {
 		return volumes[mapIndex(index)];
 	}
 
@@ -122,6 +125,26 @@ public class VolumeContainer {
 	public String toString() {
 		return new StringBuilder().append("prices: ").append(Arrays.toString(prices)).append(", volumes: ")
 				.append(Arrays.toString(volumes)).toString();
+	}
+
+	public PriceVolume getFirstValue() {
+		final int index = mapIndex(0);
+		lastPriceVolume.setPriceVolume(prices[index], volumes[index]);
+		return lastPriceVolume;
+	}
+
+	public PriceVolume getLastValue() {
+		final int index = mapIndex(size - 1);
+		lastPriceVolume.setPriceVolume(prices[index], volumes[index]);
+		return lastPriceVolume;
+	}
+
+	public int getVolumeByPrice(int price) {
+		final int index = indexOf(price);
+		if(index>=0) {
+			return volumes[index];
+		}
+		return VOLUME_VALUE_ABSENT;
 	}
 
 }
