@@ -9,7 +9,7 @@ public class VolumeContainer {
 	private static final int EXPANSION_DENOMINATOR = 2;
 
 	private static final PriceVolume lastPriceVolume = new PriceVolume();
-	static final int VOLUME_VALUE_ABSENT = -1;
+	public static final int VOLUME_VALUE_ABSENT = -1;
 
 	private final boolean reversed;
 	private int[] prices;
@@ -90,7 +90,7 @@ public class VolumeContainer {
 
 	private void expand() {
 		int newCapacity = prices.length * EXPANSION_NUMERATOR / EXPANSION_DENOMINATOR;
-		newCapacity = newCapacity > prices.length ? newCapacity : newCapacity + 1;
+		newCapacity = newCapacity > prices.length ? newCapacity : prices.length + 1;
 
 		final int[] newPrices = new int[newCapacity];
 		System.arraycopy(prices, 0, newPrices, 0, prices.length);
@@ -105,11 +105,11 @@ public class VolumeContainer {
 		int leftIndex = 0;
 		int rightIndex = size - 1;
 		while (leftIndex <= rightIndex) {
-			int middleIndex = (leftIndex + rightIndex) / 2;
-			int middlePrice = prices[middleIndex];
-			if (!reversed && middlePrice < price || reversed && middlePrice > price) {
+			final int middleIndex = (leftIndex + rightIndex) / 2;
+			final int middlePrice = prices[middleIndex];
+			if (reversed && middlePrice > price || !reversed && middlePrice < price) {
 				leftIndex = middleIndex + 1;
-			} else if (!reversed && middlePrice > price || reversed && middlePrice < price) {
+			} else if (reversed && middlePrice < price || !reversed && middlePrice > price) {
 				rightIndex = middleIndex - 1;
 			} else {
 				return middleIndex;
@@ -138,7 +138,7 @@ public class VolumeContainer {
 			lastPriceVolume.setPriceVolume(prices[index], volumes[index]);
 			return lastPriceVolume;
 		}
-		return null;
+		return null;// violates clear code convention
 	}
 
 	private boolean isIndexValid(int index) {
@@ -155,21 +155,20 @@ public class VolumeContainer {
 
 	public int subtractVolumeForBestPrice(int subtractVolume) {
 		final int index = getBestPriceIndex();
-		final int previousVolume = volumes[index];
-		if (previousVolume < subtractVolume) {
-			size--;
-		} else {
-			volumes[index] -= subtractVolume;
+		if (isIndexValid(index)) {
+			final int previousVolume = volumes[index];
+			if (previousVolume < subtractVolume) {
+				size--;
+			} else {
+				volumes[index] -= subtractVolume;
+			}
+			return previousVolume;
 		}
-		return previousVolume;
+		return VOLUME_VALUE_ABSENT;
 	}
 
 	int getBestPriceIndex() {
-		if (reversed) {
-			return 0;
-		} else {
-			return size - 1;
-		}
+		return size - 1;
 	}
 
 	int getBestPriceVolume() {

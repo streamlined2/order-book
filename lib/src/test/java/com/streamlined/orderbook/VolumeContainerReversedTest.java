@@ -157,8 +157,8 @@ class VolumeContainerReversedTest {
 	void test14() {
 		VolumeContainer container = new VolumeContainer(true, new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
 
-		assertEquals(15, container.subtractVolumeForBestPrice(5));
-		assertEquals(10, container.getBestPriceVolume());
+		assertEquals(5, container.subtractVolumeForBestPrice(5));
+		assertEquals(0, container.getBestPriceVolume());
 	}
 
 	@Test
@@ -167,7 +167,7 @@ class VolumeContainerReversedTest {
 		VolumeContainer container = new VolumeContainer(true, new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
 
 		assertEquals(3, container.getSize());
-		assertEquals(15, container.subtractVolumeForBestPrice(20));
+		assertEquals(5, container.subtractVolumeForBestPrice(20));
 		assertEquals(2, container.getSize());
 	}
 
@@ -177,8 +177,8 @@ class VolumeContainerReversedTest {
 		VolumeContainer container = new VolumeContainer(true, new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
 
 		var priceVolume = container.getBestPriceValue();
-		assertEquals(300, priceVolume.getPrice());
-		assertEquals(15, priceVolume.getVolume());
+		assertEquals(100, priceVolume.getPrice());
+		assertEquals(5, priceVolume.getVolume());
 	}
 
 	@Test
