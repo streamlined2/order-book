@@ -1,8 +1,10 @@
 package com.streamlined.orderbook;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 public class Parser {
@@ -13,18 +15,22 @@ public class Parser {
 	private static final String QUERY_COMMAND = "q";
 	private static final String OMIT_COMMAND = "o";
 
-	private final File file;
+	private final File inputFile;
+	private final File outputFile;
 	private final OrderBook orderBook;
 
 	public Parser(File file) {
-		this.file = file;
+		this.inputFile = file;
+		outputFile = new File("output.txt");
 		orderBook = new OrderBook(INITIAL_CAPACITY);
 	}
 
 	public void parse() throws IOException {
 
-		try (FileReader fileReader = new FileReader(file);
-				BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+		try (FileReader fileReader = new FileReader(inputFile);
+				BufferedReader bufferedReader = new BufferedReader(fileReader);
+				FileWriter fileWriter = new FileWriter(outputFile);
+				BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
 
 			while (bufferedReader.ready()) {
 
@@ -36,7 +42,7 @@ public class Parser {
 					updateOrderBook(values[1], values[2], values[3].trim());
 					break;
 				case QUERY_COMMAND:
-					queryOrderBook(values);
+					queryOrderBook(bufferedWriter, values);
 					break;
 				case OMIT_COMMAND:
 					omitOrderBook(values[1].trim(), values[2]);
@@ -66,7 +72,7 @@ public class Parser {
 		}
 	}
 
-	private void queryOrderBook(String[] values) {
+	private void queryOrderBook(BufferedWriter bufferedWriter, String[] values) throws IOException {
 		final String type = values[1];
 
 		switch (type) {
@@ -75,7 +81,8 @@ public class Parser {
 			if (priceVolumeBid == null) {
 				System.out.println("no valid price and size for best bid");
 			} else {
-				System.out.println(String.format("%d,%d", priceVolumeBid.getPrice(), priceVolumeBid.getVolume()));
+				bufferedWriter.write(String.format("%d,%d", priceVolumeBid.getPrice(), priceVolumeBid.getVolume()));
+				bufferedWriter.newLine();
 			}
 			break;
 		case "best_ask":
@@ -83,12 +90,14 @@ public class Parser {
 			if (priceVolumeAsk == null) {
 				System.out.println("no valid price and size for best ask");
 			} else {
-				System.out.println(String.format("%d,%d", priceVolumeAsk.getPrice(), priceVolumeAsk.getVolume()));
+				bufferedWriter.write(String.format("%d,%d", priceVolumeAsk.getPrice(), priceVolumeAsk.getVolume()));
+				bufferedWriter.newLine();
 			}
 			break;
 		case "size":
 			final int price = Integer.parseInt(values[2]);
-			System.out.println(String.format("%d", orderBook.querySizeForPrice(price)));
+			bufferedWriter.write(String.format("%d", orderBook.querySizeForPrice(price)));
+			bufferedWriter.newLine();
 			break;
 		default:
 			System.err.println("wrong type of query " + type);
@@ -108,6 +117,15 @@ public class Parser {
 		default:
 			System.err.println("wrong type of operation " + type);
 		}
+	}
+
+	public static void main(String... args) {
+		try {
+			new Parser(new File("input.txt")).parse();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 }
