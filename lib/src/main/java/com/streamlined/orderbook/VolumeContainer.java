@@ -157,14 +157,21 @@ public class VolumeContainer {
 		final int index = getBestPriceIndex();
 		if (isIndexValid(index)) {
 			final int previousVolume = volumes[index];
-			if (previousVolume < subtractVolume) {
+			if (previousVolume <= subtractVolume) {
 				size--;
+				removeEmptyVolumeItems(index);
 			} else {
 				volumes[index] -= subtractVolume;
 			}
 			return previousVolume;
 		}
 		return VOLUME_VALUE_ABSENT;
+	}
+
+	private void removeEmptyVolumeItems(final int index) {
+		for (int k = index - 1; k >= 0 && volumes[k] == 0; k--) {
+			size--;
+		}
 	}
 
 	int getBestPriceIndex() {

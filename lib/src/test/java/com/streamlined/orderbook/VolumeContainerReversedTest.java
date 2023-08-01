@@ -158,7 +158,7 @@ class VolumeContainerReversedTest {
 		VolumeContainer container = new VolumeContainer(true, new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
 
 		assertEquals(5, container.subtractVolumeForBestPrice(5));
-		assertEquals(0, container.getBestPriceVolume());
+		assertEquals(10, container.getBestPriceVolume());
 	}
 
 	@Test
