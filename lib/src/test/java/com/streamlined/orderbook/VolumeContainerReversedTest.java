@@ -201,4 +201,32 @@ class VolumeContainerReversedTest {
 		assertEquals(1, container.getSize());
 	}
 
+	@Test
+	@DisplayName("last element should be removed if size set to 0")
+	void test19() {
+		VolumeContainer container = new VolumeContainer(true, new int[] { 100, 200, 300, 400, 500 },
+				new int[] { 5, 10, 15, 20, 25 });
+		container.set(100, 0);
+
+		assertEquals(4, container.getSize());
+		assertEquals(100, container.getPrice(4));
+		assertEquals(5, container.getVolume(4));
+	}
+
+	@Test
+	@DisplayName("last element and preceding empty elements should be removed if size set to 0 for last element")
+	void test20() {
+		VolumeContainer container = new VolumeContainer(true, new int[] { 100, 200, 300, 400, 500 },
+				new int[] { 5, 0, 0, 0, 25 });
+		container.set(100, 0);
+
+		assertEquals(1, container.getSize());
+		assertEquals(5, container.getVolume(4));
+		assertEquals(100, container.getPrice(4));
+		assertEquals(200, container.getPrice(3));
+		assertEquals(300, container.getPrice(2));
+		assertEquals(400, container.getPrice(1));
+		assertEquals(500, container.getPrice(0));
+	}
+
 }

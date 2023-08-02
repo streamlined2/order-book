@@ -65,7 +65,9 @@ public class VolumeContainer {
 
 	public void set(int price, int volume) {
 		final int index = indexOf(price);
-		if (index >= 0) {
+		if (index == size - 1 && volume == 0) {
+			removeEmptyVolumeItems(index);
+		} else if (index >= 0) {
 			volumes[index] = volume;
 		} else {
 			freeCellAndStorePriceVolume(index, price, volume);
@@ -158,7 +160,6 @@ public class VolumeContainer {
 		if (isIndexValid(index)) {
 			final int previousVolume = volumes[index];
 			if (previousVolume <= subtractVolume) {
-				size--;
 				removeEmptyVolumeItems(index);
 			} else {
 				volumes[index] -= subtractVolume;
@@ -168,8 +169,9 @@ public class VolumeContainer {
 		return VOLUME_VALUE_ABSENT;
 	}
 
-	private void removeEmptyVolumeItems(final int index) {
-		for (int k = index - 1; k >= 0 && volumes[k] == 0; k--) {
+	private void removeEmptyVolumeItems(final int startIndex) {
+		size--;
+		for (int k = startIndex - 1; k >= 0 && volumes[k] == 0; k--) {
 			size--;
 		}
 	}
