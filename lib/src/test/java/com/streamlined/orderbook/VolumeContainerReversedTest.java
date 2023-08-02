@@ -190,4 +190,15 @@ class VolumeContainerReversedTest {
 		assertNull(priceVolume);
 	}
 
+	@Test
+	@DisplayName("should remove elements for best price if subtracted volume is same or greater and previous elements are empty")
+	void test18() {
+		VolumeContainer container = new VolumeContainer(true, new int[] { 100, 200, 300, 400, 500 },
+				new int[] { 5, 0, 0, 0, 25 });
+
+		assertEquals(5, container.getSize());
+		assertEquals(5, container.subtractVolumeForBestPrice(5));
+		assertEquals(1, container.getSize());
+	}
+
 }
