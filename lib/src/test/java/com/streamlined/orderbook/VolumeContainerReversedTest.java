@@ -153,22 +153,68 @@ class VolumeContainerReversedTest {
 	}
 
 	@Test
-	@DisplayName("should subtract given volume for best price if volume enough")
+	@DisplayName("should subtract given volume for best price if subtracted volume is less than element's volume")
 	void test14() {
 		VolumeContainer container = new VolumeContainer(true, new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
 
-		assertEquals(5, container.subtractVolumeForBestPrice(5));
-		assertEquals(10, container.getBestPriceVolume());
+		assertEquals(1, container.subtractVolumeForBestPrice(1));
+		assertEquals(15, container.getVolumeByPrice(300));
+		assertEquals(10, container.getVolumeByPrice(200));
+		assertEquals(4, container.getVolumeByPrice(100));
+		assertEquals(3, container.getSize());
 	}
 
 	@Test
-	@DisplayName("should remove element for best price if volume is not enough")
+	@DisplayName("should remove element for best price if volume is enough")
 	void test15() {
 		VolumeContainer container = new VolumeContainer(true, new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
 
-		assertEquals(3, container.getSize());
-		assertEquals(5, container.subtractVolumeForBestPrice(20));
+		assertEquals(5, container.subtractVolumeForBestPrice(5));
+		assertEquals(15, container.getVolumeByPrice(300));
+		assertEquals(10, container.getVolumeByPrice(200));
 		assertEquals(2, container.getSize());
+	}
+
+	@Test
+	@DisplayName("should remove last element for best price and decrease adjacent element")
+	void test15a() {
+		VolumeContainer container = new VolumeContainer(true, new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
+
+		assertEquals(6, container.subtractVolumeForBestPrice(6));
+		assertEquals(15, container.getVolumeByPrice(300));
+		assertEquals(9, container.getVolumeByPrice(200));
+		assertEquals(2, container.getSize());
+	}
+
+	@Test
+	@DisplayName("should remove two last elements and decrease first element")
+	void test15b() {
+		VolumeContainer container = new VolumeContainer(true, new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
+
+		assertEquals(16, container.subtractVolumeForBestPrice(16));
+		assertEquals(14, container.getVolumeByPrice(300));
+		assertEquals(1, container.getSize());
+	}
+
+	@Test
+	@DisplayName("should remove adjacent empty elements and decrease non-empty elements")
+	void test15c() {
+		VolumeContainer container = new VolumeContainer(true, new int[] { 100, 200, 300, 400, 500 },
+				new int[] { 5, 0, 0, 10, 15 });
+
+		assertEquals(16, container.subtractVolumeForBestPrice(16));
+		assertEquals(14, container.getVolumeByPrice(500));
+		assertEquals(1, container.getSize());
+	}
+
+	@Test
+	@DisplayName("should remove elements and return real decreased volume if given volume greater than presented")
+	void test15d() {
+		VolumeContainer container = new VolumeContainer(true, new int[] { 100, 200, 300, 400, 500 },
+				new int[] { 5, 0, 0, 10, 15 });
+
+		assertEquals(30, container.subtractVolumeForBestPrice(35));
+		assertEquals(0, container.getSize());
 	}
 
 	@Test

@@ -66,11 +66,18 @@ public class VolumeContainer {
 	public void set(int price, int volume) {
 		final int index = indexOf(price);
 		if (index == size - 1 && volume == 0) {
+			size--;
 			removeEmptyVolumeItems(index);
 		} else if (index >= 0) {
 			volumes[index] = volume;
 		} else {
 			freeCellAndStorePriceVolume(index, price, volume);
+		}
+	}
+
+	private void removeEmptyVolumeItems(final int startIndex) {
+		for (int k = startIndex - 1; k >= 0 && volumes[k] == 0; k--) {
+			size--;
 		}
 	}
 
@@ -128,12 +135,6 @@ public class VolumeContainer {
 		return volumes[index];
 	}
 
-	@Override
-	public String toString() {
-		return new StringBuilder().append("prices: ").append(Arrays.toString(prices)).append(", volumes: ")
-				.append(Arrays.toString(volumes)).toString();
-	}
-
 	public PriceVolume getBestPriceValue() {
 		final int index = getBestPriceIndex();
 		if (isIndexValid(index)) {
@@ -141,6 +142,14 @@ public class VolumeContainer {
 			return lastPriceVolume;
 		}
 		return null;// violates clear code convention
+	}
+
+	int getBestPriceIndex() {
+		return size - 1;
+	}
+
+	int getBestPriceVolume() {
+		return volumes[getBestPriceIndex()];
 	}
 
 	private boolean isIndexValid(int index) {
@@ -156,32 +165,32 @@ public class VolumeContainer {
 	}
 
 	public int subtractVolumeForBestPrice(int subtractVolume) {
-		final int index = getBestPriceIndex();
+		int index = getBestPriceIndex();
 		if (isIndexValid(index)) {
-			final int previousVolume = volumes[index];
-			if (previousVolume <= subtractVolume) {
-				removeEmptyVolumeItems(index);
-			} else {
-				volumes[index] -= subtractVolume;
-			}
-			return previousVolume;
+			int toSubtractVolume = subtractVolume;
+			int subtractedVolume = 0;
+			do {
+				final int volume = volumes[index];
+				if (volume <= toSubtractVolume) {
+					subtractedVolume += volume;
+					toSubtractVolume -= volume;
+					size--;
+				} else {
+					subtractedVolume += toSubtractVolume;
+					volumes[index] -= toSubtractVolume;
+					break;
+				}
+				index--;
+			} while (index >= 0);
+			return subtractedVolume;
 		}
 		return VOLUME_VALUE_ABSENT;
 	}
 
-	private void removeEmptyVolumeItems(final int startIndex) {
-		size--;
-		for (int k = startIndex - 1; k >= 0 && volumes[k] == 0; k--) {
-			size--;
-		}
-	}
-
-	int getBestPriceIndex() {
-		return size - 1;
-	}
-
-	int getBestPriceVolume() {
-		return volumes[getBestPriceIndex()];
+	@Override
+	public String toString() {
+		return new StringBuilder().append("prices: ").append(Arrays.toString(prices)).append(", volumes: ")
+				.append(Arrays.toString(volumes)).toString();
 	}
 
 }

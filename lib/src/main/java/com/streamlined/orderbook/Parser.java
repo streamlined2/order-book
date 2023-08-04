@@ -13,7 +13,7 @@ public class Parser {
 	private static final String COMMA_SEPARATOR = ",";
 	private static final String UPDATE_COMMAND = "u";
 	private static final String QUERY_COMMAND = "q";
-	private static final String OMIT_COMMAND = "o";
+	private static final String ORDER_COMMAND = "o";
 
 	private final File inputFile;
 	private final File outputFile;
@@ -44,8 +44,8 @@ public class Parser {
 				case QUERY_COMMAND:
 					bufferedWriter.write(queryOrderBook(values));
 					break;
-				case OMIT_COMMAND:
-					omitOrderBook(values[1].trim(), values[2]);
+				case ORDER_COMMAND:
+					giveOrder(values[1].trim(), values[2]);
 					break;
 				default:
 					System.err.println("unknown command " + command);
@@ -96,10 +96,10 @@ public class Parser {
 		default:
 			System.err.println("wrong type of query " + type);
 		}
-		return null;// violates clean code convention
+		return "";
 	}
 
-	private void omitOrderBook(String type, String volumeValue) {
+	private void giveOrder(String type, String volumeValue) {
 		int volume = Integer.parseInt(volumeValue);
 
 		switch (type) {
