@@ -133,6 +133,22 @@ class VolumeContainerReversedTest {
 	}
 
 	@Test
+	@DisplayName("check no value of best price for empty container")
+	void test10() {
+		VolumeContainer container = new VolumeContainer(true, 1);
+
+		assertEquals(VolumeContainer.PRICE_VALUE_ABSENT, container.getBestPrice());
+	}
+
+	@Test
+	@DisplayName("check value of best price for non empty container")
+	void test11() {
+		VolumeContainer container = new VolumeContainer(true, new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
+
+		assertEquals(100, container.getBestPrice());
+	}
+
+	@Test
 	@DisplayName("should return volume by price if found")
 	void test12() {
 		VolumeContainer container = new VolumeContainer(true, new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
@@ -230,7 +246,7 @@ class VolumeContainerReversedTest {
 	@Test
 	@DisplayName("should return null for best price value in empty container")
 	void test17() {
-		VolumeContainer container = new VolumeContainer(true);
+		VolumeContainer container = new VolumeContainer(true, 1);
 
 		var priceVolume = container.getBestPriceValue();
 		assertNull(priceVolume);

@@ -4,25 +4,18 @@ import java.util.Arrays;
 
 public class VolumeContainer {
 
-	private static final int INITIAL_CAPACITY = 1000;
-	private static final int EXPANSION_NUMERATOR = 3;
-	private static final int EXPANSION_DENOMINATOR = 2;
+	private static final int EXPANSION_NUMERATOR = 110;
+	private static final int EXPANSION_DENOMINATOR = 100;
+	private static final int EXPANSION_CONSTANT = 1;
 
 	private static final PriceVolume lastPriceVolume = new PriceVolume();
 	public static final int VOLUME_VALUE_ABSENT = -1;
+	public static final int PRICE_VALUE_ABSENT = -1;
 
 	private final boolean reversed;
 	private int[] prices;
 	private int[] volumes;
 	private int size;
-
-	public VolumeContainer() {
-		this(false, INITIAL_CAPACITY);
-	}
-
-	public VolumeContainer(boolean reversed) {
-		this(reversed, INITIAL_CAPACITY);
-	}
 
 	public VolumeContainer(int initialCapacity) {
 		this(false, initialCapacity);
@@ -67,7 +60,7 @@ public class VolumeContainer {
 		final int index = indexOf(price);
 		if (index == size - 1 && volume == 0) {
 			size--;
-			removeEmptyVolumeItems(index);
+			removeEmptyVolumeItems(index - 1);
 		} else if (index >= 0) {
 			volumes[index] = volume;
 		} else {
@@ -76,7 +69,7 @@ public class VolumeContainer {
 	}
 
 	private void removeEmptyVolumeItems(final int startIndex) {
-		for (int k = startIndex - 1; k >= 0 && volumes[k] == 0; k--) {
+		for (int k = startIndex; k >= 0 && volumes[k] == 0; k--) {
 			size--;
 		}
 	}
@@ -99,7 +92,7 @@ public class VolumeContainer {
 
 	private void expand() {
 		int newCapacity = prices.length * EXPANSION_NUMERATOR / EXPANSION_DENOMINATOR;
-		newCapacity = newCapacity > prices.length ? newCapacity : prices.length + 1;
+		newCapacity = newCapacity > prices.length ? newCapacity : prices.length + EXPANSION_CONSTANT;
 
 		final int[] newPrices = new int[newCapacity];
 		System.arraycopy(prices, 0, newPrices, 0, prices.length);
@@ -111,20 +104,52 @@ public class VolumeContainer {
 	}
 
 	int indexOf(int price) {
+
+		if (size == 0) {
+			return -1;// insert at index 0 for empty array
+		}
+
+		if (isOutOfRightBorder(price)) {
+			return -size - 1;// not found, insert at rightmost free index
+		}
+		if (isOutOfLeftBorder(price)) {
+			return -1;// not found, insert at leftmost occupied index 0
+		}
+
 		int leftIndex = 0;
 		int rightIndex = size - 1;
+
 		while (leftIndex <= rightIndex) {
+
 			final int middleIndex = (leftIndex + rightIndex) / 2;
 			final int middlePrice = prices[middleIndex];
-			if (reversed && middlePrice > price || !reversed && middlePrice < price) {
+
+			if (isValueInRightHalf(price, middlePrice)) {
 				leftIndex = middleIndex + 1;
-			} else if (reversed && middlePrice < price || !reversed && middlePrice > price) {
+			} else if (isValueInLeftHalf(price, middlePrice)) {
 				rightIndex = middleIndex - 1;
 			} else {
 				return middleIndex;
 			}
 		}
-		return -leftIndex - 1;
+
+		return -leftIndex - 1;// value not found, return index to place value
+	}
+
+	private boolean isValueInLeftHalf(int price, final int middlePrice) {
+		return reversed && middlePrice < price || !reversed && middlePrice > price;
+	}
+
+	private boolean isValueInRightHalf(int price, final int middlePrice) {
+		return reversed && middlePrice > price || !reversed && middlePrice < price;
+	}
+
+	private boolean isOutOfLeftBorder(int price) {
+		return isValueInRightHalf(prices[0], price);
+	}
+
+	private boolean isOutOfRightBorder(int price) {
+		return isValueInLeftHalf(prices[size - 1], price);
 	}
 
 	int getPrice(int index) {
@@ -139,9 +164,17 @@ public class VolumeContainer {
 		final int index = getBestPriceIndex();
 		if (isIndexValid(index)) {
 			lastPriceVolume.setPriceVolume(prices[index], volumes[index]);
-			return lastPriceVolume;
+			return lastPriceVolume;// mutable singleton to avoid GC involvement
 		}
 		return null;// violates clear code convention
+	}
+
+	public int getBestPrice() {
+		final int index = getBestPriceIndex();
+		if (isIndexValid(index)) {
+			return prices[index];
+		}
+		return PRICE_VALUE_ABSENT;
 	}
 
 	int getBestPriceIndex() {
@@ -161,7 +194,7 @@ public class VolumeContainer {
 		if (isIndexValid(index)) {
 			return volumes[index];
 		}
-		return VOLUME_VALUE_ABSENT;
+		return VOLUME_VALUE_ABSENT;// magic value to avoid exception handling
 	}
 
 	public int subtractVolumeForBestPrice(int subtractVolume) {
