@@ -49,36 +49,40 @@ public class VolumeContainer {
 
 	public void set(int price, int volume) {
 		final int index = indexOf(price);
-		if (index == size - 1 && volume == 0) {
-			size--;
-			removeEmptyVolumeItems(index - 1);
-		} else if (index >= 0) {
+		if (index >= 0) {
 			volumes[index] = volume;
 		} else {
 			freeCellAndStorePriceVolume(index, price, volume);
 		}
 	}
 
-	private void removeEmptyVolumeItems(final int startIndex) {
-		for (int k = startIndex; k >= 0 && volumes[k] == 0; k--) {
-			size--;
-		}
-	}
-
 	private void freeCellAndStorePriceVolume(final int index, int price, int volume) {
-		if (size == prices.length) {
-			expand();
-		}
 		final int insertIndex = -index - 1;
 		freeCellByShifting(insertIndex);
 		prices[insertIndex] = price;
 		volumes[insertIndex] = volume;
-		size++;
 	}
 
 	private void freeCellByShifting(int insertIndex) {
-		System.arraycopy(prices, insertIndex, prices, insertIndex + 1, size - insertIndex);
-		System.arraycopy(volumes, insertIndex, volumes, insertIndex + 1, size - insertIndex);
+		final int nextIndex = insertIndex + 1;
+		final int firstFreeIndex = getFirstFreeCellIndex(nextIndex);
+		if (firstFreeIndex == size) {
+			if (size == prices.length) {
+				expand();
+			}
+			size++;
+		}
+		System.arraycopy(prices, insertIndex, prices, nextIndex, firstFreeIndex - insertIndex);
+		System.arraycopy(volumes, insertIndex, volumes, nextIndex, firstFreeIndex - insertIndex);
+	}
+
+	private int getFirstFreeCellIndex(int startIndex) {
+		for (int k = startIndex; k < size; k++) {
+			if (volumes[k] <= 0) {
+				return k;
+			}
+		}
+		return size;
 	}
 
 	private void expand() {
@@ -130,8 +134,9 @@ public class VolumeContainer {
 	private int getMiddleIndex(int price, int leftIndex, int rightIndex) {
 		final int leftPrice = prices[leftIndex];
 		final int rightPrice = prices[rightIndex];
+		final int medianIndex = (leftIndex + rightIndex) >> 1;
 		if (rightPrice == leftPrice) {
-			return (leftIndex + rightIndex) >> 1;
+			return medianIndex;
 		}
 		long priceDiff;
 		long maxPriceDiff;
@@ -141,6 +146,9 @@ public class VolumeContainer {
 		} else {
 			priceDiff = price - leftPrice;
 			maxPriceDiff = rightPrice - leftPrice;
+		}
+		if (priceDiff <= 0) {
+			return medianIndex;
 		}
 		return (int) (priceDiff * (rightIndex - leftIndex) / maxPriceDiff + leftIndex);
 	}

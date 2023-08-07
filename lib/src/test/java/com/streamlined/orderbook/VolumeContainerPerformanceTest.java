@@ -53,4 +53,26 @@ class VolumeContainerPerformanceTest {
 		System.out.print("time for search in reversed container = %d, total = %d%n".formatted(time, total));
 	}
 
+	@Test
+	@DisplayName("measure insertion time for non-reversed container")
+	void testMeasureInsertionTimeForNonReversedContainer() {
+		final int step = 10;
+		// setup
+		VolumeContainer container = new VolumeContainer(100_000);
+		int price = 1;
+		for (int k = 0; k < container.getCapacity(); k++) {
+			container.set(price, k % step == 0 ? 0 : 1);
+			price += 2;
+		}
+		// measure
+		price = 2;
+		long start = System.currentTimeMillis();
+		for (int k = 0; k < container.getSize(); k += step) {
+			container.set(price, 2);
+			price += 2;
+		}
+		long time = System.currentTimeMillis() - start;
+		System.out.print("time for insertion in non-reversed container = %d%n".formatted(time));
+	}
+
 }

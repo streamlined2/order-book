@@ -80,6 +80,33 @@ class VolumeContainerTest {
 	}
 
 	@Test
+	@DisplayName("should copy elements up to empty element before insertion")
+	void test7() {
+		VolumeContainer container = new VolumeContainer(new int[] { 100, 200, 300, 400, 500, 600, 700 },
+				new int[] { 5, 10, 15, 20, 25, 0, 35 });
+
+		final int price = 150;
+		final int volume = 7;
+		container.set(price, volume);
+
+		assertEquals(7, container.getSize());
+		assertEquals(100, container.getPrice(0));
+		assertEquals(5, container.getVolume(0));
+		assertEquals(price, container.getPrice(1));
+		assertEquals(volume, container.getVolume(1));
+		assertEquals(200, container.getPrice(2));
+		assertEquals(10, container.getVolume(2));
+		assertEquals(300, container.getPrice(3));
+		assertEquals(15, container.getVolume(3));
+		assertEquals(400, container.getPrice(4));
+		assertEquals(20, container.getVolume(4));
+		assertEquals(500, container.getPrice(5));
+		assertEquals(25, container.getVolume(5));
+		assertEquals(700, container.getPrice(6));
+		assertEquals(35, container.getVolume(6));
+	}
+
+	@Test
 	@DisplayName("should contain three elements in correct order")
 	void test8() {
 		VolumeContainer container = new VolumeContainer(1);
@@ -246,35 +273,6 @@ class VolumeContainerTest {
 		assertEquals(5, container.getSize());
 		assertEquals(25, container.subtractVolumeForBestPrice(25));
 		assertEquals(1, container.getSize());
-	}
-
-	@Test
-	@DisplayName("last element should be removed if size set to 0")
-	void test19() {
-		VolumeContainer container = new VolumeContainer(new int[] { 100, 200, 300, 400, 500 },
-				new int[] { 5, 10, 15, 20, 25 });
-		container.set(500, 0);
-
-		assertEquals(4, container.getSize());
-		assertEquals(500, container.getPrice(4));
-		assertEquals(25, container.getVolume(4));
-	}
-
-	@Test
-	@DisplayName("last element and preceding empty elements should be removed if size set to 0 for last element")
-	void test20() {
-		VolumeContainer container = new VolumeContainer(new int[] { 100, 200, 300, 400, 500 },
-				new int[] { 5, 0, 0, 0, 25 });
-		container.set(500, 0);
-
-		assertEquals(1, container.getSize());
-		assertEquals(100, container.getPrice(0));
-		assertEquals(200, container.getPrice(1));
-		assertEquals(300, container.getPrice(2));
-		assertEquals(400, container.getPrice(3));
-		assertEquals(500, container.getPrice(4));
-		assertEquals(5, container.getVolume(0));
-		assertEquals(25, container.getVolume(4));
 	}
 
 }
