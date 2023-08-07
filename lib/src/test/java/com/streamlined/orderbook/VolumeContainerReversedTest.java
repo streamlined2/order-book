@@ -31,7 +31,7 @@ class VolumeContainerReversedTest {
 		VolumeContainer container = new VolumeContainer(true, 1);
 		final int price = 1000;
 		final int volume = 100;
-		container.add(price, volume);
+		container.set(price, volume);
 
 		assertEquals(1, container.getCapacity());
 		assertEquals(1, container.getSize());
@@ -45,10 +45,10 @@ class VolumeContainerReversedTest {
 		VolumeContainer container = new VolumeContainer(true, 1);
 		final int price1 = 1000;
 		final int volume1 = 100;
-		container.add(price1, volume1);
+		container.set(price1, volume1);
 		final int price2 = 2000;
 		final int volume2 = 300;
-		container.add(price2, volume2);
+		container.set(price2, volume2);
 
 		assertTrue(container.getCapacity() > 1);
 		assertEquals(2, container.getSize());
@@ -80,33 +80,18 @@ class VolumeContainerReversedTest {
 	}
 
 	@Test
-	@DisplayName("should be created one element and its volume accumulated by adding values")
-	void test7() {
-		VolumeContainer container = new VolumeContainer(true, 1);
-		final int price1 = 1000;
-		final int volume1 = 100;
-		container.add(price1, volume1);
-		container.add(price1, volume1);
-		container.add(price1, volume1);
-
-		assertEquals(1, container.getSize());
-		assertEquals(price1, container.getPrice(0));
-		assertEquals(3 * volume1, container.getVolume(0));
-	}
-
-	@Test
 	@DisplayName("should contain three elements in correct order")
 	void test8() {
 		VolumeContainer container = new VolumeContainer(true, 1);
 		final int price3 = 500;
 		final int volume3 = 50;
-		container.add(price3, volume3);
+		container.set(price3, volume3);
 		final int price2 = 1000;
 		final int volume2 = 100;
-		container.add(price2, volume2);
+		container.set(price2, volume2);
 		final int price1 = 2000;
 		final int volume1 = 200;
-		container.add(price1, volume1);
+		container.set(price1, volume1);
 
 		assertEquals(3, container.getSize());
 		assertEquals(price3, container.getPrice(2));

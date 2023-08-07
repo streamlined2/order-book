@@ -35,7 +35,7 @@ public class VolumeContainer {
 	public VolumeContainer(boolean reversed, int[] prices, int[] volumes) {
 		this(reversed, Math.min(prices.length, volumes.length));
 		for (int k = 0; k < this.prices.length; k++) {
-			add(prices[k], volumes[k]);
+			set(prices[k], volumes[k]);
 		}
 	}
 
@@ -45,15 +45,6 @@ public class VolumeContainer {
 
 	public int getSize() {
 		return size;
-	}
-
-	public void add(int price, int volume) {
-		final int index = indexOf(price);
-		if (index >= 0) {
-			volumes[index] += volume;
-		} else {
-			freeCellAndStorePriceVolume(index, price, volume);
-		}
 	}
 
 	public void set(int price, int volume) {
@@ -121,7 +112,7 @@ public class VolumeContainer {
 
 		while (leftIndex <= rightIndex) {
 
-			final int middleIndex = (leftIndex + rightIndex) / 2;
+			final int middleIndex = getMiddleIndex(price, leftIndex, rightIndex);
 			final int middlePrice = prices[middleIndex];
 
 			if (isValueInRightHalf(price, middlePrice)) {
@@ -134,6 +125,24 @@ public class VolumeContainer {
 		}
 
 		return -leftIndex - 1;// value not found, return index to place value
+	}
+
+	private int getMiddleIndex(int price, int leftIndex, int rightIndex) {
+		final int leftPrice = prices[leftIndex];
+		final int rightPrice = prices[rightIndex];
+		if (rightPrice == leftPrice) {
+			return (leftIndex + rightIndex) >> 1;
+		}
+		long priceDiff;
+		long maxPriceDiff;
+		if (reversed) {
+			priceDiff = leftPrice - price;
+			maxPriceDiff = leftPrice - rightPrice;
+		} else {
+			priceDiff = price - leftPrice;
+			maxPriceDiff = rightPrice - leftPrice;
+		}
+		return (int) (priceDiff * (rightIndex - leftIndex) / maxPriceDiff + leftIndex);
 	}
 
 	private boolean isValueInLeftHalf(int price, final int middlePrice) {
