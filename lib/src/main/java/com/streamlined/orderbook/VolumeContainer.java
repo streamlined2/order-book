@@ -49,10 +49,19 @@ public class VolumeContainer {
 
 	public void set(int price, int volume) {
 		final int index = indexOf(price);
-		if (index >= 0) {
+		if (index == size - 1 && volume == 0) {
+			size--;
+			removeEmptyVolumeItems(index - 1);
+		} else if (index >= 0) {
 			volumes[index] = volume;
 		} else {
 			freeCellAndStorePriceVolume(index, price, volume);
+		}
+	}
+
+	private void removeEmptyVolumeItems(final int startIndex) {
+		for (int k = startIndex; k >= 0 && volumes[k] == 0; k--) {
+			size--;
 		}
 	}
 
@@ -100,12 +109,8 @@ public class VolumeContainer {
 
 	int indexOf(int price) {
 
-		if (size == 0) {
+		if (size == 0 || isOutOfLeftBorder(price)) {
 			return -1;// insert at index 0 for empty array
-		}
-
-		if (isOutOfLeftBorder(price)) {
-			return -1;// not found, insert at leftmost occupied index 0
 		}
 		if (isOutOfRightBorder(price)) {
 			return -size - 1;// not found, insert at rightmost free index

@@ -56,7 +56,7 @@ class VolumeContainerPerformanceTest {
 	@Test
 	@DisplayName("measure insertion time for non-reversed container")
 	void testMeasureInsertionTimeForNonReversedContainer() {
-		final int count = 100_000;
+		final int count = 10_000_000;
 		final int step = 10;
 		// setup
 		VolumeContainer container = new VolumeContainer(count);
