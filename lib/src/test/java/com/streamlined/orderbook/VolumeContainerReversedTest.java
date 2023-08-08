@@ -145,6 +145,34 @@ class VolumeContainerReversedTest {
 	}
 
 	@Test
+	@DisplayName("search via indexOf should continue until key is within left and right border")
+	void test9a() {
+		final int count = 1000;
+		VolumeContainer container = new VolumeContainer(true, count);
+		int price = 1;
+		for (int k = 0; k < count; k++) {
+			container.set(price, 1);
+			price += 2;
+		}
+
+		price = 2;
+		for (int k = 0; k < count; k++) {
+			container.set(price, 2);
+			price += 2;
+		}
+
+		assertEquals(2 * count, container.getSize());
+
+		price = 2 * count;
+		for (int k = 0; k < 2 * count; k++) {
+			assertEquals(price, container.getPrice(k));
+			assertEquals(k % 2 == 0 ? 2 : 1, container.getVolume(k));
+			price -= 1;
+		}
+
+	}
+
+	@Test
 	@DisplayName("check no value of best price for empty container")
 	void test10() {
 		VolumeContainer container = new VolumeContainer(true, 1);

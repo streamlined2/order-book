@@ -56,18 +56,19 @@ class VolumeContainerPerformanceTest {
 	@Test
 	@DisplayName("measure insertion time for non-reversed container")
 	void testMeasureInsertionTimeForNonReversedContainer() {
+		final int count = 100_000;
 		final int step = 10;
 		// setup
-		VolumeContainer container = new VolumeContainer(100_000);
+		VolumeContainer container = new VolumeContainer(count);
 		int price = 1;
-		for (int k = 0; k < container.getCapacity(); k++) {
+		for (int k = 0; k < count; k++) {
 			container.set(price, k % step == 0 ? 0 : 1);
 			price += 2;
 		}
 		// measure
 		price = 2;
 		long start = System.currentTimeMillis();
-		for (int k = 0; k < container.getSize(); k += step) {
+		for (int k = 0; k < count; k += step) {
 			container.set(price, 2);
 			price += 2;
 		}
