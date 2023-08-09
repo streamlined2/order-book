@@ -10,7 +10,7 @@ class VolumeContainerReversedTest {
 	@Test
 	@DisplayName("initial capacity should be 1 and size should be 0 for empty container created with initial capacity 0")
 	void test1() {
-		VolumeContainer container = new VolumeContainer(true, 0);
+		ArrayContainer container = new ReversedOrderContainer(0);
 
 		assertEquals(1, container.getCapacity());
 		assertEquals(0, container.getSize());
@@ -19,7 +19,7 @@ class VolumeContainerReversedTest {
 	@Test
 	@DisplayName("initial capacity should be 1 and size 0 after container created with initial capacity 1")
 	void test2() {
-		VolumeContainer container = new VolumeContainer(true, 1);
+		ArrayContainer container = new ReversedOrderContainer(1);
 
 		assertEquals(1, container.getCapacity());
 		assertEquals(0, container.getSize());
@@ -28,7 +28,7 @@ class VolumeContainerReversedTest {
 	@Test
 	@DisplayName("initial capacity should be 1 and size 1 after one element added to container with initial capacity 1")
 	void test3() {
-		VolumeContainer container = new VolumeContainer(true, 1);
+		ArrayContainer container = new ReversedOrderContainer(1);
 		final int price = 1000;
 		final int volume = 100;
 		container.set(price, volume);
@@ -42,7 +42,7 @@ class VolumeContainerReversedTest {
 	@Test
 	@DisplayName("initial capacity should be greater 1 and size 2 after two elements added to container with initial capacity 1")
 	void test4() {
-		VolumeContainer container = new VolumeContainer(true, 1);
+		ArrayContainer container = new ReversedOrderContainer(1);
 		final int price1 = 1000;
 		final int volume1 = 100;
 		container.set(price1, volume1);
@@ -61,7 +61,7 @@ class VolumeContainerReversedTest {
 	@Test
 	@DisplayName("check binary search for price value if succeeds")
 	void test5() {
-		VolumeContainer container = new VolumeContainer(true, new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
+		ArrayContainer container = new ReversedOrderContainer(new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
 
 		assertEquals(0, container.indexOf(300));
 		assertEquals(1, container.indexOf(200));
@@ -71,7 +71,7 @@ class VolumeContainerReversedTest {
 	@Test
 	@DisplayName("check binary search for price value if fails")
 	void test6() {
-		VolumeContainer container = new VolumeContainer(true, new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
+		ArrayContainer container = new ReversedOrderContainer(new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
 
 		assertEquals(-1, container.indexOf(350));
 		assertEquals(-2, container.indexOf(250));
@@ -82,7 +82,7 @@ class VolumeContainerReversedTest {
 	@Test
 	@DisplayName("should copy elements up to empty element before insertion")
 	void test7() {
-		VolumeContainer container = new VolumeContainer(true, new int[] { 700, 600, 500, 400, 300, 200, 100 },
+		ArrayContainer container = new ReversedOrderContainer(new int[] { 700, 600, 500, 400, 300, 200, 100 },
 				new int[] { 35, 30, 25, 20, 15, 0, 5 });
 
 		final int price = 650;
@@ -109,7 +109,7 @@ class VolumeContainerReversedTest {
 	@Test
 	@DisplayName("should contain three elements in correct order")
 	void test8() {
-		VolumeContainer container = new VolumeContainer(true, 1);
+		ArrayContainer container = new ReversedOrderContainer(1);
 		final int price3 = 500;
 		final int volume3 = 50;
 		container.set(price3, volume3);
@@ -132,7 +132,7 @@ class VolumeContainerReversedTest {
 	@Test
 	@DisplayName("should one element be created and its volume set to given value")
 	void test9() {
-		VolumeContainer container = new VolumeContainer(true, 1);
+		ArrayContainer container = new ReversedOrderContainer(1);
 		final int price1 = 1000;
 		final int volume1 = 100;
 		final int volume2 = 1000;
@@ -148,7 +148,7 @@ class VolumeContainerReversedTest {
 	@DisplayName("search via indexOf should continue until key is within left and right border")
 	void test9a() {
 		final int count = 1000;
-		VolumeContainer container = new VolumeContainer(true, count);
+		ArrayContainer container = new ReversedOrderContainer(count);
 		int price = 1;
 		for (int k = 0; k < count; k++) {
 			container.set(price, 1);
@@ -175,15 +175,15 @@ class VolumeContainerReversedTest {
 	@Test
 	@DisplayName("check no value of best price for empty container")
 	void test10() {
-		VolumeContainer container = new VolumeContainer(true, 1);
+		ArrayContainer container = new ReversedOrderContainer(1);
 
-		assertEquals(VolumeContainer.PRICE_VALUE_ABSENT, container.getBestPrice());
+		assertEquals(ArrayContainer.PRICE_VALUE_ABSENT, container.getBestPrice());
 	}
 
 	@Test
 	@DisplayName("check value of best price for non empty container")
 	void test11() {
-		VolumeContainer container = new VolumeContainer(true, new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
+		ArrayContainer container = new ReversedOrderContainer(new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
 
 		assertEquals(100, container.getBestPrice());
 	}
@@ -191,7 +191,7 @@ class VolumeContainerReversedTest {
 	@Test
 	@DisplayName("should return volume by price if found")
 	void test12() {
-		VolumeContainer container = new VolumeContainer(true, new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
+		ArrayContainer container = new ReversedOrderContainer(new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
 
 		assertEquals(5, container.getVolumeByPrice(100));
 		assertEquals(10, container.getVolumeByPrice(200));
@@ -201,17 +201,17 @@ class VolumeContainerReversedTest {
 	@Test
 	@DisplayName("should return absent volume value if price not found")
 	void test13() {
-		VolumeContainer container = new VolumeContainer(true, new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
+		ArrayContainer container = new ReversedOrderContainer(new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
 
-		assertEquals(VolumeContainer.VOLUME_VALUE_ABSENT, container.getVolumeByPrice(110));
-		assertEquals(VolumeContainer.VOLUME_VALUE_ABSENT, container.getVolumeByPrice(220));
-		assertEquals(VolumeContainer.VOLUME_VALUE_ABSENT, container.getVolumeByPrice(330));
+		assertEquals(ArrayContainer.VOLUME_VALUE_ABSENT, container.getVolumeByPrice(110));
+		assertEquals(ArrayContainer.VOLUME_VALUE_ABSENT, container.getVolumeByPrice(220));
+		assertEquals(ArrayContainer.VOLUME_VALUE_ABSENT, container.getVolumeByPrice(330));
 	}
 
 	@Test
 	@DisplayName("should subtract given volume for best price if subtracted volume is less than element's volume")
 	void test14() {
-		VolumeContainer container = new VolumeContainer(true, new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
+		ArrayContainer container = new ReversedOrderContainer(new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
 
 		assertEquals(1, container.subtractVolumeForBestPrice(1));
 		assertEquals(15, container.getVolumeByPrice(300));
@@ -223,7 +223,7 @@ class VolumeContainerReversedTest {
 	@Test
 	@DisplayName("should remove element for best price if volume is enough")
 	void test15() {
-		VolumeContainer container = new VolumeContainer(true, new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
+		ArrayContainer container = new ReversedOrderContainer(new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
 
 		assertEquals(5, container.subtractVolumeForBestPrice(5));
 		assertEquals(15, container.getVolumeByPrice(300));
@@ -234,7 +234,7 @@ class VolumeContainerReversedTest {
 	@Test
 	@DisplayName("should remove last element for best price and decrease adjacent element")
 	void test15a() {
-		VolumeContainer container = new VolumeContainer(true, new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
+		ArrayContainer container = new ReversedOrderContainer(new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
 
 		assertEquals(6, container.subtractVolumeForBestPrice(6));
 		assertEquals(15, container.getVolumeByPrice(300));
@@ -245,7 +245,7 @@ class VolumeContainerReversedTest {
 	@Test
 	@DisplayName("should remove two last elements and decrease first element")
 	void test15b() {
-		VolumeContainer container = new VolumeContainer(true, new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
+		ArrayContainer container = new ReversedOrderContainer(new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
 
 		assertEquals(16, container.subtractVolumeForBestPrice(16));
 		assertEquals(14, container.getVolumeByPrice(300));
@@ -255,7 +255,7 @@ class VolumeContainerReversedTest {
 	@Test
 	@DisplayName("should remove adjacent empty elements and decrease non-empty elements")
 	void test15c() {
-		VolumeContainer container = new VolumeContainer(true, new int[] { 100, 200, 300, 400, 500 },
+		ArrayContainer container = new ReversedOrderContainer(new int[] { 100, 200, 300, 400, 500 },
 				new int[] { 5, 0, 0, 10, 15 });
 
 		assertEquals(16, container.subtractVolumeForBestPrice(16));
@@ -266,7 +266,7 @@ class VolumeContainerReversedTest {
 	@Test
 	@DisplayName("should remove elements and return real decreased volume if given volume greater than presented")
 	void test15d() {
-		VolumeContainer container = new VolumeContainer(true, new int[] { 100, 200, 300, 400, 500 },
+		ArrayContainer container = new ReversedOrderContainer(new int[] { 100, 200, 300, 400, 500 },
 				new int[] { 5, 0, 0, 10, 15 });
 
 		assertEquals(30, container.subtractVolumeForBestPrice(35));
@@ -276,7 +276,7 @@ class VolumeContainerReversedTest {
 	@Test
 	@DisplayName("should return price and volume for best price value in container")
 	void test16() {
-		VolumeContainer container = new VolumeContainer(true, new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
+		ArrayContainer container = new ReversedOrderContainer(new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
 
 		var priceVolume = container.getBestPriceValue();
 		assertEquals(100, priceVolume.getPrice());
@@ -286,7 +286,7 @@ class VolumeContainerReversedTest {
 	@Test
 	@DisplayName("should return null for best price value in empty container")
 	void test17() {
-		VolumeContainer container = new VolumeContainer(true, 1);
+		ArrayContainer container = new ReversedOrderContainer(1);
 
 		var priceVolume = container.getBestPriceValue();
 		assertNull(priceVolume);
@@ -295,7 +295,7 @@ class VolumeContainerReversedTest {
 	@Test
 	@DisplayName("should remove elements for best price if subtracted volume is same or greater and previous elements are empty")
 	void test18() {
-		VolumeContainer container = new VolumeContainer(true, new int[] { 100, 200, 300, 400, 500 },
+		ArrayContainer container = new ReversedOrderContainer(new int[] { 100, 200, 300, 400, 500 },
 				new int[] { 5, 0, 0, 0, 25 });
 
 		assertEquals(5, container.subtractVolumeForBestPrice(5));
@@ -305,7 +305,7 @@ class VolumeContainerReversedTest {
 	@Test
 	@DisplayName("last element should be removed if size set to 0")
 	void test19() {
-		VolumeContainer container = new VolumeContainer(true, new int[] { 100, 200, 300, 400, 500 },
+		ArrayContainer container = new ReversedOrderContainer(new int[] { 100, 200, 300, 400, 500 },
 				new int[] { 5, 10, 15, 20, 25 });
 		container.set(100, 0);
 
@@ -317,7 +317,7 @@ class VolumeContainerReversedTest {
 	@Test
 	@DisplayName("last element and preceding empty elements should be removed if size set to 0 for last element")
 	void test20() {
-		VolumeContainer container = new VolumeContainer(true, new int[] { 100, 200, 300, 400, 500 },
+		ArrayContainer container = new ReversedOrderContainer(new int[] { 100, 200, 300, 400, 500 },
 				new int[] { 5, 0, 0, 0, 25 });
 		container.set(100, 0);
 

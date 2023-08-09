@@ -6,8 +6,8 @@ public class OrderBook {
 	private final VolumeContainer bidContainer;
 
 	public OrderBook(int initialCapacity) {
-		askContainer = new VolumeContainer(true, initialCapacity);
-		bidContainer = new VolumeContainer(initialCapacity);
+		askContainer = new ReversedOrderContainer(initialCapacity);
+		bidContainer = new NaturalOrderContainer(initialCapacity);
 	}
 
 	public void setBidSize(int price, int size) {
@@ -28,16 +28,16 @@ public class OrderBook {
 
 	public int querySizeForPrice(int price) {
 		int bestBidPrice = bidContainer.getBestPrice();
-		if (bestBidPrice != VolumeContainer.PRICE_VALUE_ABSENT && price <= bestBidPrice) {
+		if (bestBidPrice != ArrayContainer.PRICE_VALUE_ABSENT && price <= bestBidPrice) {
 			int bidSize = bidContainer.getVolumeByPrice(price);
-			if (bidSize != VolumeContainer.VOLUME_VALUE_ABSENT) {
+			if (bidSize != ArrayContainer.VOLUME_VALUE_ABSENT) {
 				return bidSize;
 			}
 		}
 		int bestAskPrice = askContainer.getBestPrice();
-		if (bestAskPrice != VolumeContainer.PRICE_VALUE_ABSENT && price >= bestAskPrice) {
+		if (bestAskPrice != ArrayContainer.PRICE_VALUE_ABSENT && price >= bestAskPrice) {
 			int askSize = askContainer.getVolumeByPrice(price);
-			if (askSize != VolumeContainer.VOLUME_VALUE_ABSENT) {
+			if (askSize != ArrayContainer.VOLUME_VALUE_ABSENT) {
 				return askSize;
 			}
 		}
