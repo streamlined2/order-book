@@ -109,76 +109,81 @@ public class VolumeContainer {
 
 	int indexOf(int price) {
 
-		if (size == 0 || isOutOfLeftBorder(price)) {
-			return -1;// insert at index 0 for empty array
+		if (size == 0 || belongsToRightHalf(prices[0], price)) {
+			return -1;// insert at index 0 for an empty array or if price is less then left border
+						// value
 		}
-		if (isOutOfRightBorder(price)) {
-			return -size - 1;// not found, insert at rightmost free index
+		if (!belongsToLeftHalf(price, size)) {
+			return -size - 1;// price greater than right border value, insert at rightmost free index
 		}
 
 		int leftIndex = 0;
 		int rightIndex = size - 1;
 
-		while (leftIndex <= rightIndex && isWithinRange(price, leftIndex, rightIndex)) {
+		while (leftIndex <= rightIndex) {
 
-			final int middleIndex = getMiddleIndex(price, leftIndex, rightIndex);
+			final int leftPrice = prices[leftIndex];
+			final int rightPrice = prices[rightIndex];
+
+			if (!withinRange(price, leftPrice, rightPrice)) {
+				break;
+			}
+
+			final int middleIndex = getMiddleIndex(price, leftIndex, rightIndex, leftPrice, rightPrice);
 			final int middlePrice = prices[middleIndex];
 
 			if (price == middlePrice) {
 				return middleIndex;
 			}
 
-			final boolean belongsToRightHalf = belongsToRightHalf(price, middlePrice);
-			final boolean belongsToLeftHalf = belongsToLeftHalf(price, middleIndex);
-
-			if (!belongsToRightHalf && !belongsToLeftHalf) {
-				return -middleIndex - 1;
-			} else if (belongsToRightHalf) {
+			if (belongsToRightHalf(price, middlePrice)) {
 				leftIndex = middleIndex + 1;
-			} else {
+			} else if (belongsToLeftHalf(price, middleIndex)) {
 				rightIndex = middleIndex - 1;
+			} else {
+				return -middleIndex - 1;// price does not belong to any half, insert between them
 			}
 
 		}
 
-		return -leftIndex - 1;// value not found, return index to place value
+		return -leftIndex - 1;// value not found, insert at leftIndex position
 	}
 
 	private boolean belongsToRightHalf(int price, final int middlePrice) {
-		return reversed && middlePrice > price || !reversed && middlePrice < price;
+		if (reversed) {
+			return middlePrice > price;
+		} else {
+			return middlePrice < price;
+		}
 	}
 
 	private boolean belongsToLeftHalf(int price, final int middleIndex) {
 		if (middleIndex > 0) {
 			final int leftIndex = middleIndex - 1;
 			final int leftPrice = prices[leftIndex];
-			return reversed && price >= leftPrice || !reversed && price <= leftPrice;
+			if (reversed) {
+				return price >= leftPrice;
+			} else {
+				return price <= leftPrice;
+			}
 		}
 		return false;
 	}
 
-	private boolean isOutOfLeftBorder(int price) {
-		return belongsToRightHalf(prices[0], price);
-	}
-
-	private boolean isOutOfRightBorder(int price) {
-		return !belongsToLeftHalf(price, size);
-	}
-
-	private boolean isWithinRange(int price, int leftIndex, int rightIndex) {
+	private boolean withinRange(int price, int leftPrice, int rightPrice) {
 		if (reversed) {
-			return prices[rightIndex] <= price && price <= prices[leftIndex];
+			return rightPrice <= price && price <= leftPrice;
 		} else {
-			return prices[leftIndex] <= price && price <= prices[rightIndex];
+			return leftPrice <= price && price <= rightPrice;
 		}
 	}
 
-	private int getMiddleIndex(int price, int leftIndex, int rightIndex) {
-		final int leftPrice = prices[leftIndex];
-		final int rightPrice = prices[rightIndex];
-		if (rightPrice == leftPrice) {
-			return (leftIndex + rightIndex) >> 1;
-		}
+	private int getMiddleIndex(int price, int leftIndex, int rightIndex, final int leftPrice, final int rightPrice) {
+		return rightPrice == leftPrice ? (leftIndex + rightIndex) >> 1
+				: getMiddleIndexForPrice(price, leftIndex, rightIndex, leftPrice, rightPrice);
+	}
+
+	private int getMiddleIndexForPrice(int price, int leftIndex, int rightIndex, int leftPrice, int rightPrice) {
 		long priceDiff;
 		long maxPriceDiff;
 		if (reversed) {
@@ -188,7 +193,7 @@ public class VolumeContainer {
 			priceDiff = price - leftPrice;
 			maxPriceDiff = rightPrice - leftPrice;
 		}
-		return (int) (priceDiff * (rightIndex - leftIndex) / maxPriceDiff + leftIndex);
+		return leftIndex + (int) ((rightIndex - leftIndex) * priceDiff / maxPriceDiff);
 	}
 
 	int getPrice(int index) {
@@ -205,7 +210,7 @@ public class VolumeContainer {
 			lastPriceVolume.setPriceVolume(prices[index], volumes[index]);
 			return lastPriceVolume;// mutable singleton to avoid GC involvement
 		}
-		return null;// violates clear code convention
+		return null;// violates clean code convention
 	}
 
 	public int getBestPrice() {
