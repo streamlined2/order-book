@@ -1,6 +1,9 @@
-package com.streamlined.orderbook;
+package com.streamlined.orderbook.arrayimplementation;
 
 import java.util.Arrays;
+
+import com.streamlined.orderbook.PriceVolume;
+import com.streamlined.orderbook.VolumeContainer;
 
 public abstract class ArrayContainer implements VolumeContainer {
 
@@ -29,7 +32,7 @@ public abstract class ArrayContainer implements VolumeContainer {
 		}
 	}
 
-	final int getCapacity() {
+	public final int getCapacity() {
 		return prices.length;
 	}
 
@@ -97,7 +100,7 @@ public abstract class ArrayContainer implements VolumeContainer {
 		volumes = newVolumes;
 	}
 
-	final int indexOf(int price) {
+	public final int indexOf(int price) {
 
 		if (size == 0 || belongsToRightHalf(prices[0], price)) {
 			return -1;// insert at index 0 for an empty array or if price is less then left border
@@ -162,11 +165,11 @@ public abstract class ArrayContainer implements VolumeContainer {
 	protected abstract int getMiddleIndexForPrice(int price, int leftIndex, int rightIndex, int leftPrice,
 			int rightPrice);
 
-	final int getPrice(int index) {
+	public final int getPrice(int index) {
 		return prices[index];
 	}
 
-	final int getVolume(int index) {
+	public final int getVolume(int index) {
 		return volumes[index];
 	}
 

@@ -3,6 +3,10 @@ package com.streamlined.orderbook;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import com.streamlined.orderbook.arrayimplementation.ArrayContainer;
+import com.streamlined.orderbook.arrayimplementation.NaturalOrderContainer;
+import com.streamlined.orderbook.arrayimplementation.ReversedOrderContainer;
+
 class VolumeContainerPerformanceTest {
 
 	@Test

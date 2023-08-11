@@ -1,4 +1,4 @@
-package com.streamlined.orderbook;
+package com.streamlined.orderbook.arrayimplementation;
 
 public class NaturalOrderContainer extends ArrayContainer {
 

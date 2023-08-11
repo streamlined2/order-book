@@ -1,5 +1,9 @@
 package com.streamlined.orderbook;
 
+import com.streamlined.orderbook.arrayimplementation.ArrayContainer;
+import com.streamlined.orderbook.arrayimplementation.NaturalOrderContainer;
+import com.streamlined.orderbook.arrayimplementation.ReversedOrderContainer;
+
 public class OrderBook {
 
 	private final VolumeContainer askContainer;
