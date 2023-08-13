@@ -31,47 +31,55 @@ public class HashtableContainer implements VolumeContainer {
 		minPriceGroupIndex = priceGroups.length;
 	}
 
-	int defineFirstPriceGroupStart(int firstPrice, int groupSizePower) {
+	int defineFirstPriceGroupStart(int firstPrice) {
 		if (firstPriceGroupStart == VALUE_UNDEFINED) {
-			firstPriceGroupStart = firstPrice >> groupSizePower << groupSizePower;
+			firstPriceGroupStart = firstPrice >> PRICE_GROUP_SIZE_POWER << PRICE_GROUP_SIZE_POWER;
 		}
 		return firstPriceGroupStart;
 	}
 
-	int mapPriceToGroupIndex(int price, int groupSizePower) {
-		defineFirstPriceGroupStart(price, groupSizePower);
-		int index = (price - firstPriceGroupStart) >> groupSizePower;
+	int mapPriceToGroupIndex(int price) {
+		defineFirstPriceGroupStart(price);
+		int index = (price - firstPriceGroupStart) >> PRICE_GROUP_SIZE_POWER;
 		if (index < 0) {
 			index += priceGroups.length;
 		}
 		return index;
 	}
 
-	int getMinExpansionSize(int price, int index) {
-		int minExpansionSize;
-		if (price < firstPriceGroupStart) {
-			minExpansionSize = maxPriceGroupIndex - index + 1;
-		} else {
-			minExpansionSize = index - minPriceGroupIndex + 1;
-		}
-		return minExpansionSize;
+	private int getMinExpansionSize(int price, int index) {
+		return belongsToMinPriceSegment(price) ? maxPriceGroupIndex - index + 1 : index - minPriceGroupIndex + 1;
 	}
 
-	boolean needsExpansion(int price, int groupSizePower) {
-		return getMinExpansionSize(price, mapPriceToGroupIndex(price, groupSizePower)) > 0;
+	private boolean belongsToMinPriceSegment(int price) {
+		return price < firstPriceGroupStart;
 	}
 
-	void allocateCell(int price, int groupSizePower) {
-		int index = mapPriceToGroupIndex(price, groupSizePower);
-		int minExpansionSize = getMinExpansionSize(price, index);
+	int locateGroupForPrice(int price) {
+		int index = mapPriceToGroupIndex(price);
+		final int minExpansionSize = getMinExpansionSize(price, index);
 		if (minExpansionSize > 0) {
 			expandContainer(minExpansionSize);
+			index = mapPriceToGroupIndex(price);
 		}
-		if (price < firstPriceGroupStart) {
-			minPriceGroupIndex = minPriceGroupIndex > index ? index : minPriceGroupIndex;
+		if (belongsToMinPriceSegment(price)) {
+			minPriceGroupIndex = Math.min(index, minPriceGroupIndex);
 		} else {
-			maxPriceGroupIndex = maxPriceGroupIndex < index ? index : maxPriceGroupIndex;
+			maxPriceGroupIndex = Math.max(index, maxPriceGroupIndex);
 		}
+		return index;
+	}
+
+	int getMinPriceGroupIndex() {
+		return minPriceGroupIndex;
+	}
+
+	int getMaxPriceGroupIndex() {
+		return maxPriceGroupIndex;
+	}
+
+	int getCapacity() {
+		return priceGroups.length;
 	}
 
 	private void expandContainer(int minExpansionSize) {
