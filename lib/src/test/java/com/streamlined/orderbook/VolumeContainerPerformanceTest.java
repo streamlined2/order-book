@@ -13,10 +13,11 @@ class VolumeContainerPerformanceTest {
 	@DisplayName("measure search time for non-reversed container")
 	void testMeasureSearchTimeForNonReversedContainer() {
 		// setup
-		ArrayContainer container = new NaturalOrderContainer(10_000_000);
+		final int capacity = 10_000_000;
+		ArrayContainer container = new NaturalOrderContainer(capacity);
 		int price = 1;
 		int volume = 1;
-		for (int k = 0; k < container.getCapacity(); k++) {
+		for (int k = 0; k < capacity; k++) {
 			container.set(price, volume);
 			price += 1;
 			volume += 10;
@@ -37,10 +38,11 @@ class VolumeContainerPerformanceTest {
 	@DisplayName("measure search time for reversed container")
 	void testMeasureSearchTimeForReversedContainer() {
 		// setup
-		ArrayContainer container = new ReversedOrderContainer(10_000_000);
-		int price = container.getCapacity();
+		final int capacity = 10_000_000;
+		ArrayContainer container = new ReversedOrderContainer(capacity);
+		int price = capacity;
 		int volume = 1;
-		for (int k = 0; k < container.getCapacity(); k++) {
+		for (int k = 0; k < capacity; k++) {
 			container.set(price, volume);
 			price -= 1;
 			volume += 10;

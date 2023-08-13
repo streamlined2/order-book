@@ -13,7 +13,7 @@ class LinkedListTest {
 	@Test
 	@DisplayName("newly created list should be empty")
 	void test1() {
-		LinkedList list = new LinkedList();
+		OrderedLinkedList list = new OrderedLinkedList();
 
 		assertEquals(0, list.getSize());
 		assertTrue(list.isEmpty());
@@ -22,7 +22,7 @@ class LinkedListTest {
 	@Test
 	@DisplayName("list should contain one element passed to constructor")
 	void test2() {
-		LinkedList list = new LinkedList(new int[] { 1 }, new int[] { 10 });
+		OrderedLinkedList list = new OrderedLinkedList(new int[] { 1 }, new int[] { 10 });
 
 		assertEquals(1, list.getSize());
 		assertFalse(list.isEmpty());
@@ -35,7 +35,7 @@ class LinkedListTest {
 	@Test
 	@DisplayName("should contain one element after adding it to empty list")
 	void test3() {
-		LinkedList list = new LinkedList();
+		OrderedLinkedList list = new OrderedLinkedList();
 
 		list.add(1, 10);
 
@@ -50,7 +50,7 @@ class LinkedListTest {
 	@Test
 	@DisplayName("element should be added before another one")
 	void test4() {
-		LinkedList list = new LinkedList(new int[] { 2 }, new int[] { 10 });
+		OrderedLinkedList list = new OrderedLinkedList(new int[] { 2 }, new int[] { 10 });
 
 		list.add(1, 5);
 
@@ -69,7 +69,7 @@ class LinkedListTest {
 	@Test
 	@DisplayName("element should be added after another one")
 	void test5() {
-		LinkedList list = new LinkedList(new int[] { 1 }, new int[] { 5 });
+		OrderedLinkedList list = new OrderedLinkedList(new int[] { 1 }, new int[] { 5 });
 
 		list.add(2, 10);
 
@@ -88,7 +88,7 @@ class LinkedListTest {
 	@Test
 	@DisplayName("element should be added after head but before last one")
 	void test6() {
-		LinkedList list = new LinkedList(new int[] { 3, 1 }, new int[] { 15, 5 });
+		OrderedLinkedList list = new OrderedLinkedList(new int[] { 3, 1 }, new int[] { 15, 5 });
 
 		list.add(2, 10);
 
@@ -110,7 +110,7 @@ class LinkedListTest {
 	@Test
 	@DisplayName("element should be added after last one")
 	void test7() {
-		LinkedList list = new LinkedList(new int[] { 2, 1 }, new int[] { 10, 5 });
+		OrderedLinkedList list = new OrderedLinkedList(new int[] { 2, 1 }, new int[] { 10, 5 });
 
 		list.add(3, 15);
 
@@ -132,7 +132,7 @@ class LinkedListTest {
 	@Test
 	@DisplayName("size should be changed for every element of list")
 	void test8() {
-		LinkedList list = new LinkedList(new int[] { 1, 2 }, new int[] { 5, 10 });
+		OrderedLinkedList list = new OrderedLinkedList(new int[] { 1, 2 }, new int[] { 5, 10 });
 
 		list.setVolume(1, 10);
 		list.setVolume(2, 20);
@@ -152,7 +152,7 @@ class LinkedListTest {
 	@Test
 	@DisplayName("hasNext should return false for empty list")
 	void test9() {
-		LinkedList list = new LinkedList();
+		OrderedLinkedList list = new OrderedLinkedList();
 		Iterator<Node> i = list.iterator();
 
 		assertFalse(i.hasNext());
@@ -161,7 +161,7 @@ class LinkedListTest {
 	@Test
 	@DisplayName("next should throw exception if no elements left in list")
 	void test10() {
-		LinkedList list = new LinkedList();
+		OrderedLinkedList list = new OrderedLinkedList();
 		Iterator<Node> i = list.iterator();
 
 		assertThrows(NoSuchElementException.class, () -> i.next());
@@ -170,7 +170,7 @@ class LinkedListTest {
 	@Test
 	@DisplayName("next should return element from list")
 	void test11() {
-		LinkedList list = new LinkedList(new int[] { 1 }, new int[] { 10 });
+		OrderedLinkedList list = new OrderedLinkedList(new int[] { 1 }, new int[] { 10 });
 		Iterator<Node> i = list.iterator();
 
 		Node node = i.next();
@@ -181,7 +181,7 @@ class LinkedListTest {
 	@Test
 	@DisplayName("remove operation for empty list should throw exception")
 	void test12() {
-		LinkedList list = new LinkedList();
+		OrderedLinkedList list = new OrderedLinkedList();
 
 		Iterator<Node> i = list.iterator();
 		assertThrows(NoSuchElementException.class, () -> i.remove());
@@ -190,7 +190,7 @@ class LinkedListTest {
 	@Test
 	@DisplayName("remove operation should throw exception if no preliminary call of next was done")
 	void test13() {
-		LinkedList list = new LinkedList(new int[] { 1 }, new int[] { 10 });
+		OrderedLinkedList list = new OrderedLinkedList(new int[] { 1 }, new int[] { 10 });
 
 		Iterator<Node> i = list.iterator();
 		assertThrows(NoSuchElementException.class, () -> i.remove());
@@ -199,7 +199,7 @@ class LinkedListTest {
 	@Test
 	@DisplayName("remove operation for one element list should make it empty")
 	void test14() {
-		LinkedList list = new LinkedList(new int[] { 1 }, new int[] { 10 });
+		OrderedLinkedList list = new OrderedLinkedList(new int[] { 1 }, new int[] { 10 });
 
 		Iterator<Node> i = list.iterator();
 		i.next();
@@ -212,7 +212,7 @@ class LinkedListTest {
 	@Test
 	@DisplayName("two consequent remove operations for two element list should make it empty list")
 	void test15() {
-		LinkedList list = new LinkedList(new int[] { 1, 2 }, new int[] { 10, 20 });
+		OrderedLinkedList list = new OrderedLinkedList(new int[] { 1, 2 }, new int[] { 10, 20 });
 
 		Iterator<Node> i = list.iterator();
 		i.next();
@@ -233,7 +233,7 @@ class LinkedListTest {
 	@Test
 	@DisplayName("remove operation amidst list should contract it")
 	void test16() {
-		LinkedList list = new LinkedList(new int[] { 1, 2, 3 }, new int[] { 10, 20, 30 });
+		OrderedLinkedList list = new OrderedLinkedList(new int[] { 1, 2, 3 }, new int[] { 10, 20, 30 });
 
 		Iterator<Node> i = list.iterator();
 		i.next();
@@ -253,7 +253,7 @@ class LinkedListTest {
 	@Test
 	@DisplayName("remove operation at the tail list should contract it")
 	void test17() {
-		LinkedList list = new LinkedList(new int[] { 1, 2, 3 }, new int[] { 10, 20, 30 });
+		OrderedLinkedList list = new OrderedLinkedList(new int[] { 1, 2, 3 }, new int[] { 10, 20, 30 });
 
 		Iterator<Node> i = list.iterator();
 		i.next();

@@ -3,14 +3,14 @@ package com.streamlined.orderbook.hashtableimplementation;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class LinkedList implements Iterable<Node> {
+public class OrderedLinkedList implements Iterable<Node> {
 
 	private Node head;
 
-	public LinkedList() {
+	public OrderedLinkedList() {
 	}
 
-	public LinkedList(int[] orders, int[] volumes) {
+	public OrderedLinkedList(int[] orders, int[] volumes) {
 		for (int k = 0; k < Math.min(orders.length, volumes.length); k++) {
 			add(orders[k], volumes[k]);
 		}
