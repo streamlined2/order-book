@@ -1,11 +1,14 @@
 package com.streamlined.orderbook.hashtableimplementation;
 
+import java.util.NoSuchElementException;
+
 import com.streamlined.orderbook.PriceVolume;
 import com.streamlined.orderbook.VolumeContainer;
 
 public class HashtableContainer implements VolumeContainer {
 
 	private static final int INITIAL_CAPACITY = 1000;
+	public static final int VOLUME_VALUE_ABSENT = -1;
 	static final int VALUE_UNDEFINED = -1;
 
 	static final int PRICE_GROUP_SIZE_POWER = 2;
@@ -102,10 +105,14 @@ public class HashtableContainer implements VolumeContainer {
 	public int getSize() {
 		int size = 0;
 		for (int k = 0; k <= maxPriceGroupIndex; k++) {
-			size += priceGroups[k].getSize();
+			if (priceGroups[k] != null) {
+				size += priceGroups[k].getSize();
+			}
 		}
 		for (int k = minPriceGroupIndex; k < priceGroups.length; k++) {
-			size += priceGroups[k].getSize();
+			if (priceGroups[k] != null) {
+				size += priceGroups[k].getSize();
+			}
 		}
 		return size;
 	}
@@ -116,8 +123,24 @@ public class HashtableContainer implements VolumeContainer {
 
 	@Override
 	public void set(int price, int volume) {
-		// TODO Auto-generated method stub
+		final int index = locateGroupForPrice(price);
+		if (priceGroups[index] == null) {
+			priceGroups[index] = new OrderedLinkedList();
+		}
+		priceGroups[index].add(price, volume);
+	}
 
+	@Override
+	public int getVolumeByPrice(int price) {
+		final int index = locateGroupForPrice(price);
+		if (priceGroups[index] == null) {
+			return VOLUME_VALUE_ABSENT;
+		}
+		Node node = priceGroups[index].getNodeByOrder(price);
+		if (node == null) {
+			return VOLUME_VALUE_ABSENT;
+		}
+		return node.getVolume();
 	}
 
 	@Override
@@ -133,15 +156,32 @@ public class HashtableContainer implements VolumeContainer {
 	}
 
 	@Override
-	public int getVolumeByPrice(int price) {
+	public int subtractVolumeForBestPrice(int subtractVolume) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public int subtractVolumeForBestPrice(int subtractVolume) {
-		// TODO Auto-generated method stub
-		return 0;
+	public String toString() {
+		StringBuilder b = new StringBuilder("[");
+		int count = 0;
+		for (int k = minPriceGroupIndex; k < priceGroups.length; k++) {
+			if (priceGroups[k] != null) {
+				b.append(priceGroups[k].toString()).append(",");
+				count++;
+			}
+		}
+		for (int k = 0; k <= maxPriceGroupIndex; k++) {
+			if (priceGroups[k] != null) {
+				b.append(priceGroups[k].toString()).append(",");
+				count++;
+			}
+		}
+		if (count > 0) {
+			b.deleteCharAt(b.length() - 1);
+		}
+		b.append("]");
+		return b.toString();
 	}
 
 }

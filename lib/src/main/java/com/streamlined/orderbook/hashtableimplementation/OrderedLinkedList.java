@@ -52,24 +52,43 @@ public class OrderedLinkedList implements Iterable<Node> {
 		}
 	}
 
-	public void setVolume(int order, int volume) {
-		for (Iterator<Node> i = iterator(); i.hasNext();) {
-			Node node = i.next();
+	public boolean setVolume(int order, int volume) {
+		for (Node node = head; node != null; node = node.getNextNode()) {
 			if (node.getOrder() == order) {
 				node.setVolume(volume);
-				break;
+				return true;
+			}
+			if (!node.precedes(order)) {
+				return false;
 			}
 		}
+		return false;
 	}
 
-	public void remove(int order) {
+	public boolean remove(int order) {
 		for (Iterator<Node> i = iterator(); i.hasNext();) {
 			Node node = i.next();
 			if (node.getOrder() == order) {
 				i.remove();
-				break;
+				return true;
+			}
+			if (!node.precedes(order)) {
+				return false;
 			}
 		}
+		return false;
+	}
+
+	public Node getNodeByOrder(int order) {
+		for (Node node = head; node != null; node = node.getNextNode()) {
+			if (node.getOrder() == order) {
+				return node;
+			}
+			if (!node.precedes(order)) {
+				return null;
+			}
+		}
+		return null;
 	}
 
 	@Override

@@ -2,6 +2,8 @@ package com.streamlined.orderbook.hashtableimplementation;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.NoSuchElementException;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -158,6 +160,52 @@ class HashtableContainerTest {
 		assertEquals(container.getCapacity() - 3, container.getMinPriceGroupIndex());
 		assertEquals(0, container.getMaxPriceGroupIndex());
 		assertTrue(container.getCapacity() > 3);
+	}
+
+	@Test
+	@DisplayName("check method adds new element and sets its size")
+	void test8() {
+		HashtableContainer container = new HashtableContainer(1);
+
+		container.set(10, 1);
+		container.set(11, 1);
+		assertEquals(2, container.getSize());
+
+		container.set(12, 1);
+		container.set(13, 1);
+		assertEquals(4, container.getSize());
+
+		container.set(30, 3);
+		container.set(31, 3);
+		assertEquals(6, container.getSize());
+
+		container.set(32, 3);
+		container.set(33, 3);
+		assertEquals(8, container.getSize());
+	}
+
+	@Test
+	@DisplayName("empty container does not contain any element")
+	void test9() {
+		HashtableContainer container = new HashtableContainer();
+
+		assertEquals(HashtableContainer.VOLUME_VALUE_ABSENT, container.getVolumeByPrice(100));
+		assertEquals(HashtableContainer.VOLUME_VALUE_ABSENT, container.getVolumeByPrice(200));
+		assertEquals(HashtableContainer.VOLUME_VALUE_ABSENT, container.getVolumeByPrice(300));
+	}
+
+	@Test
+	@DisplayName("non-empty container should contain added earlier element")
+	void test10() {
+		HashtableContainer container = new HashtableContainer();
+
+		container.set(100, 1);
+		container.set(200, 2);
+		container.set(300, 3);
+
+		assertEquals(1, container.getVolumeByPrice(100));
+		assertEquals(2, container.getVolumeByPrice(200));
+		assertEquals(3, container.getVolumeByPrice(300));
 	}
 
 }

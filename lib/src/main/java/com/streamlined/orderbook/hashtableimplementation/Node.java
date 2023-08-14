@@ -35,6 +35,10 @@ public class Node {
 		return order < node.order;
 	}
 
+	public boolean precedes(int order) {
+		return this.order < order;
+	}
+
 	@Override
 	public String toString() {
 		return String.format("[%d,%d]", order, volume);

@@ -8,7 +8,7 @@ import java.util.NoSuchElementException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class LinkedListTest {
+class OrderedLinkedListTest {
 
 	@Test
 	@DisplayName("newly created list should be empty")
@@ -134,8 +134,10 @@ class LinkedListTest {
 	void test8() {
 		OrderedLinkedList list = new OrderedLinkedList(new int[] { 1, 2 }, new int[] { 5, 10 });
 
-		list.setVolume(1, 10);
-		list.setVolume(2, 20);
+		assertFalse(list.setVolume(0, 0));
+		assertTrue(list.setVolume(1, 10));
+		assertTrue(list.setVolume(2, 20));
+		assertFalse(list.setVolume(3, 30));
 
 		assertEquals(2, list.getSize());
 		assertFalse(list.isEmpty());
@@ -264,6 +266,81 @@ class LinkedListTest {
 		assertEquals(30, node.getVolume());
 
 		assertEquals(2, list.getSize());
+	}
+
+	@Test
+	@DisplayName("search operation for empty list should not yield results")
+	void test18() {
+		OrderedLinkedList list = new OrderedLinkedList();
+
+		assertNull(list.getNodeByOrder(1));
+		assertNull(list.getNodeByOrder(2));
+		assertNull(list.getNodeByOrder(3));
+	}
+
+	@Test
+	@DisplayName("search operation for non-empty list should not yield results if order is not present in list")
+	void test19() {
+		OrderedLinkedList list = new OrderedLinkedList(new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
+
+		assertNull(list.getNodeByOrder(5));
+		assertNull(list.getNodeByOrder(15));
+		assertNull(list.getNodeByOrder(25));
+		assertNull(list.getNodeByOrder(35));
+	}
+
+	@Test
+	@DisplayName("search operation for non-empty list should not yield results if order is present in list")
+	void test20() {
+		OrderedLinkedList list = new OrderedLinkedList(new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
+
+		Node node = list.getNodeByOrder(10);
+		assertEquals(10, node.getOrder());
+		node = list.getNodeByOrder(20);
+		assertEquals(20, node.getOrder());
+		node = list.getNodeByOrder(30);
+		assertEquals(30, node.getOrder());
+	}
+
+	@Test
+	@DisplayName("remove operation for empty list should not yiled results")
+	void test21() {
+		OrderedLinkedList list = new OrderedLinkedList();
+
+		assertFalse(list.remove(0));
+		assertFalse(list.remove(1));
+		assertFalse(list.remove(2));
+	}
+
+	@Test
+	@DisplayName("remove operation for non-empty list should remove element")
+	void test22() {
+		OrderedLinkedList list = new OrderedLinkedList(new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
+
+		assertTrue(list.remove(10));
+		assertEquals(2, list.getSize());
+		assertTrue(list.remove(20));
+		assertEquals(1, list.getSize());
+		assertTrue(list.remove(30));
+		assertEquals(0, list.getSize());
+		assertTrue(list.isEmpty());
+	}
+
+	@Test
+	@DisplayName("remove operation for non-empty list should remove found element or return false if not found")
+	void test23() {
+		OrderedLinkedList list = new OrderedLinkedList(new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
+
+		assertFalse(list.remove(5));
+		assertTrue(list.remove(10));
+		assertEquals(2, list.getSize());
+		assertFalse(list.remove(15));
+		assertTrue(list.remove(20));
+		assertEquals(1, list.getSize());
+		assertFalse(list.remove(25));
+		assertTrue(list.remove(30));
+		assertEquals(0, list.getSize());
+		assertTrue(list.isEmpty());
 	}
 
 }
