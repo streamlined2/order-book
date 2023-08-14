@@ -1,13 +1,9 @@
-package com.streamlined.orderbook;
+package com.streamlined.orderbook.arrayimplementation;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.streamlined.orderbook.arrayimplementation.ArrayContainer;
-import com.streamlined.orderbook.arrayimplementation.NaturalOrderContainer;
-import com.streamlined.orderbook.arrayimplementation.ReversedOrderContainer;
-
-class VolumeContainerPerformanceTest {
+class ArrayContainerPerformanceTest {
 
 	@Test
 	@DisplayName("measure search time for non-reversed container")

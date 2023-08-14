@@ -312,4 +312,122 @@ class HashtableContainerTest {
 		assertEquals(100, container.getBestPrice());
 	}
 
+	@Test
+	@DisplayName("best price volume subtraction for empty bid container should no produce result")
+	void test17() {
+		HashtableContainer container = new BidContainer();
+
+		assertEquals(0, container.subtractVolumeForBestPrice(100));
+	}
+
+	@Test
+	@DisplayName("best price volume subtraction for non-empty bid container should decrease volumes")
+	void test18() {
+		HashtableContainer container = new BidContainer();
+
+		container.set(100, 1);
+		container.set(101, 2);
+		container.set(102, 3);
+		container.set(103, 4);
+
+		assertEquals(2, container.subtractVolumeForBestPrice(2));
+		assertEquals(1, container.getVolumeByPrice(100));
+		assertEquals(2, container.getVolumeByPrice(101));
+		assertEquals(3, container.getVolumeByPrice(102));
+		assertEquals(2, container.getVolumeByPrice(103));
+	}
+
+	@Test
+	@DisplayName("best price volume subtraction for non-empty bid container should decrease volumes")
+	void test19() {
+		HashtableContainer container = new BidContainer();
+
+		container.set(100, 1);
+		container.set(101, 2);
+		container.set(102, 3);
+		container.set(103, 4);
+
+		assertEquals(6, container.subtractVolumeForBestPrice(6));
+		assertEquals(1, container.getVolumeByPrice(100));
+		assertEquals(2, container.getVolumeByPrice(101));
+		assertEquals(1, container.getVolumeByPrice(102));
+		assertEquals(0, container.getVolumeByPrice(103));
+	}
+
+	@Test
+	@DisplayName("best price volume subtraction for non-empty bid container should decrease volumes")
+	void test20() {
+		HashtableContainer container = new BidContainer();
+
+		container.set(100, 1);
+		container.set(101, 2);
+		container.set(102, 3);
+		container.set(103, 4);
+
+		assertEquals(10, container.subtractVolumeForBestPrice(12));
+		assertEquals(0, container.getVolumeByPrice(100));
+		assertEquals(0, container.getVolumeByPrice(101));
+		assertEquals(0, container.getVolumeByPrice(102));
+		assertEquals(0, container.getVolumeByPrice(103));
+	}
+
+	@Test
+	@DisplayName("best price volume subtraction for empty ask container should no produce result")
+	void test21() {
+		HashtableContainer container = new AskContainer();
+
+		assertEquals(0, container.subtractVolumeForBestPrice(100));
+	}
+
+	@Test
+	@DisplayName("best price volume subtraction for non-empty ask container should decrease volumes")
+	void test22() {
+		HashtableContainer container = new AskContainer();
+
+		container.set(100, 1);
+		container.set(101, 2);
+		container.set(102, 3);
+		container.set(103, 4);
+
+		assertEquals(1, container.subtractVolumeForBestPrice(1));
+		assertEquals(0, container.getVolumeByPrice(100));
+		assertEquals(2, container.getVolumeByPrice(101));
+		assertEquals(3, container.getVolumeByPrice(102));
+		assertEquals(4, container.getVolumeByPrice(103));
+	}
+
+	@Test
+	@DisplayName("best price volume subtraction for non-empty ask container should decrease volumes")
+	void test23() {
+		HashtableContainer container = new AskContainer();
+
+		container.set(100, 1);
+		container.set(101, 2);
+		container.set(102, 3);
+		container.set(103, 4);
+
+		assertEquals(4, container.subtractVolumeForBestPrice(4));
+		assertEquals(0, container.getVolumeByPrice(100));
+		assertEquals(0, container.getVolumeByPrice(101));
+		assertEquals(2, container.getVolumeByPrice(102));
+		assertEquals(4, container.getVolumeByPrice(103));
+	}
+
+	@Test
+	@DisplayName("best price volume subtraction for non-empty ask container should decrease volumes")
+	void test24() {
+		HashtableContainer container = new AskContainer();
+
+		container.set(100, 1);
+		container.set(101, 2);
+		container.set(102, 3);
+		container.set(103, 4);
+
+		assertEquals(10, container.subtractVolumeForBestPrice(12));
+		assertEquals(0, container.getVolumeByPrice(100));
+		assertEquals(0, container.getVolumeByPrice(101));
+		assertEquals(0, container.getVolumeByPrice(102));
+		assertEquals(0, container.getVolumeByPrice(103));
+	}
+
 }

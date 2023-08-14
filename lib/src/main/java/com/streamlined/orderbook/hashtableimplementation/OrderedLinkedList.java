@@ -111,6 +111,22 @@ public class OrderedLinkedList implements Iterable<Node> {
 		return null;
 	}
 
+	public int subtractVolume(int subtractVolume) {
+		int subtractedVolume = 0;
+		for (Node node = head; node != null && subtractedVolume < subtractVolume; node = node.getNextNode()) {
+			int volumeLeftover = subtractVolume - subtractedVolume;
+			final int volume = node.getVolume();
+			if (volume < volumeLeftover) {
+				subtractedVolume += volume;
+				node.setVolume(0);
+			} else {
+				subtractedVolume += volumeLeftover;
+				node.setVolume(volume - volumeLeftover);
+			}
+		}
+		return subtractedVolume;
+	}
+
 	@Override
 	public Iterator<Node> iterator() {
 		return new Iterator<>() {

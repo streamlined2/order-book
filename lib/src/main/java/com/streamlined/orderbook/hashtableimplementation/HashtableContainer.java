@@ -18,10 +18,10 @@ public abstract class HashtableContainer implements VolumeContainer {
 
 	private static final PriceVolume lastPriceVolume = new PriceVolume();
 
-	private OrderedLinkedList[] priceGroups;
-	private int firstPriceGroupStart;
-	private int maxPriceGroupIndex;
-	private int minPriceGroupIndex;
+	protected OrderedLinkedList[] priceGroups;
+	protected int firstPriceGroupStart;
+	protected int maxPriceGroupIndex;
+	protected int minPriceGroupIndex;
 
 	protected HashtableContainer() {
 		this(INITIAL_CAPACITY);
@@ -173,12 +173,6 @@ public abstract class HashtableContainer implements VolumeContainer {
 	}
 
 	protected abstract int getBestPriceGroupIndex();
-
-	@Override
-	public int subtractVolumeForBestPrice(int subtractVolume) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
 	@Override
 	public String toString() {

@@ -343,4 +343,130 @@ class OrderedLinkedListTest {
 		assertTrue(list.isEmpty());
 	}
 
+	@Test
+	@DisplayName("there should be no non-empty node for empty list")
+	void test24() {
+		OrderedLinkedList list = new OrderedLinkedList();
+
+		assertNull(list.getFirstNonEmptyNode());
+	}
+
+	@Test
+	@DisplayName("there should be found non-empty node for non-empty list")
+	void test25() {
+		OrderedLinkedList list = new OrderedLinkedList(true, new int[] { 1, 5, 10, 20, 30 },
+				new int[] { 0, 0, 10, 20, 30 });
+
+		Node node = list.getFirstNonEmptyNode();
+		assertEquals(10, node.getOrder());
+		assertEquals(10, node.getVolume());
+	}
+
+	@Test
+	@DisplayName("there should be found non-empty node for non-empty list")
+	void test26() {
+		OrderedLinkedList list = new OrderedLinkedList(false, new int[] { 1, 5, 10, 20, 30, 40, 50 },
+				new int[] { 0, 0, 10, 20, 30, 0, 0 });
+
+		Node node = list.getFirstNonEmptyNode();
+		assertEquals(30, node.getOrder());
+		assertEquals(30, node.getVolume());
+	}
+
+	@Test
+	@DisplayName("should be no subtracted volume for empty list")
+	void test27() {
+		OrderedLinkedList list = new OrderedLinkedList();
+
+		assertEquals(0, list.subtractVolume(100));
+	}
+
+	@Test
+	@DisplayName("should be correct subtracted volume for non-empty ascending list")
+	void test28() {
+		OrderedLinkedList list = new OrderedLinkedList(true, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
+
+		assertEquals(5, list.subtractVolume(5));
+		assertEquals(5, list.getNodeByOrder(10).getVolume());
+		assertEquals(20, list.getNodeByOrder(20).getVolume());
+		assertEquals(30, list.getNodeByOrder(30).getVolume());
+	}
+
+	@Test
+	@DisplayName("should be correct subtracted volume for non-empty ascending list")
+	void test29() {
+		OrderedLinkedList list = new OrderedLinkedList(true, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
+
+		assertEquals(15, list.subtractVolume(15));
+		assertEquals(0, list.getNodeByOrder(10).getVolume());
+		assertEquals(15, list.getNodeByOrder(20).getVolume());
+		assertEquals(30, list.getNodeByOrder(30).getVolume());
+	}
+
+	@Test
+	@DisplayName("should be correct subtracted volume for non-empty ascending list")
+	void test30() {
+		OrderedLinkedList list = new OrderedLinkedList(true, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
+
+		assertEquals(35, list.subtractVolume(35));
+		assertEquals(0, list.getNodeByOrder(10).getVolume());
+		assertEquals(0, list.getNodeByOrder(20).getVolume());
+		assertEquals(25, list.getNodeByOrder(30).getVolume());
+	}
+
+	@Test
+	@DisplayName("should be correct subtracted volume for non-empty ascending list")
+	void test31() {
+		OrderedLinkedList list = new OrderedLinkedList(true, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
+
+		assertEquals(60, list.subtractVolume(65));
+		assertEquals(0, list.getNodeByOrder(10).getVolume());
+		assertEquals(0, list.getNodeByOrder(20).getVolume());
+		assertEquals(0, list.getNodeByOrder(30).getVolume());
+	}
+
+	@Test
+	@DisplayName("should be correct subtracted volume for non-empty descending list")
+	void test32() {
+		OrderedLinkedList list = new OrderedLinkedList(false, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
+
+		assertEquals(5, list.subtractVolume(5));
+		assertEquals(10, list.getNodeByOrder(10).getVolume());
+		assertEquals(20, list.getNodeByOrder(20).getVolume());
+		assertEquals(25, list.getNodeByOrder(30).getVolume());
+	}
+
+	@Test
+	@DisplayName("should be correct subtracted volume for non-empty descending list")
+	void test33() {
+		OrderedLinkedList list = new OrderedLinkedList(false, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
+
+		assertEquals(35, list.subtractVolume(35));
+		assertEquals(10, list.getNodeByOrder(10).getVolume());
+		assertEquals(15, list.getNodeByOrder(20).getVolume());
+		assertEquals(0, list.getNodeByOrder(30).getVolume());
+	}
+
+	@Test
+	@DisplayName("should be correct subtracted volume for non-empty descending list")
+	void test34() {
+		OrderedLinkedList list = new OrderedLinkedList(false, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
+
+		assertEquals(55, list.subtractVolume(55));
+		assertEquals(5, list.getNodeByOrder(10).getVolume());
+		assertEquals(0, list.getNodeByOrder(20).getVolume());
+		assertEquals(0, list.getNodeByOrder(30).getVolume());
+	}
+
+	@Test
+	@DisplayName("should be correct subtracted volume for non-empty descending list")
+	void test35() {
+		OrderedLinkedList list = new OrderedLinkedList(false, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
+
+		assertEquals(60, list.subtractVolume(65));
+		assertEquals(0, list.getNodeByOrder(10).getVolume());
+		assertEquals(0, list.getNodeByOrder(20).getVolume());
+		assertEquals(0, list.getNodeByOrder(30).getVolume());
+	}
+
 }
