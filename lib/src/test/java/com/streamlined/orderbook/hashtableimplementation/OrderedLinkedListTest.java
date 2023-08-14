@@ -50,7 +50,7 @@ class OrderedLinkedListTest {
 	@Test
 	@DisplayName("element should be added before another one")
 	void test4() {
-		OrderedLinkedList list = new OrderedLinkedList(new int[] { 2 }, new int[] { 10 });
+		OrderedLinkedList list = new OrderedLinkedList(true, new int[] { 2 }, new int[] { 10 });
 
 		list.add(1, 5);
 
@@ -69,7 +69,7 @@ class OrderedLinkedListTest {
 	@Test
 	@DisplayName("element should be added after another one")
 	void test5() {
-		OrderedLinkedList list = new OrderedLinkedList(new int[] { 1 }, new int[] { 5 });
+		OrderedLinkedList list = new OrderedLinkedList(true, new int[] { 1 }, new int[] { 5 });
 
 		list.add(2, 10);
 
@@ -88,7 +88,7 @@ class OrderedLinkedListTest {
 	@Test
 	@DisplayName("element should be added after head but before last one")
 	void test6() {
-		OrderedLinkedList list = new OrderedLinkedList(new int[] { 3, 1 }, new int[] { 15, 5 });
+		OrderedLinkedList list = new OrderedLinkedList(true, new int[] { 3, 1 }, new int[] { 15, 5 });
 
 		list.add(2, 10);
 
@@ -110,7 +110,7 @@ class OrderedLinkedListTest {
 	@Test
 	@DisplayName("element should be added after last one")
 	void test7() {
-		OrderedLinkedList list = new OrderedLinkedList(new int[] { 2, 1 }, new int[] { 10, 5 });
+		OrderedLinkedList list = new OrderedLinkedList(true, new int[] { 2, 1 }, new int[] { 10, 5 });
 
 		list.add(3, 15);
 
@@ -132,7 +132,7 @@ class OrderedLinkedListTest {
 	@Test
 	@DisplayName("size should be changed for every element of list")
 	void test8() {
-		OrderedLinkedList list = new OrderedLinkedList(new int[] { 1, 2 }, new int[] { 5, 10 });
+		OrderedLinkedList list = new OrderedLinkedList(true, new int[] { 1, 2 }, new int[] { 5, 10 });
 
 		assertFalse(list.setVolume(0, 0));
 		assertTrue(list.setVolume(1, 10));
@@ -214,7 +214,7 @@ class OrderedLinkedListTest {
 	@Test
 	@DisplayName("two consequent remove operations for two element list should make it empty list")
 	void test15() {
-		OrderedLinkedList list = new OrderedLinkedList(new int[] { 1, 2 }, new int[] { 10, 20 });
+		OrderedLinkedList list = new OrderedLinkedList(true, new int[] { 1, 2 }, new int[] { 10, 20 });
 
 		Iterator<Node> i = list.iterator();
 		i.next();
@@ -235,7 +235,7 @@ class OrderedLinkedListTest {
 	@Test
 	@DisplayName("remove operation amidst list should contract it")
 	void test16() {
-		OrderedLinkedList list = new OrderedLinkedList(new int[] { 1, 2, 3 }, new int[] { 10, 20, 30 });
+		OrderedLinkedList list = new OrderedLinkedList(true, new int[] { 1, 2, 3 }, new int[] { 10, 20, 30 });
 
 		Iterator<Node> i = list.iterator();
 		i.next();
@@ -255,7 +255,7 @@ class OrderedLinkedListTest {
 	@Test
 	@DisplayName("remove operation at the tail list should contract it")
 	void test17() {
-		OrderedLinkedList list = new OrderedLinkedList(new int[] { 1, 2, 3 }, new int[] { 10, 20, 30 });
+		OrderedLinkedList list = new OrderedLinkedList(true, new int[] { 1, 2, 3 }, new int[] { 10, 20, 30 });
 
 		Iterator<Node> i = list.iterator();
 		i.next();

@@ -5,11 +5,11 @@ public class PriceVolume {
 	private int price;
 	private int volume;
 
-	int getPrice() {
+	public int getPrice() {
 		return price;
 	}
 
-	int getVolume() {
+	public int getVolume() {
 		return volume;
 	}
 

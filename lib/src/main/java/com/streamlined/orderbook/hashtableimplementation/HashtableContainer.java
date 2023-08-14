@@ -1,33 +1,33 @@
 package com.streamlined.orderbook.hashtableimplementation;
 
-import java.util.NoSuchElementException;
-
 import com.streamlined.orderbook.PriceVolume;
 import com.streamlined.orderbook.VolumeContainer;
 
-public class HashtableContainer implements VolumeContainer {
+public abstract class HashtableContainer implements VolumeContainer {
 
 	private static final int INITIAL_CAPACITY = 1000;
-	public static final int VOLUME_VALUE_ABSENT = -1;
-	static final int VALUE_UNDEFINED = -1;
+	private static final int PRICE_GROUP_SIZE_POWER = 2;
 
-	static final int PRICE_GROUP_SIZE_POWER = 2;
-	static final int PRICE_GROUP_SIZE = 1 << PRICE_GROUP_SIZE_POWER;
+	public static final int VOLUME_VALUE_ABSENT = -1;
+	public static final int PRICE_VALUE_ABSENT = -1;
+	protected static final int VALUE_UNDEFINED = -1;
 
 	private static final int EXPANSION_NUMERATOR = 130;
 	private static final int EXPANSION_DENOMINATOR = 100;
 	private static final int EXPANSION_CONSTANT = 1;
+
+	private static final PriceVolume lastPriceVolume = new PriceVolume();
 
 	private OrderedLinkedList[] priceGroups;
 	private int firstPriceGroupStart;
 	private int maxPriceGroupIndex;
 	private int minPriceGroupIndex;
 
-	public HashtableContainer() {
+	protected HashtableContainer() {
 		this(INITIAL_CAPACITY);
 	}
 
-	public HashtableContainer(int capacity) {
+	protected HashtableContainer(int capacity) {
 		priceGroups = new OrderedLinkedList[capacity];
 		firstPriceGroupStart = VALUE_UNDEFINED;
 		maxPriceGroupIndex = -1;
@@ -125,10 +125,12 @@ public class HashtableContainer implements VolumeContainer {
 	public void set(int price, int volume) {
 		final int index = locateGroupForPrice(price);
 		if (priceGroups[index] == null) {
-			priceGroups[index] = new OrderedLinkedList();
+			priceGroups[index] = createPriceGroupList();
 		}
 		priceGroups[index].add(price, volume);
 	}
+
+	protected abstract OrderedLinkedList createPriceGroupList();
 
 	@Override
 	public int getVolumeByPrice(int price) {
@@ -136,7 +138,7 @@ public class HashtableContainer implements VolumeContainer {
 		if (priceGroups[index] == null) {
 			return VOLUME_VALUE_ABSENT;
 		}
-		Node node = priceGroups[index].getNodeByOrder(price);
+		final Node node = priceGroups[index].getNodeByOrder(price);
 		if (node == null) {
 			return VOLUME_VALUE_ABSENT;
 		}
@@ -144,16 +146,33 @@ public class HashtableContainer implements VolumeContainer {
 	}
 
 	@Override
-	public PriceVolume getBestPriceValue() {
-		// TODO Auto-generated method stub
-		return null;
+	public int getBestPrice() {
+		PriceVolume priceVolume = getBestPriceValue();
+		if (priceVolume == null) {
+			return PRICE_VALUE_ABSENT;
+		}
+		return priceVolume.getPrice();
 	}
 
 	@Override
-	public int getBestPrice() {
-		// TODO Auto-generated method stub
-		return 0;
+	public PriceVolume getBestPriceValue() {
+		final int bestPriceGroupIndex = getBestPriceGroupIndex();
+		if (bestPriceGroupIndex == VALUE_UNDEFINED) {
+			return null;
+		}
+		final OrderedLinkedList list = priceGroups[bestPriceGroupIndex];
+		if (list == null) {
+			return null;
+		}
+		final Node node = list.getFirstNonEmptyNode();
+		if (node == null) {
+			return null;
+		}
+		lastPriceVolume.setPriceVolume(node.getOrder(), node.getVolume());
+		return lastPriceVolume;
 	}
+
+	protected abstract int getBestPriceGroupIndex();
 
 	@Override
 	public int subtractVolumeForBestPrice(int subtractVolume) {
