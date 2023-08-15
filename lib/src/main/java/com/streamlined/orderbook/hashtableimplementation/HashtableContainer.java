@@ -49,11 +49,7 @@ public abstract class HashtableContainer implements VolumeContainer {
 	}
 
 	private int getMinExpansionSize(int price, int index) {
-		return belongsToMinPriceSegment(price) ? maxPriceGroupIndex - index + 1 : index - minPriceGroupIndex + 1;
-	}
-
-	private boolean belongsToMinPriceSegment(int price) {
-		return price < firstPriceGroupStart;
+		return price < firstPriceGroupStart ? maxPriceGroupIndex - index + 1 : index - minPriceGroupIndex + 1;
 	}
 
 	int locateGroupForPrice(int price) {
@@ -63,10 +59,14 @@ public abstract class HashtableContainer implements VolumeContainer {
 			expandContainer(minExpansionSize);
 			index = mapPriceToGroupIndex(price);
 		}
-		if (belongsToMinPriceSegment(price)) {
-			minPriceGroupIndex = Math.min(index, minPriceGroupIndex);
+		if (price < firstPriceGroupStart) {
+			if (index < minPriceGroupIndex) {
+				minPriceGroupIndex = index;
+			}
 		} else {
-			maxPriceGroupIndex = Math.max(index, maxPriceGroupIndex);
+			if (index > maxPriceGroupIndex) {
+				maxPriceGroupIndex = index;
+			}
 		}
 		return index;
 	}

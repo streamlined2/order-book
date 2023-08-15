@@ -12,7 +12,7 @@ public class BidContainer extends HashtableContainer {
 
 	@Override
 	protected OrderedLinkedList createPriceGroupList() {
-		return new OrderedLinkedList(false);
+		return new DescendingLinkedList();
 	}
 
 	@Override

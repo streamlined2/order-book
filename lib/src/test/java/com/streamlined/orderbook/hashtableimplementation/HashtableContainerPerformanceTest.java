@@ -3,9 +3,6 @@ package com.streamlined.orderbook.hashtableimplementation;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.streamlined.orderbook.arrayimplementation.ArrayContainer;
-import com.streamlined.orderbook.arrayimplementation.NaturalOrderContainer;
-
 class HashtableContainerPerformanceTest {
 
 	@Test

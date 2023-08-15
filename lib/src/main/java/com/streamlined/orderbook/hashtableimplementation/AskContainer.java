@@ -12,7 +12,7 @@ public class AskContainer extends HashtableContainer {
 
 	@Override
 	protected OrderedLinkedList createPriceGroupList() {
-		return new OrderedLinkedList(true);
+		return new AscendingLinkedList();
 	}
 
 	@Override
