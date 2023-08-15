@@ -8,8 +8,6 @@ public abstract class HashtableContainer implements VolumeContainer {
 	private static final int INITIAL_CAPACITY = 1000;
 	private static final int PRICE_GROUP_SIZE_POWER = 2;
 
-	public static final int VOLUME_VALUE_ABSENT = -1;
-	public static final int PRICE_VALUE_ABSENT = -1;
 	protected static final int VALUE_UNDEFINED = -1;
 
 	private static final int EXPANSION_NUMERATOR = 130;
@@ -103,13 +101,12 @@ public abstract class HashtableContainer implements VolumeContainer {
 
 	@Override
 	public int getSize() {
+		return getSizeForSegment(0, maxPriceGroupIndex) + getSizeForSegment(minPriceGroupIndex, priceGroups.length - 1);
+	}
+
+	private int getSizeForSegment(int startIndex, int finishIndex) {
 		int size = 0;
-		for (int k = 0; k <= maxPriceGroupIndex; k++) {
-			if (priceGroups[k] != null) {
-				size += priceGroups[k].getSize();
-			}
-		}
-		for (int k = minPriceGroupIndex; k < priceGroups.length; k++) {
+		for (int k = startIndex; k <= finishIndex; k++) {
 			if (priceGroups[k] != null) {
 				size += priceGroups[k].getSize();
 			}
@@ -156,15 +153,7 @@ public abstract class HashtableContainer implements VolumeContainer {
 
 	@Override
 	public PriceVolume getBestPriceValue() {
-		final int bestPriceGroupIndex = getBestPriceGroupIndex();
-		if (bestPriceGroupIndex == VALUE_UNDEFINED) {
-			return null;
-		}
-		final OrderedLinkedList list = priceGroups[bestPriceGroupIndex];
-		if (list == null) {
-			return null;
-		}
-		final Node node = list.getFirstNonEmptyNode();
+		final Node node = locateBestPriceNode();
 		if (node == null) {
 			return null;
 		}
@@ -172,29 +161,28 @@ public abstract class HashtableContainer implements VolumeContainer {
 		return lastPriceVolume;
 	}
 
-	protected abstract int getBestPriceGroupIndex();
+	protected abstract Node locateBestPriceNode();
 
 	@Override
 	public String toString() {
 		StringBuilder b = new StringBuilder("[");
-		int count = 0;
-		for (int k = minPriceGroupIndex; k < priceGroups.length; k++) {
-			if (priceGroups[k] != null) {
-				b.append(priceGroups[k].toString()).append(",");
-				count++;
-			}
-		}
-		for (int k = 0; k <= maxPriceGroupIndex; k++) {
-			if (priceGroups[k] != null) {
-				b.append(priceGroups[k].toString()).append(",");
-				count++;
-			}
-		}
+		int count = addStringForSegment(b, minPriceGroupIndex, priceGroups.length - 1, 0);
+		count = addStringForSegment(b, 0, maxPriceGroupIndex, count);
 		if (count > 0) {
 			b.deleteCharAt(b.length() - 1);
 		}
 		b.append("]");
 		return b.toString();
+	}
+
+	private int addStringForSegment(StringBuilder b, int startIndex, int finishIndex, int count) {
+		for (int k = startIndex; k <= finishIndex; k++) {
+			if (priceGroups[k] != null) {
+				b.append(priceGroups[k].toString()).append(",");
+				count++;
+			}
+		}
+		return count;
 	}
 
 }

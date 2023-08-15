@@ -230,6 +230,27 @@ class HashtableContainerTest {
 	}
 
 	@Test
+	@DisplayName("check best price/volume for bid container if values added in ascending order")
+	void test11a() {
+		HashtableContainer container = new BidContainer();
+
+		container.set(100, 0);
+		container.set(101, 0);
+		container.set(102, 0);
+		container.set(103, 20);
+		container.set(104, 10);
+		container.set(105, 0);
+		container.set(106, 0);
+		container.set(107, 0);
+		container.set(108, 0);
+
+		PriceVolume priceVolume = container.getBestPriceValue();
+		assertEquals(104, priceVolume.getPrice());
+		assertEquals(10, priceVolume.getVolume());
+		assertEquals(104, container.getBestPrice());
+	}
+
+	@Test
 	@DisplayName("check best price/volume for ask container if values added in ascending order")
 	void test12() {
 		HashtableContainer container = new AskContainer();
@@ -248,6 +269,27 @@ class HashtableContainerTest {
 		assertEquals(100, priceVolume.getPrice());
 		assertEquals(1, priceVolume.getVolume());
 		assertEquals(100, container.getBestPrice());
+	}
+
+	@Test
+	@DisplayName("check best price/volume for ask container if values added in ascending order")
+	void test12a() {
+		HashtableContainer container = new AskContainer();
+
+		container.set(100, 0);
+		container.set(101, 0);
+		container.set(102, 0);
+		container.set(103, 0);
+		container.set(104, 10);
+		container.set(105, 20);
+		container.set(106, 0);
+		container.set(107, 0);
+		container.set(108, 0);
+
+		PriceVolume priceVolume = container.getBestPriceValue();
+		assertEquals(104, priceVolume.getPrice());
+		assertEquals(10, priceVolume.getVolume());
+		assertEquals(104, container.getBestPrice());
 	}
 
 	@Test

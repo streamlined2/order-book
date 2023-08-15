@@ -16,14 +16,24 @@ public class BidContainer extends HashtableContainer {
 	}
 
 	@Override
-	public int getBestPriceGroupIndex() {
-		if (maxPriceGroupIndex >= 0) {
-			return maxPriceGroupIndex;
+	protected Node locateBestPriceNode() {
+		Node node = getFirstNonEmptyNode(maxPriceGroupIndex, 0);
+		if (node != null) {
+			return node;
 		}
-		if (minPriceGroupIndex < priceGroups.length) {
-			return priceGroups.length - 1;
+		return getFirstNonEmptyNode(priceGroups.length - 1, minPriceGroupIndex);
+	}
+
+	private Node getFirstNonEmptyNode(int startIndex, int lastIndex) {
+		for (int index = startIndex; index >= lastIndex; index--) {
+			if (priceGroups[index] != null) {
+				Node node = priceGroups[index].getFirstNonEmptyNode();
+				if (node != null) {
+					return node;
+				}
+			}
 		}
-		return VALUE_UNDEFINED;
+		return null;
 	}
 
 	@Override

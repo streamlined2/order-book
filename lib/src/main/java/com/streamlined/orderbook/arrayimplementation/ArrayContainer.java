@@ -12,8 +12,6 @@ public abstract class ArrayContainer implements VolumeContainer {
 	private static final int EXPANSION_CONSTANT = 1;
 
 	private static final PriceVolume lastPriceVolume = new PriceVolume();
-	public static final int VOLUME_VALUE_ABSENT = -1;
-	public static final int PRICE_VALUE_ABSENT = -1;
 
 	private int[] prices;
 	private int[] volumes;

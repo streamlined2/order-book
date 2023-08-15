@@ -1,17 +1,17 @@
 package com.streamlined.orderbook;
 
-import com.streamlined.orderbook.arrayimplementation.ArrayContainer;
-import com.streamlined.orderbook.arrayimplementation.NaturalOrderContainer;
-import com.streamlined.orderbook.arrayimplementation.ReversedOrderContainer;
+import com.streamlined.orderbook.hashtableimplementation.HashtableContainer;
+import com.streamlined.orderbook.hashtableimplementation.AskContainer;
+import com.streamlined.orderbook.hashtableimplementation.BidContainer;
 
 public class OrderBook {
 
-	private final VolumeContainer askContainer;
-	private final VolumeContainer bidContainer;
+	private final HashtableContainer askContainer;
+	private final HashtableContainer bidContainer;
 
 	public OrderBook(int initialCapacity) {
-		askContainer = new ReversedOrderContainer(initialCapacity);
-		bidContainer = new NaturalOrderContainer(initialCapacity);
+		askContainer = new AskContainer(initialCapacity);
+		bidContainer = new BidContainer(initialCapacity);
 	}
 
 	public void setBidSize(int price, int size) {
@@ -32,16 +32,16 @@ public class OrderBook {
 
 	public int querySizeForPrice(int price) {
 		int bestBidPrice = bidContainer.getBestPrice();
-		if (bestBidPrice != ArrayContainer.PRICE_VALUE_ABSENT && price <= bestBidPrice) {
+		if (bestBidPrice != VolumeContainer.PRICE_VALUE_ABSENT && price <= bestBidPrice) {
 			int bidSize = bidContainer.getVolumeByPrice(price);
-			if (bidSize != ArrayContainer.VOLUME_VALUE_ABSENT) {
+			if (bidSize != VolumeContainer.VOLUME_VALUE_ABSENT) {
 				return bidSize;
 			}
 		}
 		int bestAskPrice = askContainer.getBestPrice();
-		if (bestAskPrice != ArrayContainer.PRICE_VALUE_ABSENT && price >= bestAskPrice) {
+		if (bestAskPrice != VolumeContainer.PRICE_VALUE_ABSENT && price >= bestAskPrice) {
 			int askSize = askContainer.getVolumeByPrice(price);
-			if (askSize != ArrayContainer.VOLUME_VALUE_ABSENT) {
+			if (askSize != VolumeContainer.VOLUME_VALUE_ABSENT) {
 				return askSize;
 			}
 		}

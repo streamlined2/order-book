@@ -16,14 +16,24 @@ public class AskContainer extends HashtableContainer {
 	}
 
 	@Override
-	public int getBestPriceGroupIndex() {
-		if (minPriceGroupIndex < priceGroups.length) {
-			return minPriceGroupIndex;
+	protected Node locateBestPriceNode() {
+		Node node = getFirstNonEmptyNode(minPriceGroupIndex, priceGroups.length - 1);
+		if (node != null) {
+			return node;
 		}
-		if (maxPriceGroupIndex >= 0) {
-			return 0;
+		return getFirstNonEmptyNode(0, maxPriceGroupIndex);
+	}
+
+	private Node getFirstNonEmptyNode(int startIndex, int lastIndex) {
+		for (int index = startIndex; index <= lastIndex; index++) {
+			if (priceGroups[index] != null) {
+				Node node = priceGroups[index].getFirstNonEmptyNode();
+				if (node != null) {
+					return node;
+				}
+			}
 		}
-		return VALUE_UNDEFINED;
+		return null;
 	}
 
 	@Override
