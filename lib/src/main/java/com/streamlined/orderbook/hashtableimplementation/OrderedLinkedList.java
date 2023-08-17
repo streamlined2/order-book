@@ -12,7 +12,7 @@ public abstract class OrderedLinkedList implements Iterable<Node> {
 
 	protected OrderedLinkedList(int[] orders, int[] volumes) {
 		for (int k = 0; k < Math.min(orders.length, volumes.length); k++) {
-			add(orders[k], volumes[k]);
+			setAdd(orders[k], volumes[k]);
 		}
 	}
 
@@ -45,6 +45,32 @@ public abstract class OrderedLinkedList implements Iterable<Node> {
 				} else if (precedes(newNode, nextNode)) {
 					node.setNextNode(newNode);
 					newNode.setNextNode(nextNode);
+					break;
+				}
+				node = nextNode;
+			} while (true);
+		}
+	}
+
+	public void setAdd(int order, int size) {
+		if (head == null) {
+			head = new Node(order, size);
+		} else if (precedes(order, head)) {
+			head = new Node(order, size, head);
+		} else if (order == head.getOrder()) {
+			head.setVolume(size);
+		} else {
+			Node node = head;
+			do {
+				Node nextNode = node.getNextNode();
+				if (nextNode == null) {
+					node.setNextNode(new Node(order, size));
+					break;
+				} else if (precedes(order, nextNode)) {
+					node.setNextNode(new Node(order, size, nextNode));
+					break;
+				} else if (order == nextNode.getOrder()) {
+					nextNode.setVolume(size);
 					break;
 				}
 				node = nextNode;
@@ -161,7 +187,9 @@ public abstract class OrderedLinkedList implements Iterable<Node> {
 
 	protected abstract boolean precedes(Node node1, Node node2);
 
-	protected abstract boolean precedes(Node node1, int order);
+	protected abstract boolean precedes(Node node, int order);
+
+	protected abstract boolean precedes(int order, Node node);
 
 	@Override
 	public String toString() {

@@ -19,4 +19,9 @@ public class AscendingLinkedList extends OrderedLinkedList {
 		return node.getOrder() < order;
 	}
 
+	@Override
+	protected boolean precedes(int order, Node node) {
+		return order < node.getOrder();
+	}
+
 }

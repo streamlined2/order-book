@@ -469,4 +469,131 @@ class OrderedLinkedListTest {
 		assertEquals(0, list.getNodeByOrder(30).getVolume());
 	}
 
+	@Test
+	@DisplayName("should contain one element after adding it to empty list")
+	void test36() {
+		OrderedLinkedList list = new DescendingLinkedList();
+
+		list.setAdd(1, 10);
+
+		assertEquals(1, list.getSize());
+		assertFalse(list.isEmpty());
+
+		Node node = list.iterator().next();
+		assertEquals(1, node.getOrder());
+		assertEquals(10, node.getVolume());
+	}
+
+	@Test
+	@DisplayName("should contain two elements after adding them to empty list")
+	void test37() {
+		OrderedLinkedList list = new DescendingLinkedList(new int[] { 2 }, new int[] { 20 });
+
+		list.setAdd(1, 10);
+
+		assertEquals(2, list.getSize());
+		assertFalse(list.isEmpty());
+
+		Iterator<Node> i = list.iterator();
+		Node node = i.next();
+		assertEquals(2, node.getOrder());
+		assertEquals(20, node.getVolume());
+		node = i.next();
+		assertEquals(1, node.getOrder());
+		assertEquals(10, node.getVolume());
+	}
+
+	@Test
+	@DisplayName("should change value of second element")
+	void test38() {
+		OrderedLinkedList list = new DescendingLinkedList(new int[] { 2 }, new int[] { 20 });
+
+		list.setAdd(2, 10);
+
+		assertEquals(1, list.getSize());
+		assertFalse(list.isEmpty());
+
+		Iterator<Node> i = list.iterator();
+		Node node = i.next();
+		assertEquals(2, node.getOrder());
+		assertEquals(10, node.getVolume());
+	}
+
+	@Test
+	@DisplayName("should add element to the tail of the list")
+	void test39() {
+		OrderedLinkedList list = new DescendingLinkedList(new int[] { 5, 4, 3, 2 }, new int[] { 50, 40, 30, 20 });
+
+		list.setAdd(1, 10);
+
+		assertEquals(5, list.getSize());
+		assertFalse(list.isEmpty());
+
+		Iterator<Node> i = list.iterator();
+		Node node = i.next();
+		assertEquals(5, node.getOrder());
+		assertEquals(50, node.getVolume());
+		node = i.next();
+		assertEquals(4, node.getOrder());
+		assertEquals(40, node.getVolume());
+		node = i.next();
+		assertEquals(3, node.getOrder());
+		assertEquals(30, node.getVolume());
+		node = i.next();
+		assertEquals(2, node.getOrder());
+		assertEquals(20, node.getVolume());
+		node = i.next();
+		assertEquals(1, node.getOrder());
+		assertEquals(10, node.getVolume());
+	}
+
+	@Test
+	@DisplayName("should add element amidst the list")
+	void test40() {
+		OrderedLinkedList list = new DescendingLinkedList(new int[] { 5, 4, 2 }, new int[] { 50, 40, 20 });
+
+		list.setAdd(3, 30);
+
+		assertEquals(4, list.getSize());
+		assertFalse(list.isEmpty());
+
+		Iterator<Node> i = list.iterator();
+		Node node = i.next();
+		assertEquals(5, node.getOrder());
+		assertEquals(50, node.getVolume());
+		node = i.next();
+		assertEquals(4, node.getOrder());
+		assertEquals(40, node.getVolume());
+		node = i.next();
+		assertEquals(3, node.getOrder());
+		assertEquals(30, node.getVolume());
+		node = i.next();
+		assertEquals(2, node.getOrder());
+		assertEquals(20, node.getVolume());
+	}
+
+	@Test
+	@DisplayName("should add element amidst the list")
+	void test41() {
+		OrderedLinkedList list = new DescendingLinkedList(new int[] { 5, 4, 2 }, new int[] { 50, 40, 20 });
+
+		list.setAdd(5, 100);
+		list.setAdd(4, 100);
+		list.setAdd(2, 100);
+
+		assertEquals(3, list.getSize());
+		assertFalse(list.isEmpty());
+
+		Iterator<Node> i = list.iterator();
+		Node node = i.next();
+		assertEquals(5, node.getOrder());
+		assertEquals(100, node.getVolume());
+		node = i.next();
+		assertEquals(4, node.getOrder());
+		assertEquals(100, node.getVolume());
+		node = i.next();
+		assertEquals(2, node.getOrder());
+		assertEquals(100, node.getVolume());
+	}
+
 }

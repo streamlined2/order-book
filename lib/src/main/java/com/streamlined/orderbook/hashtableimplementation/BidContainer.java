@@ -39,12 +39,12 @@ public class BidContainer extends HashtableContainer {
 	@Override
 	public int subtractVolumeForBestPrice(int subtractVolume) {
 		int leftOver = subtractVolume;
-		for (int index = maxPriceGroupIndex; index >= 0; index--) {
+		for (int index = maxPriceGroupIndex; leftOver > 0 && index >= 0; index--) {
 			if (priceGroups[index] != null) {
 				leftOver -= priceGroups[index].subtractVolume(leftOver);
 			}
 		}
-		for (int index = priceGroups.length - 1; index >= minPriceGroupIndex; index--) {
+		for (int index = priceGroups.length - 1; leftOver > 0 && index >= minPriceGroupIndex; index--) {
 			if (priceGroups[index] != null) {
 				leftOver -= priceGroups[index].subtractVolume(leftOver);
 			}

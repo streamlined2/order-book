@@ -39,12 +39,12 @@ public class AskContainer extends HashtableContainer {
 	@Override
 	public int subtractVolumeForBestPrice(int subtractVolume) {
 		int leftOver = subtractVolume;
-		for (int index = minPriceGroupIndex; index < priceGroups.length; index++) {
+		for (int index = minPriceGroupIndex; leftOver > 0 && index < priceGroups.length; index++) {
 			if (priceGroups[index] != null) {
 				leftOver -= priceGroups[index].subtractVolume(leftOver);
 			}
 		}
-		for (int index = 0; index <= maxPriceGroupIndex; index++) {
+		for (int index = 0; leftOver > 0 && index <= maxPriceGroupIndex; index++) {
 			if (priceGroups[index] != null) {
 				leftOver -= priceGroups[index].subtractVolume(leftOver);
 			}

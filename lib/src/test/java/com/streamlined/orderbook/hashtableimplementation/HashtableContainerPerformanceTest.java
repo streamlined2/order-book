@@ -1,5 +1,7 @@
 package com.streamlined.orderbook.hashtableimplementation;
 
+import java.security.SecureRandom;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -76,6 +78,29 @@ class HashtableContainerPerformanceTest {
 		}
 		long time = System.currentTimeMillis() - start;
 		System.out.print("time for insertion in ask container = %d%n".formatted(time));
+	}
+
+	@Test
+	@DisplayName("measure volume subtraction time for best price")
+	void testVolumeSubtractionForBestPrice() {
+		SecureRandom random = new SecureRandom();
+		final int count = 1_000_000;
+		// setup
+		HashtableContainer container = new AskContainer(count);
+		int price = 1;
+		for (int k = 0; k < count; k++) {
+			container.set(price, random.nextInt(1000) + 1);
+			price++;
+		}
+		// measure
+		final int buyout = 100;
+		final int times = 10_000;
+		long start = System.currentTimeMillis();
+		for (int k = 0; k < times; k++) {
+			container.subtractVolumeForBestPrice(buyout);
+		}
+		long time = System.currentTimeMillis() - start;
+		System.out.print("time for volume subtraction for best price = %d%n".formatted(time));
 	}
 
 }

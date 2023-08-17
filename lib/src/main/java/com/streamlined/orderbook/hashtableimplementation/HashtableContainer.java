@@ -124,7 +124,7 @@ public abstract class HashtableContainer implements VolumeContainer {
 		if (priceGroups[index] == null) {
 			priceGroups[index] = createPriceGroupList();
 		}
-		priceGroups[index].add(price, volume);
+		priceGroups[index].setAdd(price, volume);
 	}
 
 	protected abstract OrderedLinkedList createPriceGroupList();

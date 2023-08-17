@@ -11,6 +11,12 @@ public class Node {
 		this.volume = volume;
 	}
 
+	public Node(int order, int volume, Node nextNode) {
+		this.order = order;
+		this.volume = volume;
+		this.nextNode = nextNode;
+	}
+
 	public void setNextNode(Node node) {
 		nextNode = node;
 	}

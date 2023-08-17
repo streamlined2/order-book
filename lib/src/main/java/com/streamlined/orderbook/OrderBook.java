@@ -31,19 +31,16 @@ public class OrderBook {
 	}
 
 	public int querySizeForPrice(int price) {
-		int bestBidPrice = bidContainer.getBestPrice();
+		final int bestBidPrice = bidContainer.getBestPrice();
 		if (bestBidPrice != VolumeContainer.PRICE_VALUE_ABSENT && price <= bestBidPrice) {
-			int bidSize = bidContainer.getVolumeByPrice(price);
+			final int bidSize = bidContainer.getVolumeByPrice(price);
 			if (bidSize != VolumeContainer.VOLUME_VALUE_ABSENT) {
 				return bidSize;
 			}
 		}
-		int bestAskPrice = askContainer.getBestPrice();
-		if (bestAskPrice != VolumeContainer.PRICE_VALUE_ABSENT && price >= bestAskPrice) {
-			int askSize = askContainer.getVolumeByPrice(price);
-			if (askSize != VolumeContainer.VOLUME_VALUE_ABSENT) {
-				return askSize;
-			}
+		final int askSize = askContainer.getVolumeByPrice(price);
+		if (askSize != VolumeContainer.VOLUME_VALUE_ABSENT) {
+			return askSize;
 		}
 		return 0;
 	}
