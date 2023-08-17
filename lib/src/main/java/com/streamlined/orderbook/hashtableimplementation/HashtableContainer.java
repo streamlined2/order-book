@@ -163,6 +163,16 @@ public abstract class HashtableContainer implements VolumeContainer {
 
 	protected abstract Node locateBestPriceNode();
 
+	protected void contractMinMaxRange(boolean doContract, boolean minimumRange) {
+		if(doContract) {
+			if (minimumRange) {
+				minPriceGroupIndex++;
+			} else {
+				maxPriceGroupIndex--;
+			}
+		}
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder b = new StringBuilder("[");

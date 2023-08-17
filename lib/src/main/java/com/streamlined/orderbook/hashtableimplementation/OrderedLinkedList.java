@@ -3,14 +3,17 @@ package com.streamlined.orderbook.hashtableimplementation;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public abstract class OrderedLinkedList implements Iterable<Node> {
+public class OrderedLinkedList implements Iterable<Node> {
 
 	private Node head;
+	private final boolean ascending;
 
-	protected OrderedLinkedList() {
+	protected OrderedLinkedList(boolean ascending) {
+		this.ascending = ascending;
 	}
 
-	protected OrderedLinkedList(int[] orders, int[] volumes) {
+	protected OrderedLinkedList(boolean ascending, int[] orders, int[] volumes) {
+		this.ascending = ascending;
 		for (int k = 0; k < Math.min(orders.length, volumes.length); k++) {
 			setAdd(orders[k], volumes[k]);
 		}
@@ -185,11 +188,17 @@ public abstract class OrderedLinkedList implements Iterable<Node> {
 		};
 	}
 
-	protected abstract boolean precedes(Node node1, Node node2);
+	protected boolean precedes(Node node1, Node node2) {
+		return ascending ? node1.getOrder() < node2.getOrder() : node1.getOrder() > node2.getOrder();
+	}
 
-	protected abstract boolean precedes(Node node, int order);
+	protected boolean precedes(Node node, int order) {
+		return ascending ? node.getOrder() < order : node.getOrder() > order;
+	}
 
-	protected abstract boolean precedes(int order, Node node);
+	protected boolean precedes(int order, Node node) {
+		return ascending ? order < node.getOrder() : order > node.getOrder();
+	}
 
 	@Override
 	public String toString() {

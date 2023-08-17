@@ -11,7 +11,7 @@ class HashtableContainerPerformanceTest {
 	@DisplayName("measure search time for ask container")
 	void testMeasureSearchTimeForAskContainer() {
 		// setup
-		final int capacity = 10_000_000;
+		final int capacity = 1_000_000;
 		HashtableContainer container = new AskContainer(capacity);
 		int price = 1;
 		int volume = 1;
@@ -30,31 +30,6 @@ class HashtableContainerPerformanceTest {
 		}
 		long time = System.currentTimeMillis() - start;
 		System.out.print("time for search in ask container = %d, total = %d%n".formatted(time, total));
-	}
-
-	@Test
-	@DisplayName("measure search time for bid container")
-	void testMeasureSearchTimeForBidContainer() {
-		// setup
-		final int capacity = 10_000_000;
-		HashtableContainer container = new BidContainer(capacity);
-		int price = 1;
-		int volume = 1;
-		for (int k = 0; k < capacity; k++) {
-			container.set(price, volume);
-			price += 1;
-			volume += 10;
-		}
-		// measure
-		long total = 0;
-		price = 1;
-		long start = System.currentTimeMillis();
-		for (int k = 0; k < capacity; k++) {
-			total += container.getVolumeByPrice(price);
-			price += 1;
-		}
-		long time = System.currentTimeMillis() - start;
-		System.out.print("time for search in bid container = %d, total = %d%n".formatted(time, total));
 	}
 
 	@Test
@@ -101,6 +76,30 @@ class HashtableContainerPerformanceTest {
 		}
 		long time = System.currentTimeMillis() - start;
 		System.out.print("time for volume subtraction for best price = %d%n".formatted(time));
+	}
+
+	@Test
+	@DisplayName("measure best price calculation after huge buyout")
+	void testBestPriceCalculation() {
+		SecureRandom random = new SecureRandom();
+		final int maxPrice = 1_000_000;
+		final int maxVolume = 100;
+		// setup
+		HashtableContainer container = new AskContainer(maxPrice);
+		for (int price = 0; price < maxPrice; price++) {
+			container.set(price, random.nextInt(maxVolume) + 1);
+		}
+		// measure
+		final int count = 100;
+		final int buyout = maxPrice * maxVolume;
+		container.subtractVolumeForBestPrice(buyout);
+		long start = System.currentTimeMillis();
+		long total = 0;
+		for (int k = 0; k < count; k++) {
+			total += container.getBestPrice();
+		}
+		long time = System.currentTimeMillis() - start;
+		System.out.print("time for best price calculation = %d%n".formatted(time));
 	}
 
 }
