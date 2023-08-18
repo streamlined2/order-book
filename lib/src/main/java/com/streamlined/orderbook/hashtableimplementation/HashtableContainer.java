@@ -2,6 +2,7 @@ package com.streamlined.orderbook.hashtableimplementation;
 
 import com.streamlined.orderbook.PriceVolume;
 import com.streamlined.orderbook.VolumeContainer;
+import com.streamlined.orderbook.hashtableimplementation.OrderedLinkedList.Node;
 
 public abstract class HashtableContainer implements VolumeContainer {
 
@@ -164,7 +165,7 @@ public abstract class HashtableContainer implements VolumeContainer {
 	protected abstract Node locateBestPriceNode();
 
 	protected void contractMinMaxRange(boolean doContract, boolean minimumRange) {
-		if(doContract) {
+		if (doContract) {
 			if (minimumRange) {
 				minPriceGroupIndex++;
 			} else {

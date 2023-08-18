@@ -3,7 +3,7 @@ package com.streamlined.orderbook.hashtableimplementation;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class OrderedLinkedList implements Iterable<Node> {
+public class OrderedLinkedList implements Iterable<OrderedLinkedList.Node> {
 
 	private Node head;
 	private final boolean ascending;
@@ -25,7 +25,7 @@ public class OrderedLinkedList implements Iterable<Node> {
 
 	public int getSize() {
 		int count = 0;
-		for (Node node = head; node != null; node = node.getNextNode()) {
+		for (Node node = head; node != null; node = node.nextNode) {
 			count++;
 		}
 		return count;
@@ -36,18 +36,18 @@ public class OrderedLinkedList implements Iterable<Node> {
 		if (head == null) {
 			head = newNode;
 		} else if (precedes(newNode, head)) {
-			newNode.setNextNode(head);
+			newNode.nextNode = head;
 			head = newNode;
 		} else {
 			Node node = head;
 			do {
-				Node nextNode = node.getNextNode();
+				Node nextNode = node.nextNode;
 				if (nextNode == null) {
-					node.setNextNode(newNode);
+					node.nextNode = newNode;
 					break;
 				} else if (precedes(newNode, nextNode)) {
-					node.setNextNode(newNode);
-					newNode.setNextNode(nextNode);
+					node.nextNode = newNode;
+					newNode.nextNode = nextNode;
 					break;
 				}
 				node = nextNode;
@@ -60,20 +60,20 @@ public class OrderedLinkedList implements Iterable<Node> {
 			head = new Node(order, size);
 		} else if (precedes(order, head)) {
 			head = new Node(order, size, head);
-		} else if (order == head.getOrder()) {
-			head.setVolume(size);
+		} else if (order == head.order) {
+			head.volume = size;
 		} else {
 			Node node = head;
 			do {
-				Node nextNode = node.getNextNode();
+				Node nextNode = node.nextNode;
 				if (nextNode == null) {
-					node.setNextNode(new Node(order, size));
+					node.nextNode = new Node(order, size);
 					break;
 				} else if (precedes(order, nextNode)) {
-					node.setNextNode(new Node(order, size, nextNode));
+					node.nextNode = new Node(order, size, nextNode);
 					break;
-				} else if (order == nextNode.getOrder()) {
-					nextNode.setVolume(size);
+				} else if (order == nextNode.order) {
+					nextNode.volume = size;
 					break;
 				}
 				node = nextNode;
@@ -82,9 +82,9 @@ public class OrderedLinkedList implements Iterable<Node> {
 	}
 
 	public boolean setVolume(int order, int volume) {
-		for (Node node = head; node != null; node = node.getNextNode()) {
-			if (node.getOrder() == order) {
-				node.setVolume(volume);
+		for (Node node = head; node != null; node = node.nextNode) {
+			if (node.order == order) {
+				node.volume = volume;
 				return true;
 			}
 			if (!precedes(node, order)) {
@@ -97,7 +97,7 @@ public class OrderedLinkedList implements Iterable<Node> {
 	public boolean remove(int order) {
 		for (Iterator<Node> i = iterator(); i.hasNext();) {
 			Node node = i.next();
-			if (node.getOrder() == order) {
+			if (node.order == order) {
 				i.remove();
 				return true;
 			}
@@ -109,8 +109,8 @@ public class OrderedLinkedList implements Iterable<Node> {
 	}
 
 	public Node getNodeByOrder(int order) {
-		for (Node node = head; node != null; node = node.getNextNode()) {
-			if (node.getOrder() == order) {
+		for (Node node = head; node != null; node = node.nextNode) {
+			if (node.order == order) {
 				return node;
 			}
 			if (!precedes(node, order)) {
@@ -121,8 +121,8 @@ public class OrderedLinkedList implements Iterable<Node> {
 	}
 
 	public Node getFirstNonEmptyNode() {
-		for (Node node = head; node != null; node = node.getNextNode()) {
-			if (node.getVolume() > 0) {
+		for (Node node = head; node != null; node = node.nextNode) {
+			if (node.volume > 0) {
 				return node;
 			}
 		}
@@ -131,15 +131,14 @@ public class OrderedLinkedList implements Iterable<Node> {
 
 	public int subtractVolume(int subtractVolume) {
 		int subtractedVolume = 0;
-		for (Node node = head; node != null && subtractedVolume < subtractVolume; node = node.getNextNode()) {
+		for (Node node = head; node != null && subtractedVolume < subtractVolume; node = node.nextNode) {
 			int volumeLeftover = subtractVolume - subtractedVolume;
-			final int volume = node.getVolume();
-			if (volume < volumeLeftover) {
-				subtractedVolume += volume;
-				node.setVolume(0);
+			if (node.volume < volumeLeftover) {
+				subtractedVolume += node.volume;
+				node.volume = 0;
 			} else {
 				subtractedVolume += volumeLeftover;
-				node.setVolume(volume - volumeLeftover);
+				node.volume -= volumeLeftover;
 			}
 		}
 		return subtractedVolume;
@@ -164,7 +163,7 @@ public class OrderedLinkedList implements Iterable<Node> {
 					throw new NoSuchElementException("no more elements in linked list");
 				previousToLastReturnedNode = lastReturnedNode;
 				lastReturnedNode = nextNodeToReturn;
-				nextNodeToReturn = nextNodeToReturn.getNextNode();
+				nextNodeToReturn = nextNodeToReturn.nextNode;
 				return lastReturnedNode;
 			}
 
@@ -177,7 +176,7 @@ public class OrderedLinkedList implements Iterable<Node> {
 					head = nextNodeToReturn;
 					lastReturnedNode = previousToLastReturnedNode = null;
 				} else if (previousToLastReturnedNode != null) {
-					previousToLastReturnedNode.setNextNode(nextNodeToReturn);
+					previousToLastReturnedNode.nextNode = nextNodeToReturn;
 					lastReturnedNode = previousToLastReturnedNode;
 					previousToLastReturnedNode = null;
 				} else {
@@ -189,15 +188,15 @@ public class OrderedLinkedList implements Iterable<Node> {
 	}
 
 	protected boolean precedes(Node node1, Node node2) {
-		return ascending ? node1.getOrder() < node2.getOrder() : node1.getOrder() > node2.getOrder();
+		return ascending ? node1.order < node2.order : node1.order > node2.order;
 	}
 
 	protected boolean precedes(Node node, int order) {
-		return ascending ? node.getOrder() < order : node.getOrder() > order;
+		return ascending ? node.order < order : node.order > order;
 	}
 
 	protected boolean precedes(int order, Node node) {
-		return ascending ? order < node.getOrder() : order > node.getOrder();
+		return ascending ? order < node.order : order > node.order;
 	}
 
 	@Override
@@ -211,6 +210,52 @@ public class OrderedLinkedList implements Iterable<Node> {
 		}
 		b.append("}");
 		return b.toString();
+	}
+
+	protected static class Node {
+
+		private Node nextNode;
+		private final int order;
+		private int volume;
+
+		public Node(int order, int volume) {
+			this.order = order;
+			this.volume = volume;
+		}
+
+		public Node(int order, int volume, Node nextNode) {
+			this.order = order;
+			this.volume = volume;
+			this.nextNode = nextNode;
+		}
+
+		public int getOrder() {
+			return order;
+		}
+
+		public int getVolume() {
+			return volume;
+		}
+
+		@Override
+		public String toString() {
+			return String.format("[%d,%d]", order, volume);
+		}
+
+		@Override
+		public int hashCode() {
+			return order;
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			if (o instanceof Node) {
+				Node node = (Node) o;
+				return this.order == node.order;
+			}
+			return false;
+		}
+
 	}
 
 }

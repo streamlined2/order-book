@@ -1,5 +1,7 @@
 package com.streamlined.orderbook.hashtableimplementation;
 
+import com.streamlined.orderbook.hashtableimplementation.OrderedLinkedList.Node;
+
 public class AskContainer extends HashtableContainer {
 
 	public AskContainer() {
@@ -27,7 +29,7 @@ public class AskContainer extends HashtableContainer {
 	private Node getFirstNonEmptyNode(int startIndex, int lastIndex, boolean doContract, boolean minimumRange) {
 		for (int index = startIndex; index <= lastIndex; index++) {
 			if (priceGroups[index] != null) {
-				Node node = priceGroups[index].getFirstNonEmptyNode();
+				OrderedLinkedList.Node node = priceGroups[index].getFirstNonEmptyNode();
 				if (node != null) {
 					return node;
 				} else {

@@ -8,6 +8,8 @@ import java.util.NoSuchElementException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import com.streamlined.orderbook.hashtableimplementation.OrderedLinkedList.Node;
+
 class OrderedLinkedListTest {
 
 	@Test

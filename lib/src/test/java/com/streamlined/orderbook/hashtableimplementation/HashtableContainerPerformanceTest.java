@@ -11,7 +11,7 @@ class HashtableContainerPerformanceTest {
 	@DisplayName("measure search time for ask container")
 	void testMeasureSearchTimeForAskContainer() {
 		// setup
-		final int capacity = 1_000_000;
+		final int capacity = 10_000_000;
 		HashtableContainer container = new AskContainer(capacity);
 		int price = 1;
 		int volume = 1;

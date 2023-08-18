@@ -1,5 +1,7 @@
 package com.streamlined.orderbook.hashtableimplementation;
 
+import com.streamlined.orderbook.hashtableimplementation.OrderedLinkedList.Node;
+
 public class BidContainer extends HashtableContainer {
 
 	public BidContainer() {
