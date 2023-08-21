@@ -5,14 +5,16 @@ import java.util.NoSuchElementException;
 
 public class OrderedLinkedList implements Iterable<OrderedLinkedList.Node> {
 
+	private static final SubtractionResult subtractionResult = new SubtractionResult();
+
 	private Node head;
 	private final boolean ascending;
 
-	protected OrderedLinkedList(boolean ascending) {
+	public OrderedLinkedList(boolean ascending) {
 		this.ascending = ascending;
 	}
 
-	protected OrderedLinkedList(boolean ascending, int[] orders, int[] volumes) {
+	public OrderedLinkedList(boolean ascending, int[] orders, int[] volumes) {
 		this.ascending = ascending;
 		for (int k = 0; k < Math.min(orders.length, volumes.length); k++) {
 			setAdd(orders[k], volumes[k]);
@@ -129,19 +131,23 @@ public class OrderedLinkedList implements Iterable<OrderedLinkedList.Node> {
 		return null;
 	}
 
-	public int subtractVolume(int subtractVolume) {
+	public SubtractionResult subtractVolume(int subtractVolume) {
+		int emptyNodeCount = 0;
 		int subtractedVolume = 0;
 		for (Node node = head; node != null && subtractedVolume < subtractVolume; node = node.nextNode) {
 			int volumeLeftover = subtractVolume - subtractedVolume;
 			if (node.volume < volumeLeftover) {
 				subtractedVolume += node.volume;
 				node.volume = 0;
+				emptyNodeCount++;
 			} else {
 				subtractedVolume += volumeLeftover;
 				node.volume -= volumeLeftover;
 			}
 		}
-		return subtractedVolume;
+		subtractionResult.emptyNodeCount = emptyNodeCount;
+		subtractionResult.subtractedVolume = subtractedVolume;
+		return subtractionResult;
 	}
 
 	@Override
@@ -256,6 +262,15 @@ public class OrderedLinkedList implements Iterable<OrderedLinkedList.Node> {
 			return false;
 		}
 
+	}
+
+	protected static class SubtractionResult {
+		int subtractedVolume;
+		int emptyNodeCount;
+
+		public boolean isListEmpty() {
+			return emptyNodeCount == HashtableContainer.PRICE_GROUP_SIZE;
+		}
 	}
 
 }

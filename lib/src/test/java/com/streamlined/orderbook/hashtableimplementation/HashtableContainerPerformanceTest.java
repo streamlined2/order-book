@@ -59,7 +59,7 @@ class HashtableContainerPerformanceTest {
 	@DisplayName("measure volume subtraction time for best price")
 	void testVolumeSubtractionForBestPrice() {
 		SecureRandom random = new SecureRandom();
-		final int count = 1_000_000;
+		final int count = 10_000_000;
 		// setup
 		HashtableContainer container = new AskContainer(count);
 		int price = 1;
@@ -69,7 +69,7 @@ class HashtableContainerPerformanceTest {
 		}
 		// measure
 		final int buyout = 100;
-		final int times = 10_000;
+		final int times = 1_000_000;
 		long start = System.currentTimeMillis();
 		for (int k = 0; k < times; k++) {
 			container.subtractVolumeForBestPrice(buyout);
@@ -89,17 +89,17 @@ class HashtableContainerPerformanceTest {
 		for (int price = 0; price < maxPrice; price++) {
 			container.set(price, random.nextInt(maxVolume) + 1);
 		}
-		// measure
-		final int count = 100;
+		final int count = 1_000_000;
 		final int buyout = maxPrice * maxVolume;
 		container.subtractVolumeForBestPrice(buyout);
+		// measure
 		long start = System.currentTimeMillis();
 		long total = 0;
 		for (int k = 0; k < count; k++) {
 			total += container.getBestPrice();
 		}
 		long time = System.currentTimeMillis() - start;
-		System.out.print("time for best price calculation = %d%n".formatted(time));
+		System.out.print("time for best price calculation = %d, total = %d%n".formatted(time, total));
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.streamlined.orderbook.hashtableimplementation;
 
 import com.streamlined.orderbook.hashtableimplementation.OrderedLinkedList.Node;
+import com.streamlined.orderbook.hashtableimplementation.OrderedLinkedList.SubtractionResult;
 
 public class AskContainer extends HashtableContainer {
 
@@ -19,21 +20,25 @@ public class AskContainer extends HashtableContainer {
 
 	@Override
 	protected Node locateBestPriceNode() {
-		Node node = getFirstNonEmptyNode(minPriceGroupIndex, priceGroups.length - 1, true, true);
-		if (node != null) {
-			return node;
+		if (minPriceGroupIndex <= maxPriceGroupIndex) {
+			return getFirstNonEmptyNode(minPriceGroupIndex, maxPriceGroupIndex);
+		} else {
+			Node node = getFirstNonEmptyNode(minPriceGroupIndex, priceGroups.length - 1);
+			if (node != null) {
+				return node;
+			}
+			return getFirstNonEmptyNode(0, maxPriceGroupIndex);
 		}
-		return getFirstNonEmptyNode(0, maxPriceGroupIndex, false, false);
 	}
 
-	private Node getFirstNonEmptyNode(int startIndex, int lastIndex, boolean doContract, boolean minimumRange) {
+	private Node getFirstNonEmptyNode(int startIndex, int lastIndex) {
 		for (int index = startIndex; index <= lastIndex; index++) {
 			if (priceGroups[index] != null) {
-				OrderedLinkedList.Node node = priceGroups[index].getFirstNonEmptyNode();
+				Node node = priceGroups[index].getFirstNonEmptyNode();
 				if (node != null) {
 					return node;
 				} else {
-					contractMinMaxRange(doContract, minimumRange);
+					contractMinSide();
 				}
 			}
 		}
@@ -43,17 +48,28 @@ public class AskContainer extends HashtableContainer {
 	@Override
 	public int subtractVolumeForBestPrice(int subtractVolume) {
 		int leftOver = subtractVolume;
-		for (int index = minPriceGroupIndex; leftOver > 0 && index < priceGroups.length; index++) {
-			if (priceGroups[index] != null) {
-				leftOver -= priceGroups[index].subtractVolume(leftOver);
-			}
-		}
-		for (int index = 0; leftOver > 0 && index <= maxPriceGroupIndex; index++) {
-			if (priceGroups[index] != null) {
-				leftOver -= priceGroups[index].subtractVolume(leftOver);
-			}
+		if (minPriceGroupIndex <= maxPriceGroupIndex) {
+			leftOver = subtractVolumeForRange(minPriceGroupIndex, maxPriceGroupIndex, leftOver);
+		} else {
+			leftOver = subtractVolumeForRange(minPriceGroupIndex, priceGroups.length - 1, leftOver);
+			leftOver = subtractVolumeForRange(0, maxPriceGroupIndex, leftOver);
 		}
 		return subtractVolume - leftOver;
+	}
+
+	private int subtractVolumeForRange(int startIndex, int finishIndex, int leftOver) {
+		for (int index = startIndex; leftOver > 0 && index <= finishIndex; index++) {
+			if (priceGroups[index] != null) {
+				SubtractionResult result = priceGroups[index].subtractVolume(leftOver);
+				leftOver -= result.subtractedVolume;
+				if (result.isListEmpty()) {
+					contractMinSide();
+				}
+			} else {
+				contractMinSide();
+			}
+		}
+		return leftOver;
 	}
 
 }

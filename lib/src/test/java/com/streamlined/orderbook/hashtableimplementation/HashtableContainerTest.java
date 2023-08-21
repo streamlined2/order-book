@@ -10,7 +10,7 @@ import com.streamlined.orderbook.PriceVolume;
 class HashtableContainerTest {
 
 	@Test
-	@DisplayName("check value of first price group start index which should remain fixed")
+	@DisplayName("value of first price group start index should remain same")
 	void test1() {
 		HashtableContainer container = new BidContainer();
 
@@ -23,26 +23,26 @@ class HashtableContainerTest {
 	@Test
 	@DisplayName("check mapping of price to group index for growing price")
 	void test2() {
-		HashtableContainer container = new BidContainer(2);
+		HashtableContainer container = new BidContainer(3);
 		container.defineFirstPriceGroupStart(11);
 
-		assertEquals(0, container.mapPriceToGroupIndex(8));
-		assertEquals(0, container.mapPriceToGroupIndex(9));
-		assertEquals(0, container.mapPriceToGroupIndex(10));
-		assertEquals(0, container.mapPriceToGroupIndex(11));
+		assertEquals(1, container.mapPriceToGroupIndex(8));
+		assertEquals(1, container.mapPriceToGroupIndex(9));
+		assertEquals(1, container.mapPriceToGroupIndex(10));
+		assertEquals(1, container.mapPriceToGroupIndex(11));
 
-		assertEquals(1, container.mapPriceToGroupIndex(12));
-		assertEquals(1, container.mapPriceToGroupIndex(13));
-		assertEquals(1, container.mapPriceToGroupIndex(14));
-		assertEquals(1, container.mapPriceToGroupIndex(15));
+		assertEquals(2, container.mapPriceToGroupIndex(12));
+		assertEquals(2, container.mapPriceToGroupIndex(13));
+		assertEquals(2, container.mapPriceToGroupIndex(14));
+		assertEquals(2, container.mapPriceToGroupIndex(15));
 
-		assertEquals(2, container.mapPriceToGroupIndex(16));
+		assertEquals(0, container.mapPriceToGroupIndex(16));
 	}
 
 	@Test
 	@DisplayName("check mapping of price to group index for lowering price")
 	void test3() {
-		HashtableContainer container = new BidContainer(2);
+		HashtableContainer container = new BidContainer(4);
 		container.defineFirstPriceGroupStart(11);
 
 		assertEquals(1, container.mapPriceToGroupIndex(7));
@@ -52,7 +52,7 @@ class HashtableContainerTest {
 
 		assertEquals(0, container.mapPriceToGroupIndex(3));
 
-		assertEquals(-1, container.mapPriceToGroupIndex(-1));
+		assertEquals(4 - 1, container.mapPriceToGroupIndex(-1));
 	}
 
 	@Test
@@ -61,22 +61,22 @@ class HashtableContainerTest {
 		HashtableContainer container = new BidContainer(3);
 		container.defineFirstPriceGroupStart(11);
 
-		assertEquals(0, container.mapPriceToGroupIndex(8));
-		assertEquals(0, container.mapPriceToGroupIndex(9));
-		assertEquals(0, container.mapPriceToGroupIndex(10));
-		assertEquals(0, container.mapPriceToGroupIndex(11));
+		assertEquals(1, container.mapPriceToGroupIndex(8));
+		assertEquals(1, container.mapPriceToGroupIndex(9));
+		assertEquals(1, container.mapPriceToGroupIndex(10));
+		assertEquals(1, container.mapPriceToGroupIndex(11));
 
-		assertEquals(1, container.mapPriceToGroupIndex(12));
-		assertEquals(1, container.mapPriceToGroupIndex(13));
-		assertEquals(1, container.mapPriceToGroupIndex(14));
-		assertEquals(1, container.mapPriceToGroupIndex(15));
+		assertEquals(2, container.mapPriceToGroupIndex(12));
+		assertEquals(2, container.mapPriceToGroupIndex(13));
+		assertEquals(2, container.mapPriceToGroupIndex(14));
+		assertEquals(2, container.mapPriceToGroupIndex(15));
 
-		assertEquals(2, container.mapPriceToGroupIndex(7));
-		assertEquals(2, container.mapPriceToGroupIndex(6));
-		assertEquals(2, container.mapPriceToGroupIndex(5));
-		assertEquals(2, container.mapPriceToGroupIndex(4));
+		assertEquals(0, container.mapPriceToGroupIndex(7));
+		assertEquals(0, container.mapPriceToGroupIndex(6));
+		assertEquals(0, container.mapPriceToGroupIndex(5));
+		assertEquals(0, container.mapPriceToGroupIndex(4));
 
-		assertEquals(1, container.mapPriceToGroupIndex(3));
+		assertEquals(2, container.mapPriceToGroupIndex(3));
 	}
 
 	@Test
@@ -84,25 +84,21 @@ class HashtableContainerTest {
 	void test5() {
 		HashtableContainer container = new BidContainer(3);
 
-		assertEquals(0, container.locateGroupForPrice(5));
-		assertEquals(container.getCapacity(), container.getMinPriceGroupIndex());
-		assertEquals(0, container.getMaxPriceGroupIndex());
-		assertEquals(3, container.getCapacity());
-
-		assertEquals(1, container.locateGroupForPrice(9));
-		assertEquals(container.getCapacity(), container.getMinPriceGroupIndex());
+		assertEquals(1, container.locateGroupForPrice(5));
+		assertEquals(1, container.getMinPriceGroupIndex());
 		assertEquals(1, container.getMaxPriceGroupIndex());
-		assertEquals(3, container.getCapacity());
 
-		assertEquals(2, container.locateGroupForPrice(13));
-		assertEquals(container.getCapacity(), container.getMinPriceGroupIndex());
+		assertEquals(2, container.locateGroupForPrice(9));
+		assertEquals(1, container.getMinPriceGroupIndex());
 		assertEquals(2, container.getMaxPriceGroupIndex());
-		assertEquals(3, container.getCapacity());
+
+		assertEquals(0, container.locateGroupForPrice(13));
+		assertEquals(1, container.getMinPriceGroupIndex());
+		assertEquals(0, container.getMaxPriceGroupIndex());
 
 		assertEquals(3, container.locateGroupForPrice(17));
-		assertEquals(container.getCapacity(), container.getMinPriceGroupIndex());
+		assertEquals(0, container.getMinPriceGroupIndex());
 		assertEquals(3, container.getMaxPriceGroupIndex());
-		assertTrue(container.getCapacity() > 3);
 	}
 
 	@Test
@@ -110,25 +106,21 @@ class HashtableContainerTest {
 	void test6() {
 		HashtableContainer container = new BidContainer(3);
 
-		assertEquals(0, container.locateGroupForPrice(20));
-		assertEquals(container.getCapacity(), container.getMinPriceGroupIndex());
-		assertEquals(0, container.getMaxPriceGroupIndex());
-		assertEquals(3, container.getCapacity());
-
-		assertEquals(2, container.locateGroupForPrice(16));
-		assertEquals(2, container.getMinPriceGroupIndex());
-		assertEquals(0, container.getMaxPriceGroupIndex());
-		assertEquals(3, container.getCapacity());
-
-		assertEquals(1, container.locateGroupForPrice(12));
+		assertEquals(1, container.locateGroupForPrice(20));
 		assertEquals(1, container.getMinPriceGroupIndex());
-		assertEquals(0, container.getMaxPriceGroupIndex());
-		assertEquals(3, container.getCapacity());
+		assertEquals(1, container.getMaxPriceGroupIndex());
 
-		assertEquals(1, container.locateGroupForPrice(8));
-		assertEquals(container.getCapacity() - 3, container.getMinPriceGroupIndex());
-		assertEquals(0, container.getMaxPriceGroupIndex());
-		assertTrue(container.getCapacity() > 3);
+		assertEquals(0, container.locateGroupForPrice(16));
+		assertEquals(0, container.getMinPriceGroupIndex());
+		assertEquals(1, container.getMaxPriceGroupIndex());
+
+		assertEquals(2, container.locateGroupForPrice(12));
+		assertEquals(2, container.getMinPriceGroupIndex());
+		assertEquals(1, container.getMaxPriceGroupIndex());
+
+		assertEquals(3, container.locateGroupForPrice(8));
+		assertEquals(3, container.getMinPriceGroupIndex());
+		assertEquals(2, container.getMaxPriceGroupIndex());
 	}
 
 	@Test
@@ -136,30 +128,26 @@ class HashtableContainerTest {
 	void test7() {
 		HashtableContainer container = new BidContainer(2);
 
-		assertEquals(container.getCapacity(), container.getMinPriceGroupIndex());
-		assertEquals(-1, container.getMaxPriceGroupIndex());
-
-		assertEquals(0, container.locateGroupForPrice(20));
-		assertEquals(2, container.getMinPriceGroupIndex());
+		assertEquals(0, container.getMinPriceGroupIndex());
 		assertEquals(0, container.getMaxPriceGroupIndex());
-		assertEquals(2, container.getCapacity());
 
-		assertEquals(1, container.locateGroupForPrice(16));
+		assertEquals(1, container.locateGroupForPrice(20));
 		assertEquals(1, container.getMinPriceGroupIndex());
-		assertEquals(0, container.getMaxPriceGroupIndex());
-		assertEquals(2, container.getCapacity());
+		assertEquals(1, container.getMaxPriceGroupIndex());
+
+		assertEquals(0, container.locateGroupForPrice(16));
+		assertEquals(0, container.getMinPriceGroupIndex());
+		assertEquals(1, container.getMaxPriceGroupIndex());
 
 		int index = container.locateGroupForPrice(12);
-		assertEquals(container.getCapacity() - 2, index);
-		assertEquals(container.getCapacity() - 2, container.getMinPriceGroupIndex());
-		assertEquals(0, container.getMaxPriceGroupIndex());
-		assertTrue(container.getCapacity() > 2);
+		assertEquals(2, index);
+		assertEquals(2, container.getMinPriceGroupIndex());
+		assertEquals(1, container.getMaxPriceGroupIndex());
 
 		index = container.locateGroupForPrice(8);
-		assertEquals(container.getCapacity() - 3, index);
-		assertEquals(container.getCapacity() - 3, container.getMinPriceGroupIndex());
-		assertEquals(0, container.getMaxPriceGroupIndex());
-		assertTrue(container.getCapacity() > 3);
+		assertEquals(3, index);
+		assertEquals(3, container.getMinPriceGroupIndex());
+		assertEquals(2, container.getMaxPriceGroupIndex());
 	}
 
 	@Test
