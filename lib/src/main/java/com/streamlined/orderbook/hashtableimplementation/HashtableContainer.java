@@ -66,20 +66,24 @@ public abstract class HashtableContainer implements VolumeContainer {
 	}
 
 	private int getMinExpansionSize(int price, int index) {
-		int initialExpansionSize = 0;
-		int indexRest = index;
-		for (; indexRest >= priceGroups.length; indexRest -= priceGroups.length) {
-			initialExpansionSize += priceGroups.length;
-		}
+		int initialExpansionSize = getIndexExcess(index);
 		if (initialExpansionSize > 0) {
 			return initialExpansionSize;
 		}
-		if (price <= firstPriceGroupStart - PRICE_GROUP_SIZE && indexRest >= firstPriceGroupIndex) {
-			return maxPriceGroupIndex - indexRest + 1 + initialExpansionSize;
-		} else if (price >= firstPriceGroupStart + PRICE_GROUP_SIZE && indexRest <= firstPriceGroupIndex) {
-			return indexRest - minPriceGroupIndex + 1 + initialExpansionSize;
+		if (price <= firstPriceGroupStart - PRICE_GROUP_SIZE && index >= firstPriceGroupIndex) {
+			return maxPriceGroupIndex - index + 1;
+		} else if (price >= firstPriceGroupStart + PRICE_GROUP_SIZE && index <= firstPriceGroupIndex) {
+			return index - minPriceGroupIndex + 1;
 		}
 		return 0;
+	}
+
+	private int getIndexExcess(int index) {
+		int excess = 0;
+		for (int indexRest = index; indexRest >= priceGroups.length; indexRest -= priceGroups.length) {
+			excess += priceGroups.length;
+		}
+		return excess;
 	}
 
 	private void updateMinMaxIndices(int price, int index) {
