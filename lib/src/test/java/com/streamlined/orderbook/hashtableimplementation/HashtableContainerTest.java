@@ -14,8 +14,10 @@ class HashtableContainerTest {
 	void test1() {
 		HashtableContainer container = new BidContainer();
 
-		assertEquals(8, container.defineFirstPriceGroupStart(11));
-		assertEquals(8, container.defineFirstPriceGroupStart(12));
+		container.defineFirstPriceGroupStart(11);
+		assertEquals(8, container.firstPriceGroupStart);
+		container.defineFirstPriceGroupStart(12);
+		assertEquals(8, container.firstPriceGroupStart);
 		assertEquals(0, container.getSize());
 		assertTrue(container.isEmpty());
 	}
@@ -183,7 +185,7 @@ class HashtableContainerTest {
 	}
 
 	@Test
-	@DisplayName("non-empty container should contain added earlier element")
+	@DisplayName("non-empty container should contain elements added earlier")
 	void test10() {
 		HashtableContainer container = new BidContainer();
 
@@ -343,7 +345,7 @@ class HashtableContainerTest {
 	}
 
 	@Test
-	@DisplayName("best price volume subtraction for empty bid container should no produce result")
+	@DisplayName("best price volume subtraction for empty bid container should not produce result")
 	void test17() {
 		HashtableContainer container = new BidContainer();
 
@@ -402,7 +404,7 @@ class HashtableContainerTest {
 	}
 
 	@Test
-	@DisplayName("best price volume subtraction for empty ask container should no produce result")
+	@DisplayName("best price volume subtraction for empty ask container should not produce result")
 	void test21() {
 		HashtableContainer container = new AskContainer();
 
