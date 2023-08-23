@@ -169,12 +169,13 @@ public abstract class HashtableContainer implements VolumeContainer {
 	public void set(int price, int volume) {
 		final int index = locateGroupForPrice(price);
 		if (priceGroups[index] == null) {
-			priceGroups[index] = createPriceGroupList();
+			priceGroups[index] = createPriceGroupList(price, volume);
+		} else {
+			priceGroups[index].setAdd(price, volume);
 		}
-		priceGroups[index].setAdd(price, volume);
 	}
 
-	protected abstract OrderedLinkedList createPriceGroupList();
+	protected abstract OrderedLinkedList createPriceGroupList(int price, int volume);
 
 	@Override
 	public int getVolumeByPrice(int price) {

@@ -14,6 +14,11 @@ public class OrderedLinkedList implements Iterable<OrderedLinkedList.Node> {
 		this.ascending = ascending;
 	}
 
+	public OrderedLinkedList(boolean ascending, int price, int volume) {
+		this(ascending);
+		this.head = new Node(price, volume);
+	}
+
 	public OrderedLinkedList(boolean ascending, int[] orders, int[] volumes) {
 		this.ascending = ascending;
 		for (int k = 0; k < Math.min(orders.length, volumes.length); k++) {
@@ -31,30 +36,6 @@ public class OrderedLinkedList implements Iterable<OrderedLinkedList.Node> {
 			count++;
 		}
 		return count;
-	}
-
-	public void add(int order, int size) {
-		Node newNode = new Node(order, size);
-		if (head == null) {
-			head = newNode;
-		} else if (precedes(newNode, head)) {
-			newNode.nextNode = head;
-			head = newNode;
-		} else {
-			Node node = head;
-			do {
-				Node nextNode = node.nextNode;
-				if (nextNode == null) {
-					node.nextNode = newNode;
-					break;
-				} else if (precedes(newNode, nextNode)) {
-					node.nextNode = newNode;
-					newNode.nextNode = nextNode;
-					break;
-				}
-				node = nextNode;
-			} while (true);
-		}
 	}
 
 	public void setAdd(int order, int size) {

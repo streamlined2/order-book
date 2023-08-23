@@ -14,8 +14,8 @@ public class AskContainer extends HashtableContainer {
 	}
 
 	@Override
-	protected OrderedLinkedList createPriceGroupList() {
-		return new OrderedLinkedList(true);
+	protected OrderedLinkedList createPriceGroupList(int price, int volume) {
+		return new OrderedLinkedList(true, price, volume);
 	}
 
 	@Override

@@ -39,7 +39,7 @@ class OrderedLinkedListTest {
 	void test3() {
 		OrderedLinkedList list = new OrderedLinkedList(false);
 
-		list.add(1, 10);
+		list.setAdd(1, 10);
 
 		assertEquals(1, list.getSize());
 		assertFalse(list.isEmpty());
@@ -54,7 +54,7 @@ class OrderedLinkedListTest {
 	void test4() {
 		OrderedLinkedList list = new OrderedLinkedList(true, new int[] { 2 }, new int[] { 10 });
 
-		list.add(1, 5);
+		list.setAdd(1, 5);
 
 		assertEquals(2, list.getSize());
 		assertFalse(list.isEmpty());
@@ -73,7 +73,7 @@ class OrderedLinkedListTest {
 	void test5() {
 		OrderedLinkedList list = new OrderedLinkedList(true, new int[] { 1 }, new int[] { 5 });
 
-		list.add(2, 10);
+		list.setAdd(2, 10);
 
 		assertEquals(2, list.getSize());
 		assertFalse(list.isEmpty());
@@ -92,7 +92,7 @@ class OrderedLinkedListTest {
 	void test6() {
 		OrderedLinkedList list = new OrderedLinkedList(true, new int[] { 3, 1 }, new int[] { 15, 5 });
 
-		list.add(2, 10);
+		list.setAdd(2, 10);
 
 		assertEquals(3, list.getSize());
 		assertFalse(list.isEmpty());
@@ -114,7 +114,7 @@ class OrderedLinkedListTest {
 	void test7() {
 		OrderedLinkedList list = new OrderedLinkedList(true, new int[] { 2, 1 }, new int[] { 10, 5 });
 
-		list.add(3, 15);
+		list.setAdd(3, 15);
 
 		assertEquals(3, list.getSize());
 		assertFalse(list.isEmpty());
