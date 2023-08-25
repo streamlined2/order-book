@@ -2,6 +2,7 @@ package com.streamlined.orderbook.arrayimplementation;
 
 import java.util.Arrays;
 
+import com.streamlined.orderbook.BestPriceVolumeSubtractResult;
 import com.streamlined.orderbook.PriceVolume;
 import com.streamlined.orderbook.VolumeContainer;
 
@@ -12,6 +13,7 @@ public abstract class ArrayContainer implements VolumeContainer {
 	private static final int EXPANSION_CONSTANT = 1;
 
 	private static final PriceVolume lastPriceVolume = new PriceVolume();
+	private static final BestPriceVolumeSubtractResult bestPriceVolumeSubtractResult = new BestPriceVolumeSubtractResult();
 
 	private int[] prices;
 	private int[] volumes;
@@ -208,7 +210,7 @@ public abstract class ArrayContainer implements VolumeContainer {
 		return VOLUME_VALUE_ABSENT;// magic value to avoid exception handling
 	}
 
-	public final int subtractVolumeForBestPrice(int subtractVolume) {
+	public final BestPriceVolumeSubtractResult subtractVolumeForBestPrice(int subtractVolume) {
 		int index = getBestPriceIndex();
 		if (isIndexValid(index)) {
 			int toSubtractVolume = subtractVolume;
@@ -226,9 +228,11 @@ public abstract class ArrayContainer implements VolumeContainer {
 				}
 				index--;
 			} while (index >= 0);
-			return subtractedVolume;
+			bestPriceVolumeSubtractResult.setValues(PRICE_VALUE_ABSENT, subtractedVolume);
+			return bestPriceVolumeSubtractResult;
 		}
-		return VOLUME_VALUE_ABSENT;
+		bestPriceVolumeSubtractResult.setValues(PRICE_VALUE_ABSENT, VOLUME_VALUE_ABSENT);
+		return bestPriceVolumeSubtractResult;
 	}
 
 	@Override

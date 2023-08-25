@@ -15,6 +15,6 @@ public interface VolumeContainer {
 
 	int getVolumeByPrice(int price);
 
-	int subtractVolumeForBestPrice(int subtractVolume);
+	BestPriceVolumeSubtractResult subtractVolumeForBestPrice(int subtractVolume);
 
 }

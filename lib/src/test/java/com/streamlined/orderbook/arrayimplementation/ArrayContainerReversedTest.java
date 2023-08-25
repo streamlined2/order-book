@@ -213,7 +213,7 @@ class ArrayContainerReversedTest {
 	void test14() {
 		ArrayContainer container = new ReversedOrderContainer(new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
 
-		assertEquals(1, container.subtractVolumeForBestPrice(1));
+		assertEquals(1, container.subtractVolumeForBestPrice(1).getVolumeSubtracted());
 		assertEquals(15, container.getVolumeByPrice(300));
 		assertEquals(10, container.getVolumeByPrice(200));
 		assertEquals(4, container.getVolumeByPrice(100));
@@ -225,7 +225,7 @@ class ArrayContainerReversedTest {
 	void test15() {
 		ArrayContainer container = new ReversedOrderContainer(new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
 
-		assertEquals(5, container.subtractVolumeForBestPrice(5));
+		assertEquals(5, container.subtractVolumeForBestPrice(5).getVolumeSubtracted());
 		assertEquals(15, container.getVolumeByPrice(300));
 		assertEquals(10, container.getVolumeByPrice(200));
 		assertEquals(2, container.getSize());
@@ -236,7 +236,7 @@ class ArrayContainerReversedTest {
 	void test15a() {
 		ArrayContainer container = new ReversedOrderContainer(new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
 
-		assertEquals(6, container.subtractVolumeForBestPrice(6));
+		assertEquals(6, container.subtractVolumeForBestPrice(6).getVolumeSubtracted());
 		assertEquals(15, container.getVolumeByPrice(300));
 		assertEquals(9, container.getVolumeByPrice(200));
 		assertEquals(2, container.getSize());
@@ -247,7 +247,7 @@ class ArrayContainerReversedTest {
 	void test15b() {
 		ArrayContainer container = new ReversedOrderContainer(new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
 
-		assertEquals(16, container.subtractVolumeForBestPrice(16));
+		assertEquals(16, container.subtractVolumeForBestPrice(16).getVolumeSubtracted());
 		assertEquals(14, container.getVolumeByPrice(300));
 		assertEquals(1, container.getSize());
 	}
@@ -258,7 +258,7 @@ class ArrayContainerReversedTest {
 		ArrayContainer container = new ReversedOrderContainer(new int[] { 100, 200, 300, 400, 500 },
 				new int[] { 5, 0, 0, 10, 15 });
 
-		assertEquals(16, container.subtractVolumeForBestPrice(16));
+		assertEquals(16, container.subtractVolumeForBestPrice(16).getVolumeSubtracted());
 		assertEquals(14, container.getVolumeByPrice(500));
 		assertEquals(1, container.getSize());
 	}
@@ -269,7 +269,7 @@ class ArrayContainerReversedTest {
 		ArrayContainer container = new ReversedOrderContainer(new int[] { 100, 200, 300, 400, 500 },
 				new int[] { 5, 0, 0, 10, 15 });
 
-		assertEquals(30, container.subtractVolumeForBestPrice(35));
+		assertEquals(30, container.subtractVolumeForBestPrice(35).getVolumeSubtracted());
 		assertEquals(0, container.getSize());
 	}
 
@@ -298,7 +298,7 @@ class ArrayContainerReversedTest {
 		ArrayContainer container = new ReversedOrderContainer(new int[] { 100, 200, 300, 400, 500 },
 				new int[] { 5, 0, 0, 0, 25 });
 
-		assertEquals(5, container.subtractVolumeForBestPrice(5));
+		assertEquals(5, container.subtractVolumeForBestPrice(5).getVolumeSubtracted());
 		assertEquals(1, container.getSize());
 	}
 

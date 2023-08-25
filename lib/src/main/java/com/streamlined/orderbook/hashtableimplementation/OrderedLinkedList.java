@@ -15,7 +15,7 @@ public class OrderedLinkedList implements Iterable<OrderedLinkedList.Node> {
 	}
 
 	public OrderedLinkedList(boolean ascending, int price, int volume) {
-		this(ascending);
+		this.ascending = ascending;
 		this.head = new Node(price, volume);
 	}
 
@@ -114,20 +114,22 @@ public class OrderedLinkedList implements Iterable<OrderedLinkedList.Node> {
 
 	public SubtractionResult subtractVolume(int subtractVolume) {
 		int emptyNodeCount = 0;
-		int subtractedVolume = 0;
-		for (Node node = head; node != null && subtractedVolume < subtractVolume; node = node.nextNode) {
-			int volumeLeftover = subtractVolume - subtractedVolume;
-			if (node.volume < volumeLeftover) {
-				subtractedVolume += node.volume;
+		int volumeLeftover = subtractVolume;
+		int lastCheckedOrder = 0;
+		for (Node node = head; node != null && volumeLeftover > 0; node = node.nextNode) {
+			lastCheckedOrder = node.order;
+			if (node.volume <= volumeLeftover) {
+				volumeLeftover -= node.volume;
 				node.volume = 0;
 				emptyNodeCount++;
 			} else {
-				subtractedVolume += volumeLeftover;
 				node.volume -= volumeLeftover;
+				volumeLeftover = 0;
 			}
 		}
 		subtractionResult.emptyNodeCount = emptyNodeCount;
-		subtractionResult.subtractedVolume = subtractedVolume;
+		subtractionResult.subtractedVolume = subtractVolume - volumeLeftover;
+		subtractionResult.lastCheckedOrder = lastCheckedOrder;
 		return subtractionResult;
 	}
 
@@ -174,15 +176,11 @@ public class OrderedLinkedList implements Iterable<OrderedLinkedList.Node> {
 		};
 	}
 
-	protected boolean precedes(Node node1, Node node2) {
-		return ascending ? node1.order < node2.order : node1.order > node2.order;
-	}
-
-	protected boolean precedes(Node node, int order) {
+	private boolean precedes(Node node, int order) {
 		return ascending ? node.order < order : node.order > order;
 	}
 
-	protected boolean precedes(int order, Node node) {
+	private boolean precedes(int order, Node node) {
 		return ascending ? order < node.order : order > node.order;
 	}
 
@@ -248,9 +246,14 @@ public class OrderedLinkedList implements Iterable<OrderedLinkedList.Node> {
 	protected static class SubtractionResult {
 		int subtractedVolume;
 		int emptyNodeCount;
+		int lastCheckedOrder;
 
 		public boolean isListEmpty() {
 			return emptyNodeCount == HashtableContainer.PRICE_GROUP_SIZE;
+		}
+
+		public int getLastCheckedPrice() {
+			return lastCheckedOrder;
 		}
 	}
 

@@ -1,5 +1,6 @@
 package com.streamlined.orderbook.hashtableimplementation;
 
+import com.streamlined.orderbook.BestPriceVolumeSubtractResult;
 import com.streamlined.orderbook.hashtableimplementation.OrderedLinkedList.Node;
 import com.streamlined.orderbook.hashtableimplementation.OrderedLinkedList.SubtractionResult;
 
@@ -46,22 +47,26 @@ public class AskContainer extends HashtableContainer {
 	}
 
 	@Override
-	public int subtractVolumeForBestPrice(int subtractVolume) {
-		int leftOver = subtractVolume;
+	public BestPriceVolumeSubtractResult subtractVolumeForBestPrice(int subtractVolume) {
+		VolumeSubtractResult volumeSubtractResult;
 		if (minPriceGroupIndex <= maxPriceGroupIndex) {
-			leftOver = subtractVolumeForRange(minPriceGroupIndex, maxPriceGroupIndex, leftOver);
+			volumeSubtractResult = subtractVolumeForRange(minPriceGroupIndex, maxPriceGroupIndex, subtractVolume);
 		} else {
-			leftOver = subtractVolumeForRange(minPriceGroupIndex, priceGroups.length - 1, leftOver);
-			leftOver = subtractVolumeForRange(0, maxPriceGroupIndex, leftOver);
+			volumeSubtractResult = subtractVolumeForRange(minPriceGroupIndex, priceGroups.length - 1, subtractVolume);
+			volumeSubtractResult = subtractVolumeForRange(0, maxPriceGroupIndex, volumeSubtractResult.leftOver);
 		}
-		return subtractVolume - leftOver;
+		bestPriceVolumeSubtractResult.setValues(volumeSubtractResult.lastCheckedPrice,
+				subtractVolume - volumeSubtractResult.leftOver);
+		return bestPriceVolumeSubtractResult;
 	}
 
-	private int subtractVolumeForRange(int startIndex, int finishIndex, int leftOver) {
+	private VolumeSubtractResult subtractVolumeForRange(int startIndex, int finishIndex, int leftOver) {
+		int lastCheckedPrice = VALUE_UNDEFINED;
 		for (int index = startIndex; leftOver > 0 && index <= finishIndex; index++) {
 			if (priceGroups[index] != null) {
 				SubtractionResult result = priceGroups[index].subtractVolume(leftOver);
 				leftOver -= result.subtractedVolume;
+				lastCheckedPrice = result.getLastCheckedPrice();
 				if (result.isListEmpty()) {
 					contractMinSide();
 				}
@@ -69,7 +74,8 @@ public class AskContainer extends HashtableContainer {
 				contractMinSide();
 			}
 		}
-		return leftOver;
+		volumeSubtractResult.setValues(lastCheckedPrice, leftOver);
+		return volumeSubtractResult;
 	}
 
 }

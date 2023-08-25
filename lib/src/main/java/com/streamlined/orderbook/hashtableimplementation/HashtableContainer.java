@@ -1,5 +1,6 @@
 package com.streamlined.orderbook.hashtableimplementation;
 
+import com.streamlined.orderbook.BestPriceVolumeSubtractResult;
 import com.streamlined.orderbook.PriceVolume;
 import com.streamlined.orderbook.VolumeContainer;
 import com.streamlined.orderbook.hashtableimplementation.OrderedLinkedList.Node;
@@ -17,6 +18,8 @@ public abstract class HashtableContainer implements VolumeContainer {
 	private static final int EXPANSION_CONSTANT = 1;
 
 	private static final PriceVolume lastPriceVolume = new PriceVolume();
+	protected static final VolumeSubtractResult volumeSubtractResult = new VolumeSubtractResult();
+	protected static final BestPriceVolumeSubtractResult bestPriceVolumeSubtractResult = new BestPriceVolumeSubtractResult();
 
 	protected OrderedLinkedList[] priceGroups;
 	protected int maxPriceGroupIndex;
@@ -49,18 +52,18 @@ public abstract class HashtableContainer implements VolumeContainer {
 		if (firstPriceGroupStart == VALUE_UNDEFINED) {
 			firstPriceGroupStart = firstPrice >> PRICE_GROUP_SIZE_POWER << PRICE_GROUP_SIZE_POWER;
 			final int middleIndex = priceGroups.length >> 1;
-			firstPriceGroupIndex = middleIndex;
-			maxPriceGroupIndex = middleIndex;
-			minPriceGroupIndex = middleIndex;
+			firstPriceGroupIndex = maxPriceGroupIndex = minPriceGroupIndex = middleIndex;
 		}
 	}
 
 	int mapPriceToGroupIndex(int price) {
 		int index = ((price - firstPriceGroupStart) >> PRICE_GROUP_SIZE_POWER) + firstPriceGroupIndex;
-		if (-priceGroups.length <= index && index < 0) {
-			index += priceGroups.length;
-		} else if (priceGroups.length <= index && index < priceGroups.length << 1) {
-			index -= priceGroups.length;
+		if (!isFull()) {
+			if (-priceGroups.length <= index && index < 0) {
+				index += priceGroups.length;
+			} else if (priceGroups.length <= index && index < priceGroups.length << 1) {
+				index -= priceGroups.length;
+			}
 		}
 		return index;
 	}
@@ -96,6 +99,18 @@ public abstract class HashtableContainer implements VolumeContainer {
 						|| index > maxPriceGroupIndex)) {
 			maxPriceGroupIndex = index;
 		}
+	}
+
+	protected int getOccupiedSpace() {
+		if (minPriceGroupIndex <= maxPriceGroupIndex) {
+			return maxPriceGroupIndex - minPriceGroupIndex + 1;
+		} else {
+			return (maxPriceGroupIndex + 1) + (priceGroups.length - minPriceGroupIndex);
+		}
+	}
+
+	protected boolean isFull() {
+		return getOccupiedSpace() == priceGroups.length;
 	}
 
 	int getMinPriceGroupIndex() {
@@ -254,6 +269,16 @@ public abstract class HashtableContainer implements VolumeContainer {
 			}
 		}
 		return count;
+	}
+
+	protected static class VolumeSubtractResult {
+		int lastCheckedPrice;
+		int leftOver;
+
+		void setValues(int lastCheckedPrice, int leftOver) {
+			this.lastCheckedPrice = lastCheckedPrice;
+			this.leftOver = leftOver;
+		}
 	}
 
 }

@@ -213,7 +213,7 @@ class ArrayContainerTest {
 	void test14() {
 		ArrayContainer container = new NaturalOrderContainer(new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
 
-		assertEquals(5, container.subtractVolumeForBestPrice(5));
+		assertEquals(5, container.subtractVolumeForBestPrice(5).getVolumeSubtracted());
 		assertEquals(10, container.getVolumeByPrice(300));
 		assertEquals(10, container.getVolumeByPrice(200));
 		assertEquals(5, container.getVolumeByPrice(100));
@@ -225,7 +225,7 @@ class ArrayContainerTest {
 	void test15() {
 		ArrayContainer container = new NaturalOrderContainer(new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
 
-		assertEquals(15, container.subtractVolumeForBestPrice(15));
+		assertEquals(15, container.subtractVolumeForBestPrice(15).getVolumeSubtracted());
 		assertEquals(10, container.getVolumeByPrice(200));
 		assertEquals(5, container.getVolumeByPrice(100));
 		assertEquals(2, container.getSize());
@@ -236,7 +236,7 @@ class ArrayContainerTest {
 	void test15a() {
 		ArrayContainer container = new NaturalOrderContainer(new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
 
-		assertEquals(20, container.subtractVolumeForBestPrice(20));
+		assertEquals(20, container.subtractVolumeForBestPrice(20).getVolumeSubtracted());
 		assertEquals(5, container.getVolumeByPrice(200));
 		assertEquals(5, container.getVolumeByPrice(100));
 		assertEquals(2, container.getSize());
@@ -247,7 +247,7 @@ class ArrayContainerTest {
 	void test15b() {
 		ArrayContainer container = new NaturalOrderContainer(new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
 
-		assertEquals(26, container.subtractVolumeForBestPrice(26));
+		assertEquals(26, container.subtractVolumeForBestPrice(26).getVolumeSubtracted());
 		assertEquals(4, container.getVolumeByPrice(100));
 		assertEquals(1, container.getSize());
 	}
@@ -258,7 +258,7 @@ class ArrayContainerTest {
 		ArrayContainer container = new NaturalOrderContainer(new int[] { 100, 200, 300, 400, 500 },
 				new int[] { 5, 0, 0, 10, 15 });
 
-		assertEquals(26, container.subtractVolumeForBestPrice(26));
+		assertEquals(26, container.subtractVolumeForBestPrice(26).getVolumeSubtracted());
 		assertEquals(4, container.getVolumeByPrice(100));
 		assertEquals(1, container.getSize());
 	}
@@ -269,7 +269,7 @@ class ArrayContainerTest {
 		ArrayContainer container = new NaturalOrderContainer(new int[] { 100, 200, 300, 400, 500 },
 				new int[] { 5, 0, 0, 10, 15 });
 
-		assertEquals(30, container.subtractVolumeForBestPrice(35));
+		assertEquals(30, container.subtractVolumeForBestPrice(35).getVolumeSubtracted());
 		assertEquals(0, container.getSize());
 	}
 
@@ -299,7 +299,7 @@ class ArrayContainerTest {
 				new int[] { 5, 0, 0, 0, 25 });
 
 		assertEquals(5, container.getSize());
-		assertEquals(25, container.subtractVolumeForBestPrice(25));
+		assertEquals(25, container.subtractVolumeForBestPrice(25).getVolumeSubtracted());
 		assertEquals(1, container.getSize());
 	}
 
