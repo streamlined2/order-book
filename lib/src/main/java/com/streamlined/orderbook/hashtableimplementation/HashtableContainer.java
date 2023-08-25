@@ -212,11 +212,11 @@ public abstract class HashtableContainer implements VolumeContainer {
 
 	@Override
 	public int getBestPrice() {
-		PriceVolume priceVolume = getBestPriceValue();
-		if (priceVolume == null) {
+		final Node node = locateBestPriceNode();
+		if (node == null) {
 			return PRICE_VALUE_ABSENT;
 		}
-		return priceVolume.getPrice();
+		return node.getOrder();
 	}
 
 	@Override
