@@ -48,6 +48,11 @@ public abstract class HashtableContainer implements VolumeContainer {
 		return index;
 	}
 
+	int locateGroupForPriceNoExpansion(int price) {
+		defineFirstPriceGroupStart(price);
+		return mapPriceToGroupIndex(price);
+	}
+
 	void defineFirstPriceGroupStart(int firstPrice) {
 		if (firstPriceGroupStart == VALUE_UNDEFINED) {
 			firstPriceGroupStart = firstPrice >> PRICE_GROUP_SIZE_POWER << PRICE_GROUP_SIZE_POWER;
@@ -194,7 +199,7 @@ public abstract class HashtableContainer implements VolumeContainer {
 
 	@Override
 	public int getVolumeByPrice(int price) {
-		final int index = locateGroupForPrice(price);
+		final int index = locateGroupForPriceNoExpansion(price);
 		if (priceGroups[index] == null) {
 			return VOLUME_VALUE_ABSENT;
 		}
