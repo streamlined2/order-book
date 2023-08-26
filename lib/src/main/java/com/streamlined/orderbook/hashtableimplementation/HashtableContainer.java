@@ -201,11 +201,11 @@ public abstract class HashtableContainer implements VolumeContainer {
 	public int getVolumeByPrice(int price) {
 		final int index = locateGroupForPriceNoExpansion(price);
 		if (priceGroups[index] == null) {
-			return VOLUME_VALUE_ABSENT;
+			return 0;
 		}
 		final Node node = priceGroups[index].getNodeByOrder(price);
 		if (node == null) {
-			return VOLUME_VALUE_ABSENT;
+			return 0;
 		}
 		return node.getVolume();
 	}

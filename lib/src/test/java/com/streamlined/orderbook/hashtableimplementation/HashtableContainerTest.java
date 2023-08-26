@@ -169,9 +169,9 @@ class HashtableContainerTest {
 	void test9() {
 		HashtableContainer container = new BidContainer();
 
-		assertEquals(HashtableContainer.VOLUME_VALUE_ABSENT, container.getVolumeByPrice(100));
-		assertEquals(HashtableContainer.VOLUME_VALUE_ABSENT, container.getVolumeByPrice(200));
-		assertEquals(HashtableContainer.VOLUME_VALUE_ABSENT, container.getVolumeByPrice(300));
+		assertEquals(0, container.getVolumeByPrice(100));
+		assertEquals(0, container.getVolumeByPrice(200));
+		assertEquals(0, container.getVolumeByPrice(300));
 	}
 
 	@Test

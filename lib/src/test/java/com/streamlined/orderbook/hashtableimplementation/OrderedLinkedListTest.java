@@ -400,7 +400,7 @@ class OrderedLinkedListTest {
 		OrderedLinkedList list = new OrderedLinkedList(true, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
 
 		assertEquals(15, list.subtractVolume(15).subtractedVolume);
-		assertEquals(0, list.getNodeByOrder(10).getVolume());
+		assertNull(list.getNodeByOrder(10));
 		assertEquals(15, list.getNodeByOrder(20).getVolume());
 		assertEquals(30, list.getNodeByOrder(30).getVolume());
 	}
@@ -411,8 +411,8 @@ class OrderedLinkedListTest {
 		OrderedLinkedList list = new OrderedLinkedList(true, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
 
 		assertEquals(35, list.subtractVolume(35).subtractedVolume);
-		assertEquals(0, list.getNodeByOrder(10).getVolume());
-		assertEquals(0, list.getNodeByOrder(20).getVolume());
+		assertNull(list.getNodeByOrder(10));
+		assertNull(list.getNodeByOrder(20));
 		assertEquals(25, list.getNodeByOrder(30).getVolume());
 	}
 
@@ -422,9 +422,9 @@ class OrderedLinkedListTest {
 		OrderedLinkedList list = new OrderedLinkedList(true, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
 
 		assertEquals(60, list.subtractVolume(65).subtractedVolume);
-		assertEquals(0, list.getNodeByOrder(10).getVolume());
-		assertEquals(0, list.getNodeByOrder(20).getVolume());
-		assertEquals(0, list.getNodeByOrder(30).getVolume());
+		assertNull(list.getNodeByOrder(10));
+		assertNull(list.getNodeByOrder(20));
+		assertNull(list.getNodeByOrder(30));
 	}
 
 	@Test
@@ -446,7 +446,7 @@ class OrderedLinkedListTest {
 		assertEquals(35, list.subtractVolume(35).subtractedVolume);
 		assertEquals(10, list.getNodeByOrder(10).getVolume());
 		assertEquals(15, list.getNodeByOrder(20).getVolume());
-		assertEquals(0, list.getNodeByOrder(30).getVolume());
+		assertNull(list.getNodeByOrder(30));
 	}
 
 	@Test
@@ -456,8 +456,8 @@ class OrderedLinkedListTest {
 
 		assertEquals(55, list.subtractVolume(55).subtractedVolume);
 		assertEquals(5, list.getNodeByOrder(10).getVolume());
-		assertEquals(0, list.getNodeByOrder(20).getVolume());
-		assertEquals(0, list.getNodeByOrder(30).getVolume());
+		assertNull(list.getNodeByOrder(20));
+		assertNull(list.getNodeByOrder(30));
 	}
 
 	@Test
@@ -466,9 +466,9 @@ class OrderedLinkedListTest {
 		OrderedLinkedList list = new OrderedLinkedList(false, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
 
 		assertEquals(60, list.subtractVolume(65).subtractedVolume);
-		assertEquals(0, list.getNodeByOrder(10).getVolume());
-		assertEquals(0, list.getNodeByOrder(20).getVolume());
-		assertEquals(0, list.getNodeByOrder(30).getVolume());
+		assertNull(list.getNodeByOrder(10));
+		assertNull(list.getNodeByOrder(20));
+		assertNull(list.getNodeByOrder(30));
 	}
 
 	@Test

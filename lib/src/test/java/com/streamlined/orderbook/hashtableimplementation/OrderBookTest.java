@@ -119,9 +119,9 @@ class OrderBookTest {
 		assertEquals(200, book.queryBestBid().getPrice());
 		assertEquals(1000, book.queryBestBid().getVolume());
 
-		assertEquals(HashtableContainer.VOLUME_VALUE_ABSENT, book.querySizeForPrice(50));
+		assertEquals(0, book.querySizeForPrice(50));
 		assertEquals(1000, book.querySizeForPrice(100));
-		assertEquals(HashtableContainer.VOLUME_VALUE_ABSENT, book.querySizeForPrice(150));
+		assertEquals(0, book.querySizeForPrice(150));
 		assertEquals(1000, book.querySizeForPrice(200));
 		assertEquals(0, book.querySizeForPrice(250));
 		assertEquals(0, book.querySizeForPrice(300));
@@ -129,9 +129,9 @@ class OrderBookTest {
 		assertEquals(0, book.querySizeForPrice(400));
 		assertEquals(0, book.querySizeForPrice(450));
 		assertEquals(1000, book.querySizeForPrice(500));
-		assertEquals(HashtableContainer.VOLUME_VALUE_ABSENT, book.querySizeForPrice(550));
+		assertEquals(0, book.querySizeForPrice(550));
 		assertEquals(2500, book.querySizeForPrice(600));
-		assertEquals(HashtableContainer.VOLUME_VALUE_ABSENT, book.querySizeForPrice(650));
+		assertEquals(0, book.querySizeForPrice(650));
 	}
 
 }

@@ -67,8 +67,8 @@ public class BidContainer extends HashtableContainer {
 			if (priceGroups[index] != null) {
 				SubtractionResult result = priceGroups[index].subtractVolume(leftOver);
 				leftOver -= result.subtractedVolume;
-				lastCheckedPrice = result.getLastCheckedPrice();
-				if (result.isListEmpty()) {
+				lastCheckedPrice = result.lastCheckedOrder;
+				if (priceGroups[index].isEmpty()) {
 					contractMaxSide();
 				}
 			} else {
