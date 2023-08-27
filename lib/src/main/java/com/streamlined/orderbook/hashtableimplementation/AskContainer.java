@@ -1,8 +1,8 @@
 package com.streamlined.orderbook.hashtableimplementation;
 
 import com.streamlined.orderbook.BestPriceVolumeSubtractResult;
-import com.streamlined.orderbook.hashtableimplementation.OrderedLinkedList.Node;
-import com.streamlined.orderbook.hashtableimplementation.OrderedLinkedList.SubtractionResult;
+import com.streamlined.orderbook.PriceVolume;
+import com.streamlined.orderbook.hashtableimplementation.List.SubtractionResult;
 
 public class AskContainer extends HashtableContainer {
 
@@ -20,24 +20,24 @@ public class AskContainer extends HashtableContainer {
 	}
 
 	@Override
-	protected Node locateBestPriceNode() {
+	protected PriceVolume locateBestPriceVolume() {
 		if (minPriceGroupIndex <= maxPriceGroupIndex) {
 			return getFirstNonEmptyNode(minPriceGroupIndex, maxPriceGroupIndex);
 		} else {
-			Node node = getFirstNonEmptyNode(minPriceGroupIndex, priceGroups.length - 1);
-			if (node != null) {
-				return node;
+			PriceVolume priceVolume = getFirstNonEmptyNode(minPriceGroupIndex, priceGroups.length - 1);
+			if (priceVolume != null) {
+				return priceVolume;
 			}
 			return getFirstNonEmptyNode(0, maxPriceGroupIndex);
 		}
 	}
 
-	private Node getFirstNonEmptyNode(int startIndex, int lastIndex) {
+	private PriceVolume getFirstNonEmptyNode(int startIndex, int lastIndex) {
 		for (int index = startIndex; index <= lastIndex; index++) {
 			if (priceGroups[index] != null) {
-				Node node = priceGroups[index].getFirstNonEmptyNode();
-				if (node != null) {
-					return node;
+				PriceVolume priceVolume = priceGroups[index].getFirstNonEmptyNode();
+				if (priceVolume != null) {
+					return priceVolume;
 				} else {
 					contractMinSide();
 				}

@@ -173,15 +173,6 @@ public abstract class ArrayContainer implements VolumeContainer {
 		return volumes[index];
 	}
 
-	public final PriceVolume getBestPriceValue() {
-		final int index = getBestPriceIndex();
-		if (isIndexValid(index)) {
-			lastPriceVolume.setPriceVolume(prices[index], volumes[index]);
-			return lastPriceVolume;// mutable singleton to avoid GC involvement
-		}
-		return null;// violates clean code convention
-	}
-
 	public final int getBestPrice() {
 		final int index = getBestPriceIndex();
 		if (isIndexValid(index)) {
@@ -190,12 +181,17 @@ public abstract class ArrayContainer implements VolumeContainer {
 		return PRICE_VALUE_ABSENT;
 	}
 
-	final int getBestPriceIndex() {
-		return size - 1;
+	public final PriceVolume getBestPriceVolume() {
+		final int index = getBestPriceIndex();
+		if (isIndexValid(index)) {
+			lastPriceVolume.setPriceVolume(prices[index], volumes[index]);
+			return lastPriceVolume;// mutable singleton to avoid GC involvement
+		}
+		return null;// violates clean code convention
 	}
 
-	final int getBestPriceVolume() {
-		return volumes[getBestPriceIndex()];
+	final int getBestPriceIndex() {
+		return size - 1;
 	}
 
 	private boolean isIndexValid(int index) {

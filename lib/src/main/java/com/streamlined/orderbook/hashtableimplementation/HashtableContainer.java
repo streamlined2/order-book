@@ -3,7 +3,6 @@ package com.streamlined.orderbook.hashtableimplementation;
 import com.streamlined.orderbook.BestPriceVolumeSubtractResult;
 import com.streamlined.orderbook.PriceVolume;
 import com.streamlined.orderbook.VolumeContainer;
-import com.streamlined.orderbook.hashtableimplementation.OrderedLinkedList.Node;
 
 public abstract class HashtableContainer implements VolumeContainer {
 
@@ -17,7 +16,7 @@ public abstract class HashtableContainer implements VolumeContainer {
 	private static final int EXPANSION_DENOMINATOR = 100;
 	private static final int EXPANSION_CONSTANT = 1;
 
-	private static final PriceVolume lastPriceVolume = new PriceVolume();
+	protected static final PriceVolume lastPriceVolume = new PriceVolume();
 	protected static final VolumeSubtractResult volumeSubtractResult = new VolumeSubtractResult();
 	protected static final BestPriceVolumeSubtractResult bestPriceVolumeSubtractResult = new BestPriceVolumeSubtractResult();
 
@@ -203,33 +202,33 @@ public abstract class HashtableContainer implements VolumeContainer {
 		if (priceGroups[index] == null) {
 			return 0;
 		}
-		final Node node = priceGroups[index].getNodeByOrder(price);
-		if (node == null) {
+		final PriceVolume priceVolume = priceGroups[index].getPriceVolumeByOrder(price);
+		if (priceVolume == null) {
 			return 0;
 		}
-		return node.getVolume();
+		return priceVolume.getVolume();
 	}
 
 	@Override
 	public int getBestPrice() {
-		final Node node = locateBestPriceNode();
-		if (node == null) {
+		final PriceVolume priceVolume = locateBestPriceVolume();
+		if (priceVolume == null) {
 			return PRICE_VALUE_ABSENT;
 		}
-		return node.getOrder();
+		return priceVolume.getPrice();
 	}
 
 	@Override
-	public PriceVolume getBestPriceValue() {
-		final Node node = locateBestPriceNode();
-		if (node == null) {
+	public PriceVolume getBestPriceVolume() {
+		final PriceVolume priceVolume = locateBestPriceVolume();
+		if (priceVolume == null) {
 			return null;
 		}
-		lastPriceVolume.setPriceVolume(node.getOrder(), node.getVolume());
+		lastPriceVolume.setPriceVolume(priceVolume.getPrice(), priceVolume.getVolume());
 		return lastPriceVolume;
 	}
 
-	protected abstract Node locateBestPriceNode();
+	protected abstract PriceVolume locateBestPriceVolume();
 
 	protected final void contractMinSide() {
 		if (minPriceGroupIndex != maxPriceGroupIndex) {

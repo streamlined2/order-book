@@ -278,7 +278,7 @@ class ArrayContainerReversedTest {
 	void test16() {
 		ArrayContainer container = new ReversedOrderContainer(new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
 
-		var priceVolume = container.getBestPriceValue();
+		var priceVolume = container.getBestPriceVolume();
 		assertEquals(100, priceVolume.getPrice());
 		assertEquals(5, priceVolume.getVolume());
 	}
@@ -288,7 +288,7 @@ class ArrayContainerReversedTest {
 	void test17() {
 		ArrayContainer container = new ReversedOrderContainer(1);
 
-		var priceVolume = container.getBestPriceValue();
+		var priceVolume = container.getBestPriceVolume();
 		assertNull(priceVolume);
 	}
 

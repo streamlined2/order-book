@@ -278,7 +278,7 @@ class ArrayContainerTest {
 	void test16() {
 		ArrayContainer container = new NaturalOrderContainer(new int[] { 100, 200, 300 }, new int[] { 5, 10, 15 });
 
-		var priceVolume = container.getBestPriceValue();
+		var priceVolume = container.getBestPriceVolume();
 		assertEquals(300, priceVolume.getPrice());
 		assertEquals(15, priceVolume.getVolume());
 	}
@@ -288,7 +288,7 @@ class ArrayContainerTest {
 	void test17() {
 		ArrayContainer container = new NaturalOrderContainer(1);
 
-		var priceVolume = container.getBestPriceValue();
+		var priceVolume = container.getBestPriceVolume();
 		assertNull(priceVolume);
 	}
 

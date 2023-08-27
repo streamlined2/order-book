@@ -203,7 +203,7 @@ class HashtableContainerTest {
 		container.set(107, 8);
 		container.set(108, 9);
 
-		PriceVolume priceVolume = container.getBestPriceValue();
+		PriceVolume priceVolume = container.getBestPriceVolume();
 		assertEquals(108, priceVolume.getPrice());
 		assertEquals(9, priceVolume.getVolume());
 		assertEquals(108, container.getBestPrice());
@@ -224,7 +224,7 @@ class HashtableContainerTest {
 		container.set(107, 0);
 		container.set(108, 0);
 
-		PriceVolume priceVolume = container.getBestPriceValue();
+		PriceVolume priceVolume = container.getBestPriceVolume();
 		assertEquals(104, priceVolume.getPrice());
 		assertEquals(10, priceVolume.getVolume());
 		assertEquals(104, container.getBestPrice());
@@ -245,7 +245,7 @@ class HashtableContainerTest {
 		container.set(107, 8);
 		container.set(108, 9);
 
-		PriceVolume priceVolume = container.getBestPriceValue();
+		PriceVolume priceVolume = container.getBestPriceVolume();
 		assertEquals(100, priceVolume.getPrice());
 		assertEquals(1, priceVolume.getVolume());
 		assertEquals(100, container.getBestPrice());
@@ -266,7 +266,7 @@ class HashtableContainerTest {
 		container.set(107, 0);
 		container.set(108, 0);
 
-		PriceVolume priceVolume = container.getBestPriceValue();
+		PriceVolume priceVolume = container.getBestPriceVolume();
 		assertEquals(104, priceVolume.getPrice());
 		assertEquals(10, priceVolume.getVolume());
 		assertEquals(104, container.getBestPrice());
@@ -277,7 +277,7 @@ class HashtableContainerTest {
 	void test13() {
 		HashtableContainer container = new BidContainer();
 
-		PriceVolume priceVolume = container.getBestPriceValue();
+		PriceVolume priceVolume = container.getBestPriceVolume();
 		assertNull(priceVolume);
 		assertEquals(HashtableContainer.PRICE_VALUE_ABSENT, container.getBestPrice());
 	}
@@ -287,7 +287,7 @@ class HashtableContainerTest {
 	void test14() {
 		HashtableContainer container = new AskContainer();
 
-		PriceVolume priceVolume = container.getBestPriceValue();
+		PriceVolume priceVolume = container.getBestPriceVolume();
 		assertNull(priceVolume);
 		assertEquals(HashtableContainer.PRICE_VALUE_ABSENT, container.getBestPrice());
 	}
@@ -307,7 +307,7 @@ class HashtableContainerTest {
 		container.set(101, 2);
 		container.set(100, 1);
 
-		PriceVolume priceVolume = container.getBestPriceValue();
+		PriceVolume priceVolume = container.getBestPriceVolume();
 		assertEquals(108, priceVolume.getPrice());
 		assertEquals(9, priceVolume.getVolume());
 		assertEquals(108, container.getBestPrice());
@@ -328,7 +328,7 @@ class HashtableContainerTest {
 		container.set(107, 8);
 		container.set(108, 9);
 
-		PriceVolume priceVolume = container.getBestPriceValue();
+		PriceVolume priceVolume = container.getBestPriceVolume();
 		assertEquals(100, priceVolume.getPrice());
 		assertEquals(1, priceVolume.getVolume());
 		assertEquals(100, container.getBestPrice());

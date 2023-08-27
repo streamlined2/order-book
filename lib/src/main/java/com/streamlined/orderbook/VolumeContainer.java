@@ -9,7 +9,7 @@ public interface VolumeContainer {
 
 	void set(int price, int volume);
 
-	PriceVolume getBestPriceValue();
+	PriceVolume getBestPriceVolume();
 
 	int getBestPrice();
 

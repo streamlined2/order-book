@@ -34,11 +34,11 @@ public class OrderBook {
 	}
 
 	public PriceVolume queryBestBid() {
-		return bidContainer.getBestPriceValue();
+		return bidContainer.getBestPriceVolume();
 	}
 
 	public PriceVolume queryBestAsk() {
-		return askContainer.getBestPriceValue();
+		return askContainer.getBestPriceVolume();
 	}
 
 	public int querySizeForPrice(int price) {

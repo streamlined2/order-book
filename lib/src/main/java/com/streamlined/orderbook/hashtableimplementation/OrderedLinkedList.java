@@ -3,9 +3,12 @@ package com.streamlined.orderbook.hashtableimplementation;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class OrderedLinkedList implements Iterable<OrderedLinkedList.Node> {
+import com.streamlined.orderbook.PriceVolume;
+
+public class OrderedLinkedList implements List, Iterable<OrderedLinkedList.Node> {
 
 	private static final SubtractionResult subtractionResult = new SubtractionResult();
+	private static final PriceVolume priceVolume = new PriceVolume();
 
 	private Node head;
 	private final boolean ascending;
@@ -91,10 +94,11 @@ public class OrderedLinkedList implements Iterable<OrderedLinkedList.Node> {
 		return false;
 	}
 
-	public Node getNodeByOrder(int order) {
+	public PriceVolume getPriceVolumeByOrder(int order) {
 		for (Node node = head; node != null; node = node.nextNode) {
 			if (node.order == order) {
-				return node;
+				priceVolume.setPriceVolume(node.order, node.volume);
+				return priceVolume;
 			}
 			if (!precedes(node, order)) {
 				return null;
@@ -103,10 +107,11 @@ public class OrderedLinkedList implements Iterable<OrderedLinkedList.Node> {
 		return null;
 	}
 
-	public Node getFirstNonEmptyNode() {
+	public PriceVolume getFirstNonEmptyNode() {
 		for (Node node = head; node != null; node = node.nextNode) {
 			if (node.volume > 0) {
-				return node;
+				priceVolume.setPriceVolume(node.order, node.volume);
+				return priceVolume;
 			}
 		}
 		return null;
@@ -239,11 +244,6 @@ public class OrderedLinkedList implements Iterable<OrderedLinkedList.Node> {
 			return false;
 		}
 
-	}
-
-	protected static class SubtractionResult {
-		int subtractedVolume;
-		int lastCheckedOrder;
 	}
 
 }
