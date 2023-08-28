@@ -20,7 +20,7 @@ public abstract class HashtableContainer implements VolumeContainer {
 	protected static final VolumeSubtractResult volumeSubtractResult = new VolumeSubtractResult();
 	protected static final BestPriceVolumeSubtractResult bestPriceVolumeSubtractResult = new BestPriceVolumeSubtractResult();
 
-	protected OrderedLinkedList[] priceGroups;
+	protected List[] priceGroups;
 	protected int maxPriceGroupIndex;
 	protected int minPriceGroupIndex;
 	protected int firstPriceGroupStart;
@@ -31,7 +31,7 @@ public abstract class HashtableContainer implements VolumeContainer {
 	}
 
 	protected HashtableContainer(int capacity) {
-		priceGroups = new OrderedLinkedList[capacity];
+		priceGroups = new ArrayList[capacity];
 		firstPriceGroupStart = VALUE_UNDEFINED;
 	}
 
@@ -132,7 +132,7 @@ public abstract class HashtableContainer implements VolumeContainer {
 	private void expandContainer(int minExpansionSize) {
 		int newCapacity = Math.max(priceGroups.length * EXPANSION_NUMERATOR / EXPANSION_DENOMINATOR,
 				priceGroups.length + Math.max(minExpansionSize, EXPANSION_CONSTANT));
-		final OrderedLinkedList[] newPriceGroups = new OrderedLinkedList[newCapacity];
+		final List[] newPriceGroups = new ArrayList[newCapacity];
 
 		if (minPriceGroupIndex <= maxPriceGroupIndex) {// one segment [minPriceGroupIndex..maxPriceGroupIndex]
 			final int count = maxPriceGroupIndex - minPriceGroupIndex + 1;
@@ -194,7 +194,7 @@ public abstract class HashtableContainer implements VolumeContainer {
 		}
 	}
 
-	protected abstract OrderedLinkedList createPriceGroupList(int price, int volume);
+	protected abstract List createPriceGroupList(int price, int volume);
 
 	@Override
 	public int getVolumeByPrice(int price) {
@@ -202,7 +202,7 @@ public abstract class HashtableContainer implements VolumeContainer {
 		if (priceGroups[index] == null) {
 			return 0;
 		}
-		final PriceVolume priceVolume = priceGroups[index].getPriceVolumeByOrder(price);
+		final PriceVolume priceVolume = priceGroups[index].getPriceVolumeByPrice(price);
 		if (priceVolume == null) {
 			return 0;
 		}

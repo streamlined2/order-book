@@ -4,23 +4,23 @@ import com.streamlined.orderbook.PriceVolume;
 
 public interface List {
 
+	int PRICE_NOT_FOUND = -1;
+
 	boolean isEmpty();
 
 	int getSize();
 
-	void setAdd(int order, int size);
-
-	boolean setVolume(int order, int volume);
+	int setAdd(int order, int size);
 
 	boolean remove(int order);
 
-	PriceVolume getPriceVolumeByOrder(int order);
+	PriceVolume getPriceVolumeByPrice(int order);
 
 	PriceVolume getFirstNonEmptyNode();
 
 	SubtractionResult subtractVolume(int subtractVolume);
 
-	static class SubtractionResult {
+	class SubtractionResult {
 		int subtractedVolume;
 		int lastCheckedOrder;
 	}

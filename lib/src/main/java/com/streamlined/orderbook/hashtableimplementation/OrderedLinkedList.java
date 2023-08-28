@@ -29,10 +29,12 @@ public class OrderedLinkedList implements List, Iterable<OrderedLinkedList.Node>
 		}
 	}
 
+	@Override
 	public boolean isEmpty() {
 		return head == null;
 	}
 
+	@Override
 	public int getSize() {
 		int count = 0;
 		for (Node node = head; node != null; node = node.nextNode) {
@@ -41,7 +43,9 @@ public class OrderedLinkedList implements List, Iterable<OrderedLinkedList.Node>
 		return count;
 	}
 
-	public void setAdd(int order, int size) {
+	@Override
+	public int setAdd(int order, int size) {
+		int index = 0;
 		if (head == null) {
 			head = new Node(order, size);
 		} else if (precedes(order, head)) {
@@ -51,6 +55,7 @@ public class OrderedLinkedList implements List, Iterable<OrderedLinkedList.Node>
 		} else {
 			Node node = head;
 			do {
+				index++;
 				Node nextNode = node.nextNode;
 				if (nextNode == null) {
 					node.nextNode = new Node(order, size);
@@ -65,6 +70,7 @@ public class OrderedLinkedList implements List, Iterable<OrderedLinkedList.Node>
 				node = nextNode;
 			} while (true);
 		}
+		return index;
 	}
 
 	public boolean setVolume(int order, int volume) {
@@ -80,6 +86,7 @@ public class OrderedLinkedList implements List, Iterable<OrderedLinkedList.Node>
 		return false;
 	}
 
+	@Override
 	public boolean remove(int order) {
 		for (Iterator<Node> i = iterator(); i.hasNext();) {
 			Node node = i.next();
@@ -94,7 +101,8 @@ public class OrderedLinkedList implements List, Iterable<OrderedLinkedList.Node>
 		return false;
 	}
 
-	public PriceVolume getPriceVolumeByOrder(int order) {
+	@Override
+	public PriceVolume getPriceVolumeByPrice(int order) {
 		for (Node node = head; node != null; node = node.nextNode) {
 			if (node.order == order) {
 				priceVolume.setPriceVolume(node.order, node.volume);
@@ -107,6 +115,7 @@ public class OrderedLinkedList implements List, Iterable<OrderedLinkedList.Node>
 		return null;
 	}
 
+	@Override
 	public PriceVolume getFirstNonEmptyNode() {
 		for (Node node = head; node != null; node = node.nextNode) {
 			if (node.volume > 0) {
@@ -117,6 +126,7 @@ public class OrderedLinkedList implements List, Iterable<OrderedLinkedList.Node>
 		return null;
 	}
 
+	@Override
 	public SubtractionResult subtractVolume(int subtractVolume) {
 		int volumeLeftover = subtractVolume;
 		int lastCheckedOrder = 0;

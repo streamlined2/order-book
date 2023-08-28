@@ -15,8 +15,8 @@ public class BidContainer extends HashtableContainer {
 	}
 
 	@Override
-	protected OrderedLinkedList createPriceGroupList(int price, int volume) {
-		return new OrderedLinkedList(false, price, volume);
+	protected List createPriceGroupList(int price, int volume) {
+		return new ArrayList(false, PRICE_GROUP_SIZE, price, volume);
 	}
 
 	@Override

@@ -276,9 +276,9 @@ class OrderedLinkedListTest {
 	void test18() {
 		OrderedLinkedList list = new OrderedLinkedList(false);
 
-		assertNull(list.getPriceVolumeByOrder(1));
-		assertNull(list.getPriceVolumeByOrder(2));
-		assertNull(list.getPriceVolumeByOrder(3));
+		assertNull(list.getPriceVolumeByPrice(1));
+		assertNull(list.getPriceVolumeByPrice(2));
+		assertNull(list.getPriceVolumeByPrice(3));
 	}
 
 	@Test
@@ -286,10 +286,10 @@ class OrderedLinkedListTest {
 	void test19() {
 		OrderedLinkedList list = new OrderedLinkedList(false, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
 
-		assertNull(list.getPriceVolumeByOrder(5));
-		assertNull(list.getPriceVolumeByOrder(15));
-		assertNull(list.getPriceVolumeByOrder(25));
-		assertNull(list.getPriceVolumeByOrder(35));
+		assertNull(list.getPriceVolumeByPrice(5));
+		assertNull(list.getPriceVolumeByPrice(15));
+		assertNull(list.getPriceVolumeByPrice(25));
+		assertNull(list.getPriceVolumeByPrice(35));
 	}
 
 	@Test
@@ -297,11 +297,11 @@ class OrderedLinkedListTest {
 	void test20() {
 		OrderedLinkedList list = new OrderedLinkedList(false, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
 
-		PriceVolume priceVolume = list.getPriceVolumeByOrder(10);
+		PriceVolume priceVolume = list.getPriceVolumeByPrice(10);
 		assertEquals(10, priceVolume.getPrice());
-		priceVolume = list.getPriceVolumeByOrder(20);
+		priceVolume = list.getPriceVolumeByPrice(20);
 		assertEquals(20, priceVolume.getPrice());
-		priceVolume = list.getPriceVolumeByOrder(30);
+		priceVolume = list.getPriceVolumeByPrice(30);
 		assertEquals(30, priceVolume.getPrice());
 	}
 
@@ -390,9 +390,9 @@ class OrderedLinkedListTest {
 		OrderedLinkedList list = new OrderedLinkedList(true, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
 
 		assertEquals(5, list.subtractVolume(5).subtractedVolume);
-		assertEquals(5, list.getPriceVolumeByOrder(10).getVolume());
-		assertEquals(20, list.getPriceVolumeByOrder(20).getVolume());
-		assertEquals(30, list.getPriceVolumeByOrder(30).getVolume());
+		assertEquals(5, list.getPriceVolumeByPrice(10).getVolume());
+		assertEquals(20, list.getPriceVolumeByPrice(20).getVolume());
+		assertEquals(30, list.getPriceVolumeByPrice(30).getVolume());
 	}
 
 	@Test
@@ -401,9 +401,9 @@ class OrderedLinkedListTest {
 		OrderedLinkedList list = new OrderedLinkedList(true, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
 
 		assertEquals(15, list.subtractVolume(15).subtractedVolume);
-		assertNull(list.getPriceVolumeByOrder(10));
-		assertEquals(15, list.getPriceVolumeByOrder(20).getVolume());
-		assertEquals(30, list.getPriceVolumeByOrder(30).getVolume());
+		assertNull(list.getPriceVolumeByPrice(10));
+		assertEquals(15, list.getPriceVolumeByPrice(20).getVolume());
+		assertEquals(30, list.getPriceVolumeByPrice(30).getVolume());
 	}
 
 	@Test
@@ -412,9 +412,9 @@ class OrderedLinkedListTest {
 		OrderedLinkedList list = new OrderedLinkedList(true, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
 
 		assertEquals(35, list.subtractVolume(35).subtractedVolume);
-		assertNull(list.getPriceVolumeByOrder(10));
-		assertNull(list.getPriceVolumeByOrder(20));
-		assertEquals(25, list.getPriceVolumeByOrder(30).getVolume());
+		assertNull(list.getPriceVolumeByPrice(10));
+		assertNull(list.getPriceVolumeByPrice(20));
+		assertEquals(25, list.getPriceVolumeByPrice(30).getVolume());
 	}
 
 	@Test
@@ -423,9 +423,9 @@ class OrderedLinkedListTest {
 		OrderedLinkedList list = new OrderedLinkedList(true, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
 
 		assertEquals(60, list.subtractVolume(65).subtractedVolume);
-		assertNull(list.getPriceVolumeByOrder(10));
-		assertNull(list.getPriceVolumeByOrder(20));
-		assertNull(list.getPriceVolumeByOrder(30));
+		assertNull(list.getPriceVolumeByPrice(10));
+		assertNull(list.getPriceVolumeByPrice(20));
+		assertNull(list.getPriceVolumeByPrice(30));
 	}
 
 	@Test
@@ -434,9 +434,9 @@ class OrderedLinkedListTest {
 		OrderedLinkedList list = new OrderedLinkedList(false, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
 
 		assertEquals(5, list.subtractVolume(5).subtractedVolume);
-		assertEquals(10, list.getPriceVolumeByOrder(10).getVolume());
-		assertEquals(20, list.getPriceVolumeByOrder(20).getVolume());
-		assertEquals(25, list.getPriceVolumeByOrder(30).getVolume());
+		assertEquals(10, list.getPriceVolumeByPrice(10).getVolume());
+		assertEquals(20, list.getPriceVolumeByPrice(20).getVolume());
+		assertEquals(25, list.getPriceVolumeByPrice(30).getVolume());
 	}
 
 	@Test
@@ -445,9 +445,9 @@ class OrderedLinkedListTest {
 		OrderedLinkedList list = new OrderedLinkedList(false, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
 
 		assertEquals(35, list.subtractVolume(35).subtractedVolume);
-		assertEquals(10, list.getPriceVolumeByOrder(10).getVolume());
-		assertEquals(15, list.getPriceVolumeByOrder(20).getVolume());
-		assertNull(list.getPriceVolumeByOrder(30));
+		assertEquals(10, list.getPriceVolumeByPrice(10).getVolume());
+		assertEquals(15, list.getPriceVolumeByPrice(20).getVolume());
+		assertNull(list.getPriceVolumeByPrice(30));
 	}
 
 	@Test
@@ -456,9 +456,9 @@ class OrderedLinkedListTest {
 		OrderedLinkedList list = new OrderedLinkedList(false, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
 
 		assertEquals(55, list.subtractVolume(55).subtractedVolume);
-		assertEquals(5, list.getPriceVolumeByOrder(10).getVolume());
-		assertNull(list.getPriceVolumeByOrder(20));
-		assertNull(list.getPriceVolumeByOrder(30));
+		assertEquals(5, list.getPriceVolumeByPrice(10).getVolume());
+		assertNull(list.getPriceVolumeByPrice(20));
+		assertNull(list.getPriceVolumeByPrice(30));
 	}
 
 	@Test
@@ -467,9 +467,9 @@ class OrderedLinkedListTest {
 		OrderedLinkedList list = new OrderedLinkedList(false, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
 
 		assertEquals(60, list.subtractVolume(65).subtractedVolume);
-		assertNull(list.getPriceVolumeByOrder(10));
-		assertNull(list.getPriceVolumeByOrder(20));
-		assertNull(list.getPriceVolumeByOrder(30));
+		assertNull(list.getPriceVolumeByPrice(10));
+		assertNull(list.getPriceVolumeByPrice(20));
+		assertNull(list.getPriceVolumeByPrice(30));
 	}
 
 	@Test
