@@ -1,38 +1,38 @@
 package com.streamlined.orderbook.hashtableimplementation;
 
-class ListPool {
+public class ListPool {
 
 	private List[] pool;
 	private int size;
 
-	ListPool(int capacity) {
+	public ListPool(int capacity) {
 		pool = new List[capacity];
 	}
 
-	ListPool(int capacity, int listSize) {
+	public ListPool(int capacity, int listSize) {
 		this(capacity);
 		allocate(capacity, listSize);
 	}
 
 	private void allocate(int capacity, int listSize) {
 		for (int k = 0; k < capacity; k++) {
-			add(new ArrayList(true, listSize));
+			add(new OrderedArrayList(true, listSize));
 		}
 	}
 
-	boolean isFull() {
+	public boolean isFull() {
 		return size == pool.length;
 	}
 
-	boolean isEmpty() {
+	public boolean isEmpty() {
 		return size == 0;
 	}
 
-	int getSize() {
+	public int getSize() {
 		return size;
 	}
 
-	boolean add(List list) {
+	public boolean add(List list) {
 		if (!isFull()) {
 			pool[size++] = list;
 			return true;
@@ -40,7 +40,7 @@ class ListPool {
 		return false;
 	}
 
-	List get() {
+	public List get() {
 		if (isEmpty()) {
 			return null;
 		}

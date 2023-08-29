@@ -52,7 +52,7 @@ class ListPoolTest {
 	void test5() {
 		ListPool pool = new ListPool(1);
 
-		pool.add(new ArrayList(true, 10));
+		pool.add(new OrderedArrayList(true, 10));
 
 		assertTrue(pool.isFull());
 		assertFalse(pool.isEmpty());
@@ -64,7 +64,7 @@ class ListPoolTest {
 	void test6() {
 		ListPool pool = new ListPool(2);
 
-		pool.add(new ArrayList(true, 10));
+		pool.add(new OrderedArrayList(true, 10));
 
 		assertFalse(pool.isFull());
 		assertFalse(pool.isEmpty());
@@ -76,8 +76,8 @@ class ListPoolTest {
 	void test7() {
 		ListPool pool = new ListPool(2);
 
-		pool.add(new ArrayList(true, 10));
-		boolean added = pool.add(new ArrayList(true, 10));
+		pool.add(new OrderedArrayList(true, 10));
+		boolean added = pool.add(new OrderedArrayList(true, 10));
 
 		assertTrue(pool.isFull());
 		assertFalse(pool.isEmpty());
@@ -90,8 +90,8 @@ class ListPoolTest {
 	void test8() {
 		ListPool pool = new ListPool(1);
 
-		pool.add(new ArrayList(true, 10));
-		boolean added = pool.add(new ArrayList(true, 10));
+		pool.add(new OrderedArrayList(true, 10));
+		boolean added = pool.add(new OrderedArrayList(true, 10));
 
 		assertTrue(pool.isFull());
 		assertFalse(pool.isEmpty());
@@ -104,7 +104,7 @@ class ListPoolTest {
 	void test9() {
 		ListPool pool = new ListPool(1);
 
-		List list = new ArrayList(true, 10);
+		List list = new OrderedArrayList(true, 10);
 		boolean added = pool.add(list);
 
 		assertTrue(pool.isFull());
@@ -119,7 +119,7 @@ class ListPoolTest {
 	void test10() {
 		ListPool pool = new ListPool(1);
 
-		List list = new ArrayList(true, 10);
+		List list = new OrderedArrayList(true, 10);
 		pool.add(list);
 		pool.get();
 

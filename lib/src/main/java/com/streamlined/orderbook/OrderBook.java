@@ -1,20 +1,29 @@
 package com.streamlined.orderbook;
 
 import com.streamlined.orderbook.hashtableimplementation.HashtableContainer;
-
+import com.streamlined.orderbook.hashtableimplementation.ListPool;
 import com.streamlined.orderbook.hashtableimplementation.AskContainer;
 import com.streamlined.orderbook.hashtableimplementation.BidContainer;
 
 public class OrderBook {
 
+	private static final int LIST_POOL_INITIAL_CAPACITY = 1000;
+	private static final int INITIAL_CAPACITY = 1000;
+
 	private final HashtableContainer askContainer;
 	private final HashtableContainer bidContainer;
+	private final ListPool listPool;
 	private int maxBidPrice;
 	private int minAskPrice;
 
+	public OrderBook() {
+		this(INITIAL_CAPACITY);
+	}
+
 	public OrderBook(int initialCapacity) {
-		askContainer = new AskContainer(initialCapacity);
-		bidContainer = new BidContainer(initialCapacity);
+		listPool = new ListPool(LIST_POOL_INITIAL_CAPACITY, HashtableContainer.getPriceGroupSize());
+		askContainer = new AskContainer(initialCapacity, listPool);
+		bidContainer = new BidContainer(initialCapacity, listPool);
 		maxBidPrice = 0;
 		minAskPrice = Integer.MAX_VALUE;
 	}

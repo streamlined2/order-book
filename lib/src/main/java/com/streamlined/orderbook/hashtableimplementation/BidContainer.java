@@ -6,6 +6,8 @@ import com.streamlined.orderbook.hashtableimplementation.List.SubtractionResult;
 
 public class BidContainer extends HashtableContainer {
 
+	private static boolean ASCENDING_FLAG = false;
+
 	public BidContainer() {
 		super();
 	}
@@ -14,9 +16,19 @@ public class BidContainer extends HashtableContainer {
 		super(capacity);
 	}
 
+	public BidContainer(int capacity, ListPool listPool) {
+		super(capacity, listPool);
+	}
+
 	@Override
 	protected List createPriceGroupList(int price, int volume) {
-		return new ArrayList(false, PRICE_GROUP_SIZE, price, volume);
+		List list = listPool.get();
+		if (list != null) {
+			list.initialize(ASCENDING_FLAG);
+			list.setAdd(price, volume);
+			return list;
+		}
+		return new OrderedArrayList(ASCENDING_FLAG, PRICE_GROUP_SIZE, price, volume);
 	}
 
 	@Override
@@ -69,6 +81,8 @@ public class BidContainer extends HashtableContainer {
 				leftOver -= result.subtractedVolume;
 				lastCheckedPrice = result.lastCheckedOrder;
 				if (priceGroups[index].isEmpty()) {
+					listPool.add(priceGroups[index]);
+					priceGroups[index] = null;
 					contractMaxSide();
 				}
 			} else {

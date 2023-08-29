@@ -20,6 +20,8 @@ public interface List {
 
 	SubtractionResult subtractVolume(int subtractVolume);
 
+	void initialize(boolean ascending);
+
 	class SubtractionResult {
 		int subtractedVolume;
 		int lastCheckedOrder;

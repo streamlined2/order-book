@@ -28,7 +28,7 @@ class OrderBookTest {
 	@Test
 	@DisplayName("query bid size should return previously set value")
 	void test2() {
-		OrderBook book = new OrderBook(1);
+		OrderBook book = new OrderBook();
 
 		book.setBidSize(100, 1000);
 		book.setBidSize(200, 2000);
@@ -47,7 +47,7 @@ class OrderBookTest {
 	@Test
 	@DisplayName("query ask size should return previously set value")
 	void test3() {
-		OrderBook book = new OrderBook(1);
+		OrderBook book = new OrderBook();
 
 		book.setAskSize(100, 1000);
 		book.setAskSize(200, 2000);
@@ -65,7 +65,7 @@ class OrderBookTest {
 	@Test
 	@DisplayName("query bid/ask size should return previously set value")
 	void test4() {
-		OrderBook book = new OrderBook(1);
+		OrderBook book = new OrderBook();
 
 		book.setBidSize(100, 1000);
 		book.setBidSize(200, 2000);
@@ -97,7 +97,7 @@ class OrderBookTest {
 	@Test
 	@DisplayName("buy ask/sell bid should decrease size")
 	void test5() {
-		OrderBook book = new OrderBook(1);
+		OrderBook book = new OrderBook();
 
 		book.setBidSize(100, 1000);
 		book.setBidSize(200, 2000);

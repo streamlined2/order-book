@@ -11,7 +11,7 @@ public class OrderedLinkedList implements List, Iterable<OrderedLinkedList.Node>
 	private static final PriceVolume priceVolume = new PriceVolume();
 
 	private Node head;
-	private final boolean ascending;
+	private boolean ascending;
 
 	public OrderedLinkedList(boolean ascending) {
 		this.ascending = ascending;
@@ -254,6 +254,12 @@ public class OrderedLinkedList implements List, Iterable<OrderedLinkedList.Node>
 			return false;
 		}
 
+	}
+
+	@Override
+	public void initialize(boolean ascending) {
+		this.ascending = ascending;
+		this.head = null;
 	}
 
 }

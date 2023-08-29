@@ -5,12 +5,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class ArrayListTest {
+class OrderedArrayListTest {
 
 	@Test
 	@DisplayName("should create empty list")
 	void test1() {
-		ArrayList list = new ArrayList(true, 1);
+		OrderedArrayList list = new OrderedArrayList(true, 1);
 
 		assertTrue(list.isEmpty());
 		assertFalse(list.isFull());
@@ -20,7 +20,7 @@ class ArrayListTest {
 	@Test
 	@DisplayName("should create list with one element")
 	void test2() {
-		ArrayList list = new ArrayList(true, 1);
+		OrderedArrayList list = new OrderedArrayList(true, 1);
 
 		int index = list.setAdd(100, 1);
 
@@ -33,7 +33,7 @@ class ArrayListTest {
 	@Test
 	@DisplayName("should create list with given elements")
 	void test3() {
-		ArrayList list = new ArrayList(true, new int[] { 100, 200, 300 }, new int[] { 1, 2, 3 });
+		OrderedArrayList list = new OrderedArrayList(true, new int[] { 100, 200, 300 }, new int[] { 1, 2, 3 });
 
 		assertFalse(list.isEmpty());
 		assertTrue(list.isFull());
@@ -49,7 +49,7 @@ class ArrayListTest {
 	@Test
 	@DisplayName("should change value of element")
 	void test4() {
-		ArrayList list = new ArrayList(true, 1);
+		OrderedArrayList list = new OrderedArrayList(true, 1);
 
 		list.setAdd(100, 1);
 		int index = list.setAdd(100, 3);
@@ -65,7 +65,7 @@ class ArrayListTest {
 	@Test
 	@DisplayName("should not find value of element for full list")
 	void test5() {
-		ArrayList list = new ArrayList(true, 1);
+		OrderedArrayList list = new OrderedArrayList(true, 1);
 
 		list.setAdd(100, 1);
 		int index = list.setAdd(200, 3);
@@ -81,7 +81,7 @@ class ArrayListTest {
 	@Test
 	@DisplayName("should add second element to list after first element")
 	void test6() {
-		ArrayList list = new ArrayList(true, 2);
+		OrderedArrayList list = new OrderedArrayList(true, 2);
 
 		list.setAdd(100, 1);
 		int index = list.setAdd(200, 2);
@@ -99,7 +99,7 @@ class ArrayListTest {
 	@Test
 	@DisplayName("should add second element to list before first element")
 	void test7() {
-		ArrayList list = new ArrayList(true, 2);
+		OrderedArrayList list = new OrderedArrayList(true, 2);
 
 		list.setAdd(200, 2);
 		int index = list.setAdd(100, 1);
@@ -117,7 +117,7 @@ class ArrayListTest {
 	@Test
 	@DisplayName("should return false if price not found")
 	void test8() {
-		ArrayList list = new ArrayList(true, new int[] { 100, 200, 300 }, new int[] { 1, 2, 3 });
+		OrderedArrayList list = new OrderedArrayList(true, new int[] { 100, 200, 300 }, new int[] { 1, 2, 3 });
 
 		boolean removed = list.remove(400);
 
@@ -133,7 +133,7 @@ class ArrayListTest {
 	@Test
 	@DisplayName("should return true and remove last element if price found")
 	void test9() {
-		ArrayList list = new ArrayList(true, new int[] { 100, 200, 300 }, new int[] { 1, 2, 3 });
+		OrderedArrayList list = new OrderedArrayList(true, new int[] { 100, 200, 300 }, new int[] { 1, 2, 3 });
 
 		boolean removed = list.remove(300);
 
@@ -148,7 +148,7 @@ class ArrayListTest {
 	@Test
 	@DisplayName("should return true and remove middle element if price found")
 	void test10() {
-		ArrayList list = new ArrayList(true, new int[] { 100, 200, 300 }, new int[] { 1, 2, 3 });
+		OrderedArrayList list = new OrderedArrayList(true, new int[] { 100, 200, 300 }, new int[] { 1, 2, 3 });
 
 		boolean removed = list.remove(200);
 
@@ -163,7 +163,7 @@ class ArrayListTest {
 	@Test
 	@DisplayName("should return true and remove first element if price found")
 	void test11() {
-		ArrayList list = new ArrayList(true, new int[] { 100, 200, 300 }, new int[] { 1, 2, 3 });
+		OrderedArrayList list = new OrderedArrayList(true, new int[] { 100, 200, 300 }, new int[] { 1, 2, 3 });
 
 		boolean removed = list.remove(100);
 
@@ -178,7 +178,7 @@ class ArrayListTest {
 	@Test
 	@DisplayName("should return null if price not found")
 	void test12() {
-		ArrayList list = new ArrayList(true, new int[] { 100, 200, 300 }, new int[] { 1, 2, 3 });
+		OrderedArrayList list = new OrderedArrayList(true, new int[] { 100, 200, 300 }, new int[] { 1, 2, 3 });
 
 		assertNull(list.getPriceVolumeByPrice(400));
 		assertNull(list.getPriceVolumeByPrice(50));
@@ -194,7 +194,7 @@ class ArrayListTest {
 	@Test
 	@DisplayName("should return price and size if price found")
 	void test13() {
-		ArrayList list = new ArrayList(true, new int[] { 100, 200, 300 }, new int[] { 1, 2, 3 });
+		OrderedArrayList list = new OrderedArrayList(true, new int[] { 100, 200, 300 }, new int[] { 1, 2, 3 });
 
 		assertEquals(100, list.getPriceVolumeByPrice(100).getPrice());
 		assertEquals(1, list.getPriceVolumeByPrice(100).getVolume());
@@ -207,7 +207,7 @@ class ArrayListTest {
 	@Test
 	@DisplayName("should return first non-empty element for ascending list")
 	void test14() {
-		ArrayList list = new ArrayList(true, new int[] { 100, 200, 300 }, new int[] { 0, 2, 3 });
+		OrderedArrayList list = new OrderedArrayList(true, new int[] { 100, 200, 300 }, new int[] { 0, 2, 3 });
 
 		assertEquals(200, list.getFirstNonEmptyNode().getPrice());
 		assertEquals(2, list.getFirstNonEmptyNode().getVolume());
@@ -216,7 +216,7 @@ class ArrayListTest {
 	@Test
 	@DisplayName("should return first non-empty element for descending list")
 	void test15() {
-		ArrayList list = new ArrayList(false, new int[] { 100, 200, 300 }, new int[] { 1, 2, 0 });
+		OrderedArrayList list = new OrderedArrayList(false, new int[] { 100, 200, 300 }, new int[] { 1, 2, 0 });
 
 		assertEquals(200, list.getFirstNonEmptyNode().getPrice());
 		assertEquals(2, list.getFirstNonEmptyNode().getVolume());
@@ -225,7 +225,7 @@ class ArrayListTest {
 	@Test
 	@DisplayName("should return null if non-empty element absent for ascending list")
 	void test16() {
-		ArrayList list = new ArrayList(true, new int[] { 100, 200, 300 }, new int[] { 0, 0, 0 });
+		OrderedArrayList list = new OrderedArrayList(true, new int[] { 100, 200, 300 }, new int[] { 0, 0, 0 });
 
 		assertNull(list.getFirstNonEmptyNode());
 	}
@@ -233,7 +233,7 @@ class ArrayListTest {
 	@Test
 	@DisplayName("should return null if non-empty element absent for descending list")
 	void test17() {
-		ArrayList list = new ArrayList(false, new int[] { 100, 200, 300 }, new int[] { 0, 0, 0 });
+		OrderedArrayList list = new OrderedArrayList(false, new int[] { 100, 200, 300 }, new int[] { 0, 0, 0 });
 
 		assertNull(list.getFirstNonEmptyNode());
 	}
@@ -241,7 +241,7 @@ class ArrayListTest {
 	@Test
 	@DisplayName("should be no subtracted volume for empty list")
 	void test18() {
-		ArrayList list = new ArrayList(false, 1);
+		OrderedArrayList list = new OrderedArrayList(false, 1);
 
 		assertEquals(0, list.subtractVolume(100).subtractedVolume);
 	}
@@ -249,7 +249,7 @@ class ArrayListTest {
 	@Test
 	@DisplayName("should be correct subtracted volume for non-empty ascending list")
 	void test19() {
-		ArrayList list = new ArrayList(true, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
+		OrderedArrayList list = new OrderedArrayList(true, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
 
 		assertEquals(5, list.subtractVolume(5).subtractedVolume);
 		assertEquals(5, list.getPriceVolumeByPrice(10).getVolume());
@@ -260,7 +260,7 @@ class ArrayListTest {
 	@Test
 	@DisplayName("should be correct subtracted volume for non-empty ascending list")
 	void test20() {
-		ArrayList list = new ArrayList(true, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
+		OrderedArrayList list = new OrderedArrayList(true, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
 
 		assertEquals(15, list.subtractVolume(15).subtractedVolume);
 		assertNull(list.getPriceVolumeByPrice(10));
@@ -271,7 +271,7 @@ class ArrayListTest {
 	@Test
 	@DisplayName("should be correct subtracted volume for non-empty ascending list")
 	void test21() {
-		ArrayList list = new ArrayList(true, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
+		OrderedArrayList list = new OrderedArrayList(true, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
 
 		assertEquals(35, list.subtractVolume(35).subtractedVolume);
 		assertNull(list.getPriceVolumeByPrice(10));
@@ -282,7 +282,7 @@ class ArrayListTest {
 	@Test
 	@DisplayName("should be correct subtracted volume for non-empty ascending list")
 	void test22() {
-		ArrayList list = new ArrayList(true, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
+		OrderedArrayList list = new OrderedArrayList(true, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
 
 		assertEquals(60, list.subtractVolume(65).subtractedVolume);
 		assertNull(list.getPriceVolumeByPrice(10));
@@ -293,7 +293,7 @@ class ArrayListTest {
 	@Test
 	@DisplayName("should be correct subtracted volume for non-empty descending list")
 	void test23() {
-		ArrayList list = new ArrayList(false, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
+		OrderedArrayList list = new OrderedArrayList(false, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
 
 		assertEquals(5, list.subtractVolume(5).subtractedVolume);
 		assertEquals(10, list.getPriceVolumeByPrice(10).getVolume());
@@ -304,7 +304,7 @@ class ArrayListTest {
 	@Test
 	@DisplayName("should be correct subtracted volume for non-empty descending list")
 	void test24() {
-		ArrayList list = new ArrayList(false, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
+		OrderedArrayList list = new OrderedArrayList(false, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
 
 		assertEquals(35, list.subtractVolume(35).subtractedVolume);
 		assertEquals(10, list.getPriceVolumeByPrice(10).getVolume());
@@ -315,7 +315,7 @@ class ArrayListTest {
 	@Test
 	@DisplayName("should be correct subtracted volume for non-empty descending list")
 	void test25() {
-		ArrayList list = new ArrayList(false, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
+		OrderedArrayList list = new OrderedArrayList(false, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
 
 		assertEquals(55, list.subtractVolume(55).subtractedVolume);
 		assertEquals(5, list.getPriceVolumeByPrice(10).getVolume());
@@ -326,7 +326,7 @@ class ArrayListTest {
 	@Test
 	@DisplayName("should be correct subtracted volume for non-empty descending list")
 	void test26() {
-		ArrayList list = new ArrayList(false, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
+		OrderedArrayList list = new OrderedArrayList(false, new int[] { 10, 20, 30 }, new int[] { 10, 20, 30 });
 
 		assertEquals(60, list.subtractVolume(65).subtractedVolume);
 		assertNull(list.getPriceVolumeByPrice(10));

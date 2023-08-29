@@ -7,6 +7,7 @@ import com.streamlined.orderbook.VolumeContainer;
 public abstract class HashtableContainer implements VolumeContainer {
 
 	private static final int INITIAL_CAPACITY = 1000;
+	private static final int LIST_POOL_DEFAULT_INITIAL_CAPACITY = 100;
 	private static final int PRICE_GROUP_SIZE_POWER = 2;
 	protected static final int PRICE_GROUP_SIZE = 1 << PRICE_GROUP_SIZE_POWER;
 
@@ -20,6 +21,7 @@ public abstract class HashtableContainer implements VolumeContainer {
 	protected static final VolumeSubtractResult volumeSubtractResult = new VolumeSubtractResult();
 	protected static final BestPriceVolumeSubtractResult bestPriceVolumeSubtractResult = new BestPriceVolumeSubtractResult();
 
+	protected final ListPool listPool;
 	protected List[] priceGroups;
 	protected int maxPriceGroupIndex;
 	protected int minPriceGroupIndex;
@@ -27,11 +29,16 @@ public abstract class HashtableContainer implements VolumeContainer {
 	protected int firstPriceGroupIndex;
 
 	protected HashtableContainer() {
-		this(INITIAL_CAPACITY);
+		this(INITIAL_CAPACITY, new ListPool(LIST_POOL_DEFAULT_INITIAL_CAPACITY));
 	}
 
 	protected HashtableContainer(int capacity) {
-		priceGroups = new ArrayList[capacity];
+		this(capacity, new ListPool(LIST_POOL_DEFAULT_INITIAL_CAPACITY));
+	}
+
+	protected HashtableContainer(int capacity, ListPool listPool) {
+		this.listPool = listPool;
+		priceGroups = new OrderedArrayList[capacity];
 		firstPriceGroupStart = VALUE_UNDEFINED;
 	}
 
@@ -112,6 +119,10 @@ public abstract class HashtableContainer implements VolumeContainer {
 			return (maxPriceGroupIndex + 1) + (priceGroups.length - minPriceGroupIndex);
 		}
 	}
+	
+	public static int getPriceGroupSize() {
+		return PRICE_GROUP_SIZE;
+	}
 
 	protected boolean isFull() {
 		return getOccupiedSpace() == priceGroups.length;
@@ -132,7 +143,7 @@ public abstract class HashtableContainer implements VolumeContainer {
 	private void expandContainer(int minExpansionSize) {
 		int newCapacity = Math.max(priceGroups.length * EXPANSION_NUMERATOR / EXPANSION_DENOMINATOR,
 				priceGroups.length + Math.max(minExpansionSize, EXPANSION_CONSTANT));
-		final List[] newPriceGroups = new ArrayList[newCapacity];
+		final List[] newPriceGroups = new OrderedArrayList[newCapacity];
 
 		if (minPriceGroupIndex <= maxPriceGroupIndex) {// one segment [minPriceGroupIndex..maxPriceGroupIndex]
 			final int count = maxPriceGroupIndex - minPriceGroupIndex + 1;
