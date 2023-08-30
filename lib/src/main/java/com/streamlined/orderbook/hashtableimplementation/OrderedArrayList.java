@@ -1,13 +1,13 @@
 package com.streamlined.orderbook.hashtableimplementation;
 
-import java.util.Arrays;
-
 import com.streamlined.orderbook.PriceVolume;
 
 public class OrderedArrayList implements List {
 
 	private static final SubtractionResult subtractionResult = new SubtractionResult();
 	private static final PriceVolume priceVolume = new PriceVolume();
+
+	private static final int UNDEFINED_INDEX = -1;
 
 	private boolean ascending;
 	private final int[] prices;
@@ -22,7 +22,7 @@ public class OrderedArrayList implements List {
 
 	public OrderedArrayList(boolean ascending, int capacity, int price, int volume) {
 		this(ascending, capacity);
-		setAdd(price, volume);
+		addLast(price, volume);
 	}
 
 	public OrderedArrayList(boolean ascending, int[] prices, int[] volumes) {
@@ -59,9 +59,21 @@ public class OrderedArrayList implements List {
 		return volumes[index];
 	}
 
+	private int seek(int price) {
+		for (int k = 0; k < size; k++) {
+			if (prices[k] == price) {
+				return k;
+			}
+			if (prices[k] > price) {
+				return -(k + 1);
+			}
+		}
+		return -(size + 1);
+	}
+
 	@Override
 	public int setAdd(int price, int volume) {
-		final int index = Arrays.binarySearch(prices, 0, size, price);
+		final int index = seek(price);
 		if (index >= 0) {
 			volumes[index] = volume;
 			return index;
@@ -69,9 +81,23 @@ public class OrderedArrayList implements List {
 			return PRICE_NOT_FOUND;
 		}
 		final int insertionIndex = -index - 1;
-		System.arraycopy(prices, insertionIndex, prices, insertionIndex + 1, size - insertionIndex);
+		if (size > insertionIndex) {
+			System.arraycopy(prices, insertionIndex, prices, insertionIndex + 1, size - insertionIndex);
+			System.arraycopy(volumes, insertionIndex, volumes, insertionIndex + 1, size - insertionIndex);
+		}
 		prices[insertionIndex] = price;
-		System.arraycopy(volumes, insertionIndex, volumes, insertionIndex + 1, size - insertionIndex);
+		volumes[insertionIndex] = volume;
+		size++;
+		return insertionIndex;
+	}
+
+	@Override
+	public int addLast(int price, int volume) {
+		if (isFull()) {
+			return PRICE_NOT_FOUND;
+		}
+		final int insertionIndex = size;
+		prices[insertionIndex] = price;
 		volumes[insertionIndex] = volume;
 		size++;
 		return insertionIndex;
@@ -79,12 +105,12 @@ public class OrderedArrayList implements List {
 
 	@Override
 	public boolean remove(int price) {
-		final int index = Arrays.binarySearch(prices, 0, size, price);
-		if (index >= 0) {
-			removeAt(index);
-			return true;
+		final int index = seek(price);
+		if (index < 0) {
+			return false;
 		}
-		return false;
+		removeAt(index);
+		return true;
 	}
 
 	private void removeAt(int index) {
@@ -95,12 +121,12 @@ public class OrderedArrayList implements List {
 
 	@Override
 	public PriceVolume getPriceVolumeByPrice(int price) {
-		final int index = Arrays.binarySearch(prices, 0, size, price);
-		if (index >= 0) {
-			priceVolume.setPriceVolume(price, volumes[index]);
-			return priceVolume;
+		final int index = seek(price);
+		if (index < 0) {
+			return null;
 		}
-		return null;
+		priceVolume.setPriceVolume(price, volumes[index]);
+		return priceVolume;
 	}
 
 	@Override
@@ -128,19 +154,21 @@ public class OrderedArrayList implements List {
 		int volumeLeftover = subtractVolume;
 		int lastCheckedOrder = PRICE_NOT_FOUND;
 		if (ascending) {
-			while (size > 0) {
-				lastCheckedOrder = prices[0];
-				if (volumes[0] <= volumeLeftover) {
-					volumeLeftover -= volumes[0];
-					removeAt(0);
+			int lastEmptyNodeIndex = UNDEFINED_INDEX;
+			for (int k = 0; k < size && volumeLeftover > 0; k++) {
+				lastCheckedOrder = prices[k];
+				if (volumes[k] <= volumeLeftover) {
+					volumeLeftover -= volumes[k];
+					lastEmptyNodeIndex = k;
 				} else {
-					volumes[0] -= volumeLeftover;
+					volumes[k] -= volumeLeftover;
 					volumeLeftover = 0;
 					break;
 				}
 			}
+			removeRange(0, lastEmptyNodeIndex);
 		} else {
-			for (int k = size - 1; k >= 0; k--) {
+			for (int k = size - 1; k >= 0 && volumeLeftover > 0; k--) {
 				lastCheckedOrder = prices[k];
 				if (volumes[k] <= volumeLeftover) {
 					volumeLeftover -= volumes[k];
@@ -155,6 +183,18 @@ public class OrderedArrayList implements List {
 		subtractionResult.subtractedVolume = subtractVolume - volumeLeftover;
 		subtractionResult.lastCheckedOrder = lastCheckedOrder;
 		return subtractionResult;
+	}
+
+	private void removeRange(int startIndex, int finishIndex) {
+		if (finishIndex != UNDEFINED_INDEX) {
+			final int copyStartIndex = finishIndex + 1;
+			if (copyStartIndex < size) {
+				final int count = size - copyStartIndex;
+				System.arraycopy(prices, copyStartIndex, prices, startIndex, count);
+				System.arraycopy(volumes, copyStartIndex, volumes, startIndex, count);
+			}
+			size -= finishIndex - startIndex + 1;
+		}
 	}
 
 }

@@ -6,7 +6,7 @@ import com.streamlined.orderbook.hashtableimplementation.List.SubtractionResult;
 
 public class BidContainer extends HashtableContainer {
 
-	private static boolean ASCENDING_FLAG = false;
+	private static final boolean ASCENDING_FLAG = false;
 
 	public BidContainer() {
 		super();
@@ -25,7 +25,7 @@ public class BidContainer extends HashtableContainer {
 		List list = listPool.get();
 		if (list != null) {
 			list.initialize(ASCENDING_FLAG);
-			list.setAdd(price, volume);
+			list.addLast(price, volume);
 			return list;
 		}
 		return new OrderedArrayList(ASCENDING_FLAG, PRICE_GROUP_SIZE, price, volume);

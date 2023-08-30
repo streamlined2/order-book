@@ -73,6 +73,11 @@ public class OrderedLinkedList implements List, Iterable<OrderedLinkedList.Node>
 		return index;
 	}
 
+	@Override
+	public int addLast(int price, int volume) {
+		return setAdd(price, volume);
+	}
+
 	public boolean setVolume(int order, int volume) {
 		for (Node node = head; node != null; node = node.nextNode) {
 			if (node.order == order) {

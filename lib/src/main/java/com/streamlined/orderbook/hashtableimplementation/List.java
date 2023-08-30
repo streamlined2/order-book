@@ -12,6 +12,8 @@ public interface List {
 
 	int setAdd(int order, int size);
 
+	int addLast(int price, int volume);
+
 	boolean remove(int order);
 
 	PriceVolume getPriceVolumeByPrice(int order);
