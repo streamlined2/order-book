@@ -7,7 +7,7 @@ import com.streamlined.orderbook.hashtableimplementation.BidContainer;
 
 public class OrderBook {
 
-	private static final int LIST_POOL_INITIAL_CAPACITY = 1000;
+	private static final int LIST_POOL_INITIAL_CAPACITY = 100;
 	private static final int INITIAL_CAPACITY = 1000;
 
 	private final HashtableContainer askContainer;

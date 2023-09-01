@@ -45,9 +45,8 @@ public abstract class HashtableContainer implements VolumeContainer {
 	int locateGroupForPrice(int price) {
 		defineFirstPriceGroupStart(price);
 		int index = mapPriceToGroupIndex(price);
-		final int minExpansionSize = getMinExpansionSize(price, index);
-		if (minExpansionSize > 0) {
-			expandContainer(minExpansionSize);
+		if (index < 0) {
+			expandContainer(-index);
 			index = mapPriceToGroupIndex(price);
 		}
 		updateMinMaxIndices(price, index);
@@ -62,42 +61,27 @@ public abstract class HashtableContainer implements VolumeContainer {
 	void defineFirstPriceGroupStart(int firstPrice) {
 		if (firstPriceGroupStart == VALUE_UNDEFINED) {
 			firstPriceGroupStart = firstPrice >> PRICE_GROUP_SIZE_POWER << PRICE_GROUP_SIZE_POWER;
-			final int middleIndex = priceGroups.length >> 1;
-			firstPriceGroupIndex = maxPriceGroupIndex = minPriceGroupIndex = middleIndex;
+			firstPriceGroupIndex = maxPriceGroupIndex = minPriceGroupIndex = priceGroups.length >> 1;
 		}
 	}
 
 	int mapPriceToGroupIndex(int price) {
-		int index = ((price - firstPriceGroupStart) >> PRICE_GROUP_SIZE_POWER) + firstPriceGroupIndex;
-		if (!isFull()) {
-			if (-priceGroups.length <= index && index < 0) {
-				index += priceGroups.length;
-			} else if (priceGroups.length <= index && index < priceGroups.length << 1) {
-				index -= priceGroups.length;
-			}
+		final int offset = getPriceGroupOffset(price);
+		final int expansionSize = offset + 1 - priceGroups.length;
+		if (expansionSize > 0) {
+			return -expansionSize;
+		}
+		int index = offset + firstPriceGroupIndex;
+		if (index < 0) {
+			index += priceGroups.length;
+		} else if (priceGroups.length <= index) {
+			index -= priceGroups.length;
 		}
 		return index;
 	}
 
-	private int getMinExpansionSize(int price, int index) {
-		int initialExpansionSize = getIndexExcess(index);
-		if (initialExpansionSize > 0) {
-			return initialExpansionSize;
-		}
-		if (price <= firstPriceGroupStart - PRICE_GROUP_SIZE && index >= firstPriceGroupIndex) {
-			return maxPriceGroupIndex - index + 1;
-		} else if (price >= firstPriceGroupStart + PRICE_GROUP_SIZE && index <= firstPriceGroupIndex) {
-			return index - minPriceGroupIndex + 1;
-		}
-		return 0;
-	}
-
-	private int getIndexExcess(int index) {
-		int excess = 0;
-		for (int indexRest = index; indexRest >= priceGroups.length; indexRest -= priceGroups.length) {
-			excess += priceGroups.length;
-		}
-		return excess;
+	int getPriceGroupOffset(int price) {
+		return (price - firstPriceGroupStart) >> PRICE_GROUP_SIZE_POWER;
 	}
 
 	private void updateMinMaxIndices(int price, int index) {
@@ -119,7 +103,7 @@ public abstract class HashtableContainer implements VolumeContainer {
 			return (maxPriceGroupIndex + 1) + (priceGroups.length - minPriceGroupIndex);
 		}
 	}
-	
+
 	public static int getPriceGroupSize() {
 		return PRICE_GROUP_SIZE;
 	}
