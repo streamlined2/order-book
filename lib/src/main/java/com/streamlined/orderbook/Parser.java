@@ -9,8 +9,8 @@ import java.io.IOException;
 
 public class Parser {
 
-	public static final int INITIAL_CAPACITY = 100_000;
-	// 20 * 1024 * 1024 / (2 * 4);// due to 128Mb heap size restriction
+	public static final int INITIAL_CAPACITY = 1_000_000;// initial size of hash table
+
 	private static final String COMMA_SEPARATOR = ",";
 	private static final String UPDATE_COMMAND = "u";
 	private static final String QUERY_COMMAND = "q";

@@ -10,7 +10,7 @@ public abstract class HashtableContainer implements VolumeContainer {
 	private static final int LIST_POOL_DEFAULT_INITIAL_CAPACITY = 100;
 	private static final int INITIAL_CAPACITY = 1000;
 
-	private static final int PRICE_GROUP_SIZE_POWER = 2;
+	private static final int PRICE_GROUP_SIZE_POWER = 4;
 	protected static final int PRICE_GROUP_SIZE = 1 << PRICE_GROUP_SIZE_POWER;
 
 	protected static final int VALUE_UNDEFINED = -1;
@@ -44,7 +44,7 @@ public abstract class HashtableContainer implements VolumeContainer {
 		firstPriceGroupStart = VALUE_UNDEFINED;
 	}
 
-	int locateGroupForPrice(int price) {
+	private int locateGroupForPrice(int price) {
 		defineFirstPriceGroupStart(price);
 		int index = mapPriceToGroupIndex(price);
 		if (index < 0) {
@@ -55,19 +55,19 @@ public abstract class HashtableContainer implements VolumeContainer {
 		return index;
 	}
 
-	int locateGroupForPriceNoExpansion(int price) {
+	private int locateGroupForPriceNoExpansion(int price) {
 		defineFirstPriceGroupStart(price);
 		return mapPriceToGroupIndex(price);
 	}
 
-	void defineFirstPriceGroupStart(int firstPrice) {
+	private void defineFirstPriceGroupStart(int firstPrice) {
 		if (firstPriceGroupStart == VALUE_UNDEFINED) {
 			firstPriceGroupStart = firstPrice >> PRICE_GROUP_SIZE_POWER << PRICE_GROUP_SIZE_POWER;
 			firstPriceGroupIndex = maxPriceGroupIndex = minPriceGroupIndex = priceGroups.length >> 1;
 		}
 	}
 
-	int mapPriceToGroupIndex(int price) {
+	private int mapPriceToGroupIndex(int price) {
 		final int offset = (price - firstPriceGroupStart) >> PRICE_GROUP_SIZE_POWER;
 		final int expansionSize = offset + 1 - priceGroups.length;
 		if (expansionSize > 0) {
@@ -108,18 +108,6 @@ public abstract class HashtableContainer implements VolumeContainer {
 
 	protected boolean isFull() {
 		return getOccupiedSpace() == priceGroups.length;
-	}
-
-	int getMinPriceGroupIndex() {
-		return minPriceGroupIndex;
-	}
-
-	int getMaxPriceGroupIndex() {
-		return maxPriceGroupIndex;
-	}
-
-	int getCapacity() {
-		return priceGroups.length;
 	}
 
 	private void expandContainer(int minExpansionSize) {
