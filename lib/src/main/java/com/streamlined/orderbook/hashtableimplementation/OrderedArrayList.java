@@ -71,9 +71,28 @@ public class OrderedArrayList implements List {
 		return -(size + 1);
 	}
 
+	private int binarySeek(int price) {
+		int lowIndex = 0;
+		int highIndex = size - 1;
+
+		while (lowIndex <= highIndex) {
+			int midIndex = (lowIndex + highIndex) >>> 1;
+			int midValue = prices[midIndex];
+
+			if (midValue < price) {
+				lowIndex = midIndex + 1;
+			} else if (midValue > price) {
+				highIndex = midIndex - 1;
+			} else {
+				return midIndex;
+			}
+		}
+		return -(lowIndex + 1);
+	}
+
 	@Override
 	public int setAdd(int price, int volume) {
-		final int index = seek(price);
+		final int index = binarySeek(price);// Arrays.binarySearch(prices, 0, size, price);//
 		if (index >= 0) {
 			volumes[index] = volume;
 			return index;
@@ -121,7 +140,7 @@ public class OrderedArrayList implements List {
 
 	@Override
 	public PriceVolume getPriceVolumeByPrice(int price) {
-		final int index = seek(price);
+		final int index = binarySeek(price);// Arrays.binarySearch(prices, 0, size, price);//
 		if (index < 0) {
 			return null;
 		}

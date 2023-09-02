@@ -6,8 +6,10 @@ import com.streamlined.orderbook.VolumeContainer;
 
 public abstract class HashtableContainer implements VolumeContainer {
 
-	private static final int INITIAL_CAPACITY = 1000;
+	// internal usage for testing
 	private static final int LIST_POOL_DEFAULT_INITIAL_CAPACITY = 100;
+	private static final int INITIAL_CAPACITY = 1000;
+
 	private static final int PRICE_GROUP_SIZE_POWER = 2;
 	protected static final int PRICE_GROUP_SIZE = 1 << PRICE_GROUP_SIZE_POWER;
 
@@ -66,7 +68,7 @@ public abstract class HashtableContainer implements VolumeContainer {
 	}
 
 	int mapPriceToGroupIndex(int price) {
-		final int offset = getPriceGroupOffset(price);
+		final int offset = (price - firstPriceGroupStart) >> PRICE_GROUP_SIZE_POWER;
 		final int expansionSize = offset + 1 - priceGroups.length;
 		if (expansionSize > 0) {
 			return -expansionSize;
@@ -78,10 +80,6 @@ public abstract class HashtableContainer implements VolumeContainer {
 			index -= priceGroups.length;
 		}
 		return index;
-	}
-
-	int getPriceGroupOffset(int price) {
-		return (price - firstPriceGroupStart) >> PRICE_GROUP_SIZE_POWER;
 	}
 
 	private void updateMinMaxIndices(int price, int index) {

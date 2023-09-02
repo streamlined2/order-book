@@ -51,6 +51,8 @@ public class BidContainer extends HashtableContainer {
 				if (priceVolume != null) {
 					return priceVolume;
 				} else {
+					listPool.add(priceGroups[index]);
+					priceGroups[index] = null;
 					contractMaxSide();
 				}
 			}
