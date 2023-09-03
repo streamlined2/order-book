@@ -1,5 +1,7 @@
 package com.streamlined.orderbook.hashtableimplementation;
 
+import java.util.Arrays;
+
 import com.streamlined.orderbook.PriceVolume;
 
 public class OrderedArrayList implements List {
@@ -72,29 +74,33 @@ public class OrderedArrayList implements List {
 	}
 
 	private int binarySeek(int price) {
-		int lowIndex = 0;
-		int highIndex = size - 1;
+		int leftIndex = 0;
+		int rightIndex = size - 1;
 
-		while (lowIndex <= highIndex) {
-			int midIndex = (lowIndex + highIndex) >>> 1;
-			int midValue = prices[midIndex];
+		while (leftIndex <= rightIndex) {
+			int middleIndex = (leftIndex + rightIndex) >>> 1;
+			int middleValue = prices[middleIndex];
 
-			if (midValue < price) {
-				lowIndex = midIndex + 1;
-			} else if (midValue > price) {
-				highIndex = midIndex - 1;
+			if (middleValue < price) {
+				leftIndex = middleIndex + 1;
+			} else if (middleValue > price) {
+				rightIndex = middleIndex - 1;
 			} else {
-				return midIndex;
+				return middleIndex;
 			}
 		}
-		return -(lowIndex + 1);
+		return -(leftIndex + 1);
 	}
 
 	@Override
 	public int setAdd(int price, int volume) {
 		final int index = binarySeek(price);// Arrays.binarySearch(prices, 0, size, price);//
 		if (index >= 0) {
-			volumes[index] = volume;
+			if (volume == 0) {
+				removeAt(index);
+			} else {
+				volumes[index] = volume;
+			}
 			return index;
 		} else if (isFull()) {
 			return PRICE_NOT_FOUND;
@@ -112,7 +118,7 @@ public class OrderedArrayList implements List {
 
 	@Override
 	public int addLast(int price, int volume) {
-		if (isFull()) {
+		if (isFull() || volume == 0) {
 			return PRICE_NOT_FOUND;
 		}
 		final int insertionIndex = size;
@@ -124,7 +130,7 @@ public class OrderedArrayList implements List {
 
 	@Override
 	public boolean remove(int price) {
-		final int index = seek(price);
+		final int index = binarySeek(price);
 		if (index < 0) {
 			return false;
 		}
@@ -133,8 +139,10 @@ public class OrderedArrayList implements List {
 	}
 
 	private void removeAt(int index) {
-		System.arraycopy(prices, index + 1, prices, index, size - index - 1);
-		System.arraycopy(volumes, index + 1, volumes, index, size - index - 1);
+		if (size > index + 1) {
+			System.arraycopy(prices, index + 1, prices, index, size - index - 1);
+			System.arraycopy(volumes, index + 1, volumes, index, size - index - 1);
+		}
 		size--;
 	}
 

@@ -115,6 +115,76 @@ class OrderedArrayListTest {
 	}
 
 	@Test
+	@DisplayName("should remove element from list if volume set to 0")
+	void test7a() {
+		OrderedArrayList list = new OrderedArrayList(true, 2);
+
+		list.setAdd(200, 2);
+		int index = list.setAdd(200, 0);
+
+		assertTrue(list.isEmpty());
+		assertFalse(list.isFull());
+		assertEquals(0, list.getSize());
+		assertEquals(0, index);
+	}
+
+	@Test
+	@DisplayName("should remove element from the end of the list if volume set to 0")
+	void test7b() {
+		OrderedArrayList list = new OrderedArrayList(true, 2);
+
+		list.setAdd(200, 2);
+		list.setAdd(300, 1);
+		int index = list.setAdd(300, 0);
+
+		assertFalse(list.isEmpty());
+		assertFalse(list.isFull());
+		assertEquals(1, list.getSize());
+		assertEquals(1, index);
+	}
+
+	@Test
+	@DisplayName("should remove element from the start of the list if volume set to 0")
+	void test7c() {
+		OrderedArrayList list = new OrderedArrayList(true, 2);
+
+		list.setAdd(200, 2);
+		list.setAdd(100, 1);
+		int index = list.setAdd(100, 0);
+
+		assertFalse(list.isEmpty());
+		assertFalse(list.isFull());
+		assertEquals(1, list.getSize());
+		assertEquals(0, index);
+	}
+
+	@Test
+	@DisplayName("should add element to the start of the list if volume is greater than 0")
+	void test7d() {
+		OrderedArrayList list = new OrderedArrayList(true, 1);
+
+		int index = list.addLast(100, 1);
+
+		assertFalse(list.isEmpty());
+		assertTrue(list.isFull());
+		assertEquals(1, list.getSize());
+		assertEquals(0, index);
+	}
+
+	@Test
+	@DisplayName("should not add element if volume is equal to 0")
+	void test7e() {
+		OrderedArrayList list = new OrderedArrayList(true, 1);
+
+		int index = list.addLast(100, 0);
+
+		assertTrue(list.isEmpty());
+		assertFalse(list.isFull());
+		assertEquals(0, list.getSize());
+		assertEquals(List.PRICE_NOT_FOUND, index);
+	}
+
+	@Test
 	@DisplayName("should return false if price not found")
 	void test8() {
 		OrderedArrayList list = new OrderedArrayList(true, new int[] { 100, 200, 300 }, new int[] { 1, 2, 3 });
